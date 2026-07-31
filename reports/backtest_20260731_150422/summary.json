@@ -1,0 +1,41 @@
+{
+  "starting_capital": 10000.0,
+  "ending_equity": 9328.033038864627,
+  "net_pnl": -671.9669611353729,
+  "return_pct": -6.719669611353729,
+  "trades": 114,
+  "wins": 66,
+  "losses": 48,
+  "win_rate_pct": 57.89473684210527,
+  "profit_factor": 0.7182044084384757,
+  "avg_trade_pnl": -5.894447027503313,
+  "avg_win": 25.948834538029974,
+  "avg_loss": -49.678959180111576,
+  "expectancy": -5.894447027503309,
+  "max_drawdown_pct": -8.974674522609224,
+  "sharpe": -14.147930264831855,
+  "total_fees": 1099.8402001969396,
+  "bars": 2881,
+  "exit_reasons": {
+    "exit": 113,
+    "force_close": 1
+  },
+  "avg_hold_seconds": 11423.684210526315,
+  "best_trade_pnl": 93.37917542061278,
+  "worst_trade_pnl": -288.9829211550545,
+  "max_win_streak": 5,
+  "max_loss_streak": 5,
+  "meta": {
+    "mode": "backtest",
+    "strategy": "bollinger",
+    "symbol": "BTCUSD",
+    "resolution": "15m",
+    "start": "2026-07-01T09:32:22.121768+00:00",
+    "end": "2026-07-31T09:32:22.121768+00:00",
+    "params": {},
+    "sl_pct": 0.0,
+    "tp_pct": 0.0,
+    "trail_pct": 0.0,
+    "leverage": 1.0
+  }
+}

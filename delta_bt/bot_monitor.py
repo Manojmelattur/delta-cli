@@ -95,19 +95,38 @@ def emergency_close_all() -> Dict:
 
 
 def run_live_terminal_monitor(refresh_sec: int = 3):
-    """Run an auto-refreshing live terminal dashboard."""
+    """Run an auto-refreshing live terminal console PnL dashboard."""
+    from .pnl_analytics import get_portfolio_pnl, generate_ascii_chart
     print("\033[2J\033[H", end="")
     try:
         while True:
             print("\033[H", end="")
             now_str = time.strftime("%Y-%m-%d %H:%M:%S")
-            print(f"{C_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{C_RESET}")
-            print(f" {C_BOLD}{C_GREEN}⚡ DELTA TERMINAL MONITOR{C_RESET} {C_DIM}[{now_str}]{C_RESET}")
-            print(f"{C_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{C_RESET}\n")
+            pnl_data = get_portfolio_pnl()
+            positions = fetch_open_positions()
+            bots = list_deployments()
+
+            unrealized_pnl = sum(p["unrealized_pnl"] for p in positions)
+            realized_pnl = pnl_data.get("total_pnl", 0)
+            net_pnl = realized_pnl + unrealized_pnl
+
+            print(f"{C_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{C_RESET}")
+            print(f" {C_BOLD}{C_GREEN}⚡ DELTA CONSOLE PnL DASHBOARD{C_RESET} {C_DIM}[{now_str}]{C_RESET}")
+            print(f"{C_CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━{C_RESET}")
+            
+            # KPI Summary Bar
+            kpi_bar = (
+                f"  {C_BOLD}Net PnL:{C_RESET} {format_pnl(net_pnl)} │ "
+                f"{C_BOLD}Realized:{C_RESET} {format_pnl(realized_pnl)} │ "
+                f"{C_BOLD}Unrealized:{C_RESET} {format_pnl(unrealized_pnl)} │ "
+                f"{C_BOLD}Win Rate:{C_RESET} {C_YELLOW}{pnl_data.get('win_rate', 0):.1f}%{C_RESET} │ "
+                f"{C_BOLD}Bots:{C_RESET} {C_GREEN}{len([b for b in bots if b['status']=='running'])}{C_RESET}/{len(bots)} │ "
+                f"{C_BOLD}Positions:{C_RESET} {C_CYAN}{len(positions)}{C_RESET}"
+            )
+            print(f"\n{kpi_bar}\n")
 
             # 1. Active Bots Table
-            bots = list_deployments()
-            bot_headers = ["ID", "Status", "Name", "Venue", "Strategy", "Symbol", "TF", "Ticks", "PnL ($)", "Last Signal"]
+            bot_headers = ["ID", "Status", "Name", "Venue", "Strategy", "Symbol", "TF", "Ticks", "Realized PnL ($)", "Last Signal"]
             bot_rows = []
             for b in bots:
                 stat_icon = "🟢" if b["status"] == "running" else "⏸️"
@@ -124,10 +143,9 @@ def run_live_terminal_monitor(refresh_sec: int = 3):
                     pnl_str,
                     str(b["last_signal"] or "-")
                 ])
-            print(render_box_table(bot_headers, bot_rows, title=f"ACTIVE BOTS ({len(bots)})"))
+            print(render_box_table(bot_headers, bot_rows, title=f"ACTIVE BOTS FLEET ({len(bots)})"))
 
             # 2. Live Open Positions Table
-            positions = fetch_open_positions()
             pos_headers = ["Venue", "Symbol", "Side", "Size", "Entry", "Mark", "Liq Price", "uPnL ($)"]
             pos_rows = []
             for p in positions:
@@ -144,7 +162,13 @@ def run_live_terminal_monitor(refresh_sec: int = 3):
                 ])
             print("\n" + render_box_table(pos_headers, pos_rows, title=f"OPEN EXCHANGE POSITIONS ({len(positions)})"))
 
-            print(f"\n{C_DIM}Auto-refresh: {refresh_sec}s | Press Ctrl+C to exit{C_RESET}")
+            # 3. Equity Curve ASCII Chart if available
+            eq_pts = pnl_data.get("equity_pts") or []
+            if eq_pts:
+                print(f"\n{C_BOLD}📈 Equity Trajectory Curve:{C_RESET}")
+                print(generate_ascii_chart(eq_pts, width=60, height=6))
+
+            print(f"\n{C_DIM}Auto-refresh: {refresh_sec}s | Press Ctrl+C to exit dashboard{C_RESET}")
             time.sleep(refresh_sec)
     except KeyboardInterrupt:
-        print(f"\n{C_YELLOW}Monitor stopped.{C_RESET}\n")
+        print(f"\n{C_YELLOW}Console PnL Dashboard closed.{C_RESET}\n")

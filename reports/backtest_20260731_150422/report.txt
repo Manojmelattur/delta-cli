@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : bollinger
+Symbol / Res  : BTCUSD @ 15m
+Period        : 2026-07-01T09:32:22.121768+00:00 → 2026-07-31T09:32:22.121768+00:00
+Params        : {}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 9328.03
+Net PnL       : -671.97 (-6.72%)
+Trades        : 114 (W:66 L:48 WR:57.9%)
+Avg win/loss  : 25.95 / -49.68
+Expectancy    : -5.89 per trade
+Profit factor : 0.72
+Avg trade PnL : -5.89
+Best / Worst  : 93.38 / -288.98
+Streaks (W/L) : 5 / 5
+Avg hold time : 3.17 h
+Exit reasons  : exit:113, force_close:1
+Max drawdown  : -8.97%
+Sharpe        : -14.15
+Total fees    : 1099.84
+================================================================
+Artifacts     : ./reports/backtest_20260731_150422

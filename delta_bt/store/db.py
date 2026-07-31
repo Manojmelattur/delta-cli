@@ -419,8 +419,44 @@ def schema_info(db_path: Optional[str] = None) -> Dict:
 
 # ---------------------------------------------------------------- background tasks ---
 
+DEFAULT_TASKS = [
+    ("Emergency Monitor", "Monitored active positions safely. No emergencies detected.", 900, "running", "emergency_monitor"),
+    ("Daily Report", "Daily report generator & notification dispatcher.", 86400, "running", "daily_report"),
+    ("Stat Arb Scanner", "Statistical Arbitrage pair scanner.", 300, "running", "stat_arb_scanner"),
+    ("Efficiency Evaluator", "Evaluates bot execution efficiency & slippage.", 3600, "running", "efficiency_evaluator"),
+    ("Scalp Hunter", "Scans for 1m high-frequency scalp setups.", 60, "running", "scalp_hunter"),
+    ("Capital Allocator", "Dynamically allocates capital based on Sharpe ratio.", 14400, "running", "capital_allocator"),
+    ("Equity Monitor", "Tracks equity curve & flags portfolio drawdowns.", 300, "running", "equity_monitor"),
+    ("Funding Rate Monitor", "Monitored perpetual funding rates across assets.", 3600, "running", "funding_rate_monitor"),
+    ("Global Exposure Manager", "Enforces maximum portfolio leverage and exposure limits.", 600, "running", "global_exposure_manager"),
+    ("Liquidity Guard", "Monitors orderbook depth & prevents high slippage trades.", 300, "running", "liquidity_guard"),
+    ("MTF Trend Enforcer", "Enforces multi-timeframe trend alignment.", 900, "running", "mtf_trend_enforcer"),
+    ("Runner Fleet Hunter", "Identifies strong trending coins and deploys runner bots.", 300, "running", "runner_fleet_hunter"),
+    ("SMC Hunter", "Scans for Smart Money Concepts (OB + FVG) entries.", 300, "running", "smc_hunter"),
+    ("Auto-Scan One-Cycle", "Scans market, ranks setups, deploys a single one-cycle trade per signal. Bot auto-stops after first TP/SL.", 300, "paused", "auto_scan_one_cycle"),
+    ("Volatility Circuit Breaker", "Halts trading during sudden market volatility spikes.", 120, "running", "volatility_circuit_breaker"),
+    ("Volatility Grid Farmer", "Deploys dynamic grid bots on high volatility assets.", 1800, "running", "volatility_grid_farmer"),
+    ("Volume Anomaly Sniper", "Snipes high volume breakout anomalies.", 60, "running", "volume_anomaly_sniper"),
+    ("VWAP Reversion Hunter", "Scans for extreme price deviations from daily VWAP.", 600, "running", "vwap_reversion_hunter"),
+    ("Hyperparameter Auto-Tuner", "Runs automated strategy hyperparameter optimization.", 86400, "running", "hyperparam_auto_tuner"),
+    ("Liquidation Cascade Hunter", "Snipes liquidation cascade reversals.", 300, "running", "liquidation_cascade_hunter"),
+    ("Funding Arbitrage Farmer", "Farms funding rate yield arbitrage opportunities.", 3600, "running", "funding_arbitrage_farmer"),
+    ("Correlation Matrix Analyzer", "Monitors cross-asset price correlations.", 14400, "running", "correlation_matrix_analyzer"),
+    ("ATR Position Sizer", "Dynamically sizes positions using ATR volatility.", 3600, "running", "atr_position_sizer"),
+    ("Webhook Dispatcher", "Dispatches real-time webhooks & Telegram alerts.", 60, "running", "webhook_dispatcher"),
+    ("Options Delta Hedger", "Dynamically delta-hedges open options positions.", 300, "running", "options_delta_hedger"),
+]
+
 def list_background_tasks(db_path: Optional[str] = None) -> List[dict]:
     with connect(db_path) as conn:
+        cnt = conn.execute("SELECT COUNT(*) FROM background_tasks").fetchone()[0]
+        if cnt == 0:
+            for name, desc, interval, status, script in DEFAULT_TASKS:
+                conn.execute(
+                    "INSERT INTO background_tasks(name, description, interval_sec, status, script_name, params_json) "
+                    "VALUES (?, ?, ?, ?, ?, '{}')",
+                    (name, desc, interval, status, script)
+                )
         cur = conn.execute("SELECT * FROM background_tasks ORDER BY id ASC")
         cols = [c[0] for c in cur.description]
         return [dict(zip(cols, r)) for r in cur.fetchall()]

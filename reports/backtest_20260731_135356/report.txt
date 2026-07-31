@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : keltner_squeeze
+Symbol / Res  : BTCUSD @ 15m
+Period        : 2026-06-01T08:21:54.767071+00:00 → 2026-07-31T08:21:54.767071+00:00
+Params        : {}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 9603.50
+Net PnL       : -396.50 (-3.96%)
+Trades        : 36 (W:16 L:20 WR:44.4%)
+Avg win/loss  : 208.13 / -186.33
+Expectancy    : -11.01 per trade
+Profit factor : 0.89
+Avg trade PnL : -11.01
+Best / Worst  : 1305.26 / -895.85
+Streaks (W/L) : 4 / 3
+Avg hold time : 39.51 h
+Exit reasons  : exit:35, force_close:1
+Max drawdown  : -22.30%
+Sharpe        : -1.43
+Total fees    : 385.03
+================================================================
+Artifacts     : ./reports/backtest_20260731_135356

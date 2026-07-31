@@ -29,9 +29,21 @@ def strip_ansi(text: str) -> str:
     return _ANSI_REGEX.sub('', str(text))
 
 
+import unicodedata
+
 def visible_len(text: str) -> int:
-    """Calculate length of string excluding invisible ANSI escape codes."""
-    return len(strip_ansi(text))
+    """Calculate length of string excluding invisible ANSI escape codes and accounting for wide unicode chars (emojis)."""
+    clean_text = strip_ansi(text)
+    length = 0
+    for char in clean_text:
+        if unicodedata.east_asian_width(char) in ('W', 'F'):
+            length += 2
+        else:
+            length += 1
+    # Variation selectors (like U+FE0F in ⏸️) have length 1 in the loop but width 0 visually if attached to another char.
+    # A simple way to handle the most common ones without a heavy library is to just subtract their count.
+    length -= clean_text.count('\uFE0F')
+    return length
 
 
 import math

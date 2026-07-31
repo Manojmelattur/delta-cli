@@ -775,6 +775,32 @@ def _close_position(row, exit_price: float, reason: str) -> None:
     )
     set_open_position(row["id"], None, None, None)
 
+    # ── One-cycle auto-stop ──────────────────────────────────────────────────
+    # If this deployment was launched by the auto-scan one-cycle scanner,
+    # automatically stop it after the first closed trade so it never re-enters.
+    try:
+        tag = row["tag"] if "tag" in row.keys() else None
+    except (IndexError, KeyError, TypeError):
+        tag = None
+
+    if tag == "one_cycle":
+        try:
+            set_status(row["id"], "stopped")
+            record_event_full(
+                row["id"], "one_cycle_complete",
+                message=(
+                    f"one-cycle trade finished ({reason}). "
+                    f"Bot auto-stopped — no re-entry."
+                ),
+            )
+            print(
+                f"[watch] one-cycle #{row['id']} {row['name']} "
+                f"auto-stopped after {reason}",
+                flush=True,
+            )
+        except Exception as _e:
+            pass  # never let this break the main scheduler loop
+
 
 def _open_position(row, side: str, mark: float) -> None:
     size = float(row["size"])
@@ -1069,7 +1095,7 @@ def _run_background_tasks() -> None:
             task_failed = False  # Fix 2: track failure so last_run_at is not updated on error
 
             try:
-                mod    = import_module(f"delta_bt.tasks.{t['script_name']}")
+                mod    = import_module(f"delta_bt.tasks.{t['script_name'].removesuffix('.py')}")
                 params = {}
                 try:
                     if t.get("params_json"):

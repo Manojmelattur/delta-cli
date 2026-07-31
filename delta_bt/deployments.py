@@ -199,9 +199,24 @@ def add_deployment(**k: Any) -> int:
         return dep_id
 
 
-def list_deployments() -> List[sqlite3.Row]:
+def list_deployments(status: Optional[str] = None, venue: Optional[str] = None, strategy: Optional[str] = None, symbol: Optional[str] = None) -> List[sqlite3.Row]:
+    query = "SELECT * FROM deployments WHERE 1=1"
+    params = []
+    if status:
+        query += " AND status=?"
+        params.append(status)
+    if venue:
+        query += " AND venue=?"
+        params.append(venue)
+    if strategy:
+        query += " AND strategy=?"
+        params.append(strategy)
+    if symbol:
+        query += " AND symbol=?"
+        params.append(symbol)
+    query += " ORDER BY id DESC"
     with open_db() as c:
-        return list(c.execute("SELECT * FROM deployments ORDER BY id DESC"))
+        return list(c.execute(query, params))
 
 
 def get_deployment(dep_id: int) -> Optional[sqlite3.Row]:

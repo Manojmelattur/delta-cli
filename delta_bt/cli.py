@@ -483,7 +483,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     dp = sub.add_parser("deployments", help="Manage scheduled strategy deployments")
     dsub = dp.add_subparsers(dest="dcmd", required=True)
-    dsub.add_parser("list", help="Show all deployments with status/PnL")
+    dlist = dsub.add_parser("list", help="Show all deployments with status/PnL")
+    dlist.add_argument("--status", choices=["running", "paused", "stopped"], default=None, help="Filter by bot status")
+    dlist.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Filter by venue")
+    dlist.add_argument("--strategy", default=None, help="Filter by strategy")
+    dlist.add_argument("--symbol", default=None, help="Filter by symbol")
+
     da = dsub.add_parser("add", help="Create a new deployment")
     da.add_argument("--name", required=True)
     da.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], required=True)
@@ -500,7 +505,39 @@ def build_parser() -> argparse.ArgumentParser:
     da.add_argument("--i-understand-live", action="store_true")
     for name in ("pause", "resume", "stop", "close", "rm"):
         p2 = dsub.add_parser(name, help=f"{name} deployment")
-        p2.add_argument("id", type=int)
+        p2.add_argument("pos_id", type=int, nargs="?", default=None, help="Deployment ID (positional)")
+        p2.add_argument("--id", type=int, dest="opt_id", default=None, help="Deployment ID")
+        p2.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Filter by venue")
+        p2.add_argument("--all", action="store_true", help=f"{name} all deployments")
+
+    sa = dsub.add_parser("stop-all", help="Stop all active bot deployments")
+    sa.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Filter by venue")
+
+    pa = dsub.add_parser("pause-all", help="Pause all active bot deployments")
+    pa.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Filter by venue")
+
+    ra = dsub.add_parser("resume-all", help="Resume all bot deployments")
+    ra.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Filter by venue")
+
+    de = dsub.add_parser("edit", help="Edit bot parameters (venue, size, SL/TP, strategy, etc.)")
+    de.add_argument("pos_id", type=int, nargs="?", default=None, help="Bot ID (positional)")
+    de.add_argument("--id",                type=int,   dest="opt_id",  default=None)
+    de.add_argument("--name",              default=None, help="New name")
+    de.add_argument("--venue",             choices=["paper", "paper_live", "testnet", "live"], default=None)
+    de.add_argument("--strategy",          default=None)
+    de.add_argument("--symbol",            default=None)
+    de.add_argument("--resolution",        default=None)
+    de.add_argument("--size",              type=float, default=None, help="Lot size (contracts)")
+    de.add_argument("--sl-pct",            type=float, default=None, dest="sl_pct")
+    de.add_argument("--tp-pct",            type=float, default=None, dest="tp_pct")
+    de.add_argument("--trail-pct",         type=float, default=None, dest="trail_pct")
+    de.add_argument("--trail-activate-pct",type=float, default=None, dest="trail_activate_pct")
+    de.add_argument("--breakeven-pct",     type=float, default=None, dest="breakeven_after_pct")
+    de.add_argument("--leverage",          type=float, default=None)
+    de.add_argument("--interval",          type=int,   default=None, help="Tick interval (sec)")
+    de.add_argument("--params",            default=None, help="JSON params string (replaces existing)")
+    de.add_argument("--status",            choices=["running", "paused", "stopped"], default=None)
+
 
     fo = sub.add_parser("folio", help="Portfolio snapshot: balances + open positions + bot PnL")
     fo.add_argument("--venue", choices=["testnet", "live", "both"], default="both")
@@ -523,6 +560,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     bt = sub.add_parser("bots", help="List running bots with status/PnL/ticks")
     bt.add_argument("--all", action="store_true", help="Include stopped/paused bots too")
+    bt.add_argument("--status", choices=["running", "paused", "stopped"], default=None, help="Filter by bot status")
+    bt.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Filter by venue")
+    bt.add_argument("--strategy", default=None, help="Filter by strategy")
+    bt.add_argument("--symbol", default=None, help="Filter by symbol")
 
     bs = sub.add_parser("bot-show", help="Show a bot's full config + latest events")
     bs.add_argument("pos_id", type=int, nargs="?", default=None, help="Bot ID (positional)")
@@ -546,13 +587,18 @@ def build_parser() -> argparse.ArgumentParser:
     dc.add_argument("table", help="runs | trades | equity | fills | deployments | deployment_events | all")
     dc.add_argument("-y", "--yes", action="store_true", help="Skip confirmation")
 
+    fr = sub.add_parser("factory-reset", help="Reset database, deployments, & reports to fresh state for new users")
+    fr.add_argument("-y", "--yes", action="store_true", help="Skip confirmation")
+
     ad = sub.add_parser("auto-deploy", help="Auto-scan market and deploy best strategy")
     ad.add_argument("--top", type=int, default=1, help="Number of top coins to deploy on")
+    ad.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default=None, help="Target execution venue (default: testnet)")
     ad_venue = ad.add_mutually_exclusive_group()
     ad_venue.add_argument("--live", dest="live", action="store_true", help="Use live market")
     ad_venue.add_argument("--testnet", dest="live", action="store_false", help="Use testnet")
     ad.set_defaults(live=False)
-    ad.add_argument("--resolution", default="15m", help="Timeframe to sweep (default: 15m)")
+    ad.add_argument("--symbol", default=None, help="Optional specific symbol to auto-deploy (skips market scan)")
+    ad.add_argument("--timeframe", "--resolution", dest="resolution", default="15m", help="Timeframe to sweep (e.g. 1m, 5m, 15m, 1h, 4h, 1d) (default: 15m)")
     ad.add_argument("--days", type=int, default=7, help="Lookback days for market scanning and strategy sweep (default: 7)")
     ad.add_argument("--size", type=float, default=0.001, help="Order size per deployment")
     ad.add_argument("--sl-pct", type=float, default=1.2, help="Stop loss percentage")
@@ -598,13 +644,20 @@ def build_parser() -> argparse.ArgumentParser:
 
     tk = sub.add_parser("tasks", help="Manage background tasks / scheduled jobs")
     tsub = tk.add_subparsers(dest="tcmd", required=True)
-    tsub.add_parser("list", help="List all background tasks")
+    tsub.add_parser("list", help="List all active background tasks")
+    tsub.add_parser("catalog", help="List all available task scripts, descriptions, and parameter inputs")
+    tsub.add_parser("scripts", help="List all available task scripts, descriptions, and parameter inputs")
 
     tp = tsub.add_parser("pause", help="Pause background task")
-    tp.add_argument("--id", type=int, required=True, help="Task ID")
+    tp.add_argument("--id", type=int, default=None, help="Task ID")
+    tp.add_argument("--all", action="store_true", help="Pause all background tasks")
 
     tr = tsub.add_parser("resume", help="Resume background task")
-    tr.add_argument("--id", type=int, required=True, help="Task ID")
+    tr.add_argument("--id", type=int, default=None, help="Task ID")
+    tr.add_argument("--all", action="store_true", help="Resume all background tasks")
+
+    tsub.add_parser("pause-all", help="Pause all background tasks")
+    tsub.add_parser("resume-all", help="Resume all background tasks")
 
     tl = tsub.add_parser("logs", help="View background task execution logs")
     tl.add_argument("--id", type=int, required=True, help="Task ID")
@@ -628,6 +681,7 @@ def build_parser() -> argparse.ArgumentParser:
     ted.add_argument("--interval", type=int, default=None, help="New interval in seconds")
     ted.add_argument("--name", default=None, help="New task name")
     ted.add_argument("--status", choices=["running", "paused"], default=None, help="New status")
+    ted.add_argument("--params", default=None, help="New params as JSON string (replaces existing)")
 
     # PnL & Analytics
     pn = sub.add_parser("pnl", help="Show portfolio PnL summary, win rate, and ASCII equity chart")
@@ -636,8 +690,11 @@ def build_parser() -> argparse.ArgumentParser:
     pns = sub.add_parser("pnl-strategy", help="Show performance breakdown per strategy")
 
     # Terminal Monitor & Emergency Kill-switch
-    mn = sub.add_parser("monitor", help="Launch live terminal dashboard for running bots and open positions")
+    mn = sub.add_parser("monitor", help="Launch live terminal console PnL dashboard")
     mn.add_argument("--interval", type=int, default=3, help="Terminal refresh interval in seconds")
+
+    db = sub.add_parser("dashboard", help="Launch live terminal console PnL dashboard")
+    db.add_argument("--interval", type=int, default=3, help="Terminal refresh interval in seconds")
 
     bca = sub.add_parser("bot-close-all", help="Emergency CLI kill-switch: close all open exchange positions immediately")
 
@@ -1305,7 +1362,12 @@ def cmd_deployments(a) -> int:
     from .import deployments as dep
     from .pnl_analytics import render_box_table, format_pnl
     if a.dcmd == "list":
-        rows_data = dep.list_deployments()
+        rows_data = dep.list_deployments(
+            status=getattr(a, "status", None),
+            venue=getattr(a, "venue", None),
+            strategy=getattr(a, "strategy", None),
+            symbol=getattr(a, "symbol", None)
+        )
         headers = ["ID", "Name", "Venue", "Strategy", "Symbol", "TF", "Status", "Last Signal", "Realized PnL ($)"]
         rows = []
         for r in rows_data:
@@ -1332,16 +1394,121 @@ def cmd_deployments(a) -> int:
             i_understand_live=a.i_understand_live,
         )
         print(f"created deployment #{did}"); return 0
-    if a.dcmd == "pause": dep.set_status(a.id, "paused", "paused via CLI"); return 0
-    if a.dcmd == "resume": dep.set_status(a.id, "running", "resumed via CLI"); return 0
-    if a.dcmd == "stop": dep.set_status(a.id, "stopped", "stopped via CLI"); return 0
+    if a.dcmd == "stop-all" or (a.dcmd == "stop" and getattr(a, "all", False)):
+        vf = getattr(a, "venue", None)
+        deps = dep.list_deployments(venue=vf)
+        count = 0
+        for d in deps:
+            if d["status"] in ("running", "paused"):
+                dep.set_status(d["id"], "stopped", f"stopped via CLI stop-all {vf or ''}".strip())
+                count += 1
+        msg = f"stopped {count} bot deployment(s)"
+        if vf: msg += f" on venue [{vf}]"
+        print(msg)
+        return 0
+
+    if a.dcmd == "pause-all" or (a.dcmd == "pause" and getattr(a, "all", False)):
+        vf = getattr(a, "venue", None)
+        deps = dep.list_deployments(venue=vf)
+        count = 0
+        for d in deps:
+            if d["status"] == "running":
+                dep.set_status(d["id"], "paused", f"paused via CLI pause-all {vf or ''}".strip())
+                count += 1
+        msg = f"paused {count} bot deployment(s)"
+        if vf: msg += f" on venue [{vf}]"
+        print(msg)
+        return 0
+
+    if a.dcmd == "resume-all" or (a.dcmd == "resume" and getattr(a, "all", False)):
+        vf = getattr(a, "venue", None)
+        deps = dep.list_deployments(venue=vf)
+        count = 0
+        for d in deps:
+            if d["status"] == "paused":
+                dep.set_status(d["id"], "running", f"resumed via CLI resume-all {vf or ''}".strip())
+                count += 1
+        msg = f"resumed {count} bot deployment(s)"
+        if vf: msg += f" on venue [{vf}]"
+        print(msg)
+        return 0
+
+    bot_id = getattr(a, "opt_id", None) if getattr(a, "opt_id", None) is not None else getattr(a, "pos_id", None)
+    if bot_id is None and hasattr(a, "id"):
+        bot_id = a.id
+
+    if bot_id is None and a.dcmd in ("pause", "resume", "stop", "rm", "close"):
+        print(f"Deployment ID required for `deployments {a.dcmd}` (e.g. `deployments {a.dcmd} 1` or `--all`)", file=sys.stderr)
+        return 1
+
+    if a.dcmd == "pause": dep.set_status(bot_id, "paused", "paused via CLI"); print(f"paused deployment #{bot_id}"); return 0
+    if a.dcmd == "resume": dep.set_status(bot_id, "running", "resumed via CLI"); print(f"resumed deployment #{bot_id}"); return 0
+    if a.dcmd == "stop": dep.set_status(bot_id, "stopped", "stopped via CLI"); print(f"stopped deployment #{bot_id}"); return 0
     if a.dcmd == "rm":
-        try: dep.remove_deployment(a.id); print(f"removed #{a.id}"); return 0
+        try: dep.remove_deployment(bot_id); print(f"removed deployment #{bot_id}"); return 0
         except ValueError as e: print(str(e), file=sys.stderr); return 2
     if a.dcmd == "close":
-        # Reuse cmd_order-style close via positions endpoint isn't wired here;
-        # nudge user to use the web UI or `python -m delta_bt order --reduce-only`.
         print("Use the Trade page 'Close position' action, or `python -m delta_bt order` with --reduce-only.")
+        return 0
+    if a.dcmd == "edit":
+        import json as _ej
+        bot_id = getattr(a, "opt_id", None) or getattr(a, "pos_id", None)
+        if bot_id is None:
+            print("Bot ID required: deployments edit <ID> or --id <ID>", file=sys.stderr)
+            return 1
+        from .deployments import get_deployment, record_event_full
+        row = get_deployment(bot_id)
+        if row is None:
+            print(f"Bot #{bot_id} not found", file=sys.stderr)
+            return 1
+
+        # Build SET clauses only for fields that were actually supplied
+        sets, vals, changed = [], [], []
+
+        def _field(col, attr_val, label=None):
+            if attr_val is not None:
+                sets.append(f"{col} = ?")
+                vals.append(attr_val)
+                changed.append(f"{label or col} → {attr_val}")
+
+        _field("name",                a.name)
+        _field("venue",               a.venue)
+        _field("strategy",            a.strategy)
+        _field("symbol",              a.symbol)
+        _field("resolution",          a.resolution)
+        _field("size",                a.size,                "size (lots)")
+        _field("sl_pct",              a.sl_pct,              "sl_pct")
+        _field("tp_pct",              a.tp_pct,              "tp_pct")
+        _field("trail_pct",           a.trail_pct,           "trail_pct")
+        _field("trail_activate_pct",  a.trail_activate_pct,  "trail_activate_pct")
+        _field("breakeven_after_pct", a.breakeven_after_pct, "breakeven_after_pct")
+        _field("leverage",            a.leverage)
+        _field("interval_sec",        a.interval,            "interval_sec")
+        _field("status",              a.status)
+
+        if a.params is not None:
+            try:
+                _ej.loads(a.params)   # validate JSON
+            except Exception as e:
+                print(f"[deployments edit] invalid --params JSON: {e}", file=sys.stderr)
+                return 1
+            sets.append("params_json = ?")
+            vals.append(a.params)
+            changed.append(f"params_json → {a.params}")
+
+        if not sets:
+            print(f"Nothing to update — pass at least one flag (e.g. --sl-pct 2.0 --size 5)", file=sys.stderr)
+            return 1
+
+        with dep.open_db() as db:
+            db.execute(
+                f"UPDATE deployments SET {', '.join(sets)} WHERE id = ?",
+                vals + [bot_id],
+            )
+        summary = "\n  ".join(changed)
+        record_event_full(bot_id, "params_edited",
+                          message=f"parameters edited via CLI:\n  {summary}")
+        print(f"Updated bot #{bot_id}:\n  {summary}")
         return 0
     return 2
 
@@ -1503,9 +1670,15 @@ def cmd_activity(a) -> int:
 def cmd_bots(a) -> int:
     from .deployments import list_deployments as _list
     from .pnl_analytics import render_box_table, format_pnl
-    rows_data = _list()
-    if not a.all:
-        rows_data = [r for r in rows_data if r["status"] == "running"]
+    status_filter = getattr(a, "status", None)
+    if not a.all and status_filter is None:
+        status_filter = "running"
+    rows_data = _list(
+        status=status_filter,
+        venue=getattr(a, "venue", None),
+        strategy=getattr(a, "strategy", None),
+        symbol=getattr(a, "symbol", None)
+    )
     if not rows_data:
         print("(no bots)"); return 0
     headers = ["ID", "Status", "Venue", "Strategy", "Symbol", "TF", "Size", "Ticks", "Pos", "Realized PnL ($)", "Last Tick", "Signal"]
@@ -1606,8 +1779,40 @@ def cmd_db_clear(a) -> int:
         ans = input(f"clear table '{a.table}'? [y/N]: ").strip().lower()
         if ans != "y":
             print("aborted"); return 1
-    r = clear_table(a.table)
-    print(r)
+def cmd_factory_reset(a) -> int:
+    """Master factory reset: clear database, stop active bots, reset background tasks, and clean reports."""
+    if not a.yes:
+        ans = input("⚠️ Are you sure you want to FACTORY RESET the entire app for a new user? [y/N]: ").strip().lower()
+        if ans != "y":
+            print("aborted"); return 1
+
+    from .store.db import clear_table, list_background_tasks
+    import glob
+
+    # 1. Clear database tables
+    r = clear_table("all")
+    
+    # 2. Re-seed fresh default background tasks
+    list_background_tasks()
+
+    # 3. Clean reports folder
+    report_files = glob.glob("./reports/**/*.csv", recursive=True)
+    for f in report_files:
+        try:
+            os.remove(f)
+        except Exception:
+            pass
+
+    C_GREEN = "\033[1;32m"
+    C_BOLD = "\033[1m"
+    C_RESET = "\033[0m"
+
+    print("\n" + f"{C_BOLD}{C_GREEN}✨ System Factory Reset Complete!{C_RESET}")
+    print("  • Database cleared & re-indexed")
+    print("  • Deployments & active bots purged")
+    print("  • Background tasks reset to default")
+    print("  • Reports & temporary files cleaned")
+    print(f"  • {C_BOLD}Ready for fresh new user setup!{C_RESET}\n")
     return 0
 
 
@@ -1617,49 +1822,59 @@ def cmd_auto_deploy(a) -> int:
     import csv
     import os
     
-    live_flag = "--live" if a.live else "--testnet"
-    
-    print(f"[auto-deploy] Finding top {a.top} gainers on {'live' if a.live else 'testnet'}...")
-    cmd_ru = [
-        sys.executable, "-m", "delta_bt", "rank-universe",
-        "--top", str(a.top),
-        "--lookback-bars", "24",
-        "--min-turnover-usd", "1000000" if a.live else "10000",
-        "--resolution", "1h"
-    ]
-    if a.live:
-        cmd_ru.append("--live")
-        
-    try:
-        subprocess.run(cmd_ru, check=True)
-    except subprocess.CalledProcessError:
-        print("[auto-deploy] rank-universe failed.", file=sys.stderr)
-        return 1
+    target_venue = a.venue if a.venue else ("live" if a.live else "testnet")
+    use_live_data = target_venue in ("live", "paper_live") or a.live
 
     symbols = []
-    try:
-        with open("./reports/universe/universe.csv", "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                symbols.append(row["symbol"])
-    except FileNotFoundError:
-        print("[auto-deploy] Failed to read universe.csv", file=sys.stderr)
-        return 1
+    
+    if getattr(a, "symbol", None):
+        print(f"[auto-deploy] Target symbol specified: {a.symbol} (skipping market scan)")
+        symbols = [a.symbol]
+    else:
+        print(f"[auto-deploy] Scanning market for top {a.top} assets over last {a.days} days (target venue: {target_venue})...")
+        cmd_ru = [
+            sys.executable, "-m", "delta_bt", "rank-universe",
+            "--top", str(a.top),
+            "--lookback-bars", str(max(24, a.days * 24)),
+            "--min-turnover-usd", "1000000" if use_live_data else "10000",
+            "--resolution", "1h"
+        ]
+        if use_live_data:
+            cmd_ru.append("--live")
+            
+        try:
+            subprocess.run(cmd_ru, check=True)
+        except subprocess.CalledProcessError:
+            print("[auto-deploy] rank-universe failed.", file=sys.stderr)
+            return 1
+    
+        try:
+            with open("./reports/universe/universe.csv", "r", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    symbols.append(row["symbol"])
+        except FileNotFoundError:
+            print("[auto-deploy] Failed to read universe.csv", file=sys.stderr)
+            return 1
 
     if not symbols:
         print("[auto-deploy] No symbols found to deploy on.")
         return 0
 
     for symbol in symbols:
-        print(f"\n[auto-deploy] Sweeping strategies for {symbol} @ {a.resolution}...")
+        print(f"\n[auto-deploy] Sweeping strategies for {symbol} @ {a.resolution} over last {a.days} days (SL: {a.sl_pct}% / TP: {a.tp_pct}% / Trail: {a.trail_pct}%)...")
         report_path = f"./reports/sweep/{symbol}.csv"
         cmd_sw = [
             sys.executable, "-m", "delta_bt", "sweep",
             "--symbol", symbol,
             "--resolution", a.resolution,
+            "--days", str(a.days),
+            "--sl-pct", str(a.sl_pct),
+            "--tp-pct", str(a.tp_pct),
+            "--trail-pct", str(a.trail_pct),
             "--csv", report_path
         ]
-        if a.live:
+        if use_live_data:
             cmd_sw.append("--live")
         else:
             cmd_sw.append("--testnet")
@@ -1676,7 +1891,6 @@ def cmd_auto_deploy(a) -> int:
                 reader = csv.DictReader(f)
                 rows = list(reader)
                 if rows:
-                    # top row is best strategy based on default sorting (pnl)
                     best_strategy = rows[0]["strategy"]
         except FileNotFoundError:
             pass
@@ -1685,13 +1899,12 @@ def cmd_auto_deploy(a) -> int:
             print(f"[auto-deploy] No profitable strategy found for {symbol}.")
             continue
             
-        print(f"[auto-deploy] Best strategy for {symbol} is {best_strategy}. Deploying...")
-        venue_str = "live" if a.live else "testnet"
+        print(f"[auto-deploy] Best strategy for {symbol} is {best_strategy}. Deploying to [{target_venue}]...")
         
         cmd_add = [
             sys.executable, "-m", "delta_bt", "deployments", "add",
             "--name", f"Auto {symbol}",
-            "--venue", venue_str,
+            "--venue", target_venue,
             "--strategy", best_strategy,
             "--symbol", symbol,
             "--resolution", a.resolution,
@@ -1700,10 +1913,12 @@ def cmd_auto_deploy(a) -> int:
             "--tp-pct", str(a.tp_pct),
             "--trail-pct", str(a.trail_pct)
         ]
+        if target_venue == "live":
+            cmd_add.append("--i-understand-live")
         
         try:
             subprocess.run(cmd_add, check=True)
-            print(f"[auto-deploy] Successfully deployed {best_strategy} on {symbol}.")
+            print(f"[auto-deploy] Successfully deployed {best_strategy} on {symbol} [{target_venue}].")
         except subprocess.CalledProcessError:
             print(f"[auto-deploy] deployment failed for {symbol}.", file=sys.stderr)
             
@@ -1833,6 +2048,22 @@ def cmd_sweep(a) -> int:
 def cmd_tasks(a) -> int:
     from .store.db import list_background_tasks, toggle_background_task, get_task_logs, connect
     from .pnl_analytics import render_box_table
+    if a.tcmd in ("catalog", "scripts"):
+        from .task_registry import get_catalog
+        import json as _json
+        cat = get_catalog()
+        headers = ["Script Filename", "Task Name", "Category", "Default Interval", "Sample Properties / Inputs"]
+        rows = []
+        for item in cat:
+            rows.append([
+                item["script"],
+                item["name"][:32],
+                item["category"],
+                f"{item['default_interval']}s",
+                _json.dumps(item["params"])
+            ])
+        print("\n" + render_box_table(headers, rows, title="AVAILABLE TASK SCRIPTS & PROPERTY INPUTS CATALOG") + "\n")
+        return 0
     if a.tcmd == "list":
         tasks = list_background_tasks()
         headers = ["ID", "Task Name", "Script", "Status", "Interval", "Last Run"]
@@ -1848,11 +2079,27 @@ def cmd_tasks(a) -> int:
             ])
         print("\n" + render_box_table(headers, rows, title="BACKGROUND TASKS & SCHEDULER") + "\n")
         return 0
+    if a.tcmd == "pause-all" or (a.tcmd == "pause" and getattr(a, "all", False)):
+        with connect() as conn:
+            conn.execute("UPDATE background_tasks SET status='paused'")
+        print("paused all background tasks")
+        return 0
+    if a.tcmd == "resume-all" or (a.tcmd == "resume" and getattr(a, "all", False)):
+        with connect() as conn:
+            conn.execute("UPDATE background_tasks SET status='running'")
+        print("resumed all background tasks")
+        return 0
     if a.tcmd == "pause":
+        if a.id is None:
+            print("Please specify --id <ID> or --all to pause tasks", file=sys.stderr)
+            return 1
         toggle_background_task(a.id, "paused")
         print(f"paused background task #{a.id}")
         return 0
     if a.tcmd == "resume":
+        if a.id is None:
+            print("Please specify --id <ID> or --all to resume tasks", file=sys.stderr)
+            return 1
         toggle_background_task(a.id, "running")
         print(f"resumed background task #{a.id}")
         return 0
@@ -1870,13 +2117,19 @@ def cmd_tasks(a) -> int:
         print(f"removed background task #{a.id}")
         return 0
     if a.tcmd == "add":
-        with connect() as conn:
-            conn.execute(
-                "INSERT INTO background_tasks(name, description, interval_sec, status, script_name, params_json) "
-                "VALUES (?, ?, ?, 'running', ?, ?)",
-                (a.name, a.desc or a.name, a.interval, a.script, a.params)
-            )
-        print(f"added background task '{a.name}'")
+        import sqlite3
+        try:
+            with connect() as conn:
+                conn.execute(
+                    "INSERT INTO background_tasks(name, description, interval_sec, status, script_name, params_json) "
+                    "VALUES (?, ?, ?, 'running', ?, ?)",
+                    (a.name, a.desc or a.name, a.interval, a.script, a.params)
+                )
+            print(f"added background task '{a.name}'")
+        except sqlite3.IntegrityError:
+            print(f"\n[Error] A task with the name '{a.name}' already exists.")
+            print("Please edit the existing task or use a different name.")
+            return 1
         return 0
     if a.tcmd == "run-now":
         tasks = list_background_tasks()
@@ -1885,26 +2138,48 @@ def cmd_tasks(a) -> int:
             print(f"task #{a.id} not found", file=sys.stderr)
             return 1
         from importlib import import_module
+        # strip .py extension — import_module needs the module name not the filename
+        mod_name = t['script_name'].removesuffix('.py')
         try:
-            mod = import_module(f"delta_bt.tasks.{t['script_name']}")
+            mod = import_module(f"delta_bt.tasks.{mod_name}")
             fn = getattr(mod, "run", None) or getattr(mod, "main", None)
             if callable(fn):
-                res = fn()
-                print(f"[tasks run-now] Task #{a.id} completed: {res}")
+                params = {}
+                try:
+                    import json as _pj
+                    params = _pj.loads(t.get('params_json') or '{}')
+                except Exception:
+                    pass
+                print(f"[tasks run-now] executing task #{a.id} ({mod_name})...")
+                res = fn(**params)
+                print(f"[tasks run-now] success: {res}")
             else:
-                print(f"[tasks run-now] No run() or main() function found in delta_bt.tasks.{t['script_name']}", file=sys.stderr)
+                print(f"[tasks run-now] No run() or main() function found in delta_bt.tasks.{mod_name}", file=sys.stderr)
         except Exception as e:
-            print(f"[tasks run-now] Error executing task #{a.id}: {e}", file=sys.stderr)
+            print(f"[tasks run-now] error executing task #{a.id}: {e}", file=sys.stderr)
             return 1
         return 0
     if a.tcmd == "edit":
+        import json as _j
         with connect() as conn:
             if a.interval is not None:
                 conn.execute("UPDATE background_tasks SET interval_sec=? WHERE id=?", (a.interval, a.id))
+                print(f"  interval → {a.interval}s")
             if a.name is not None:
                 conn.execute("UPDATE background_tasks SET name=? WHERE id=?", (a.name, a.id))
+                print(f"  name     → {a.name}")
             if a.status is not None:
                 conn.execute("UPDATE background_tasks SET status=? WHERE id=?", (a.status, a.id))
+                print(f"  status   → {a.status}")
+            if a.params is not None:
+                # validate JSON before storing
+                try:
+                    _j.loads(a.params)
+                except Exception as e:
+                    print(f"[tasks edit] Invalid JSON params: {e}", file=sys.stderr)
+                    return 1
+                conn.execute("UPDATE background_tasks SET params_json=? WHERE id=?", (a.params, a.id))
+                print(f"  params   → {a.params}")
         print(f"updated background task #{a.id}")
         return 0
     return 2
@@ -2023,12 +2298,14 @@ def main(argv=None) -> int:
         "db-path": cmd_db_path,
         "db-vacuum": cmd_db_vacuum,
         "db-clear": cmd_db_clear,
+        "factory-reset": cmd_factory_reset,
         "sweep": cmd_sweep,
         "auto-deploy": cmd_auto_deploy,
         "tasks": cmd_tasks,
         "pnl": cmd_pnl,
         "pnl-strategy": cmd_pnl_strategy,
         "monitor": cmd_monitor,
+        "dashboard": cmd_monitor,
         "bot-close-all": cmd_bot_close_all,
     }[args.cmd](args)
 
