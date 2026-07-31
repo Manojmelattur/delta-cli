@@ -82,16 +82,45 @@ def select_strategy_interactive(default="supertrend_mom") -> str:
     return choice
 
 def menu_backtest():
-    clear_screen()
-    print_banner()
-    print(f"{C_BOLD}{C_MAGENTA}📈 RUN STRATEGY BACKTEST{C_RESET}\n")
-    
-    strategy = select_strategy_interactive(default="supertrend_mom")
-    symbol   = input(f" {C_CYAN}Symbol{C_RESET}   [BTCUSD]: ").strip() or "BTCUSD"
-    tf       = input(f" {C_CYAN}Timeframe{C_RESET}[15m]: ").strip() or "15m"
-    days     = input(f" {C_CYAN}Days{C_RESET}     [60]: ").strip() or "60"
-    
-    run_cli_command(["backtest", "--strategy", strategy, "--symbol", symbol, "--timeframe", tf, "--days", days])
+    while True:
+        clear_screen()
+        print_banner()
+        print(f"{C_BOLD}{C_MAGENTA}📈 BACKTESTING ENGINE{C_RESET}\n")
+        print(f"  {C_CYAN}1.{C_RESET} Run Strategy Backtest")
+        print(f"  {C_CYAN}2.{C_RESET} 🧹 Clean Old Backtest & Scan Reports (Frees Disk Space)")
+        print(f"  {C_CYAN}3.{C_RESET} Back to Main Menu\n")
+        
+        c = input(f" {C_BOLD}Select [1-3]:{C_RESET} ").strip()
+        
+        if c == "1":
+            strategy = select_strategy_interactive(default="supertrend_mom")
+            symbol   = input(f" {C_CYAN}Symbol{C_RESET}   [BTCUSD]: ").strip() or "BTCUSD"
+            tf       = input(f" {C_CYAN}Timeframe{C_RESET}[15m]: ").strip() or "15m"
+            days     = input(f" {C_CYAN}Days{C_RESET}     [60]: ").strip() or "60"
+            run_cli_command(["backtest", "--strategy", strategy, "--symbol", symbol, "--timeframe", tf, "--days", days])
+        
+        elif c == "2":
+            import glob
+            import shutil
+            import os
+            print(f"\n {C_DIM}Scanning for old reports...{C_RESET}")
+            paths = glob.glob("reports/backtest_*") + glob.glob("reports/scan_*")
+            if not paths:
+                print(f" {C_GREEN}No old reports found. Your disk is clean!{C_RESET}")
+            else:
+                for p in paths:
+                    try:
+                        if os.path.isdir(p):
+                            shutil.rmtree(p)
+                        else:
+                            os.remove(p)
+                    except Exception as e:
+                        pass
+                print(f" {C_GREEN}Successfully deleted {len(paths)} old report folders!{C_RESET}")
+            input(f"\n{C_DIM}Press Enter to return...{C_RESET}")
+            
+        elif c == "3":
+            break
 
 def menu_scheduled_trade():
     clear_screen()
