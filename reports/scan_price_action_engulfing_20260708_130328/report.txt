@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : price_action_engulfing
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 8166.30
+Net PnL       : -1833.70 (-18.34%)
+Trades        : 51 (W:11 L:40 WR:21.6%)
+Avg win/loss  : 33.44 / -55.04
+Expectancy    : -35.95 per trade
+Profit factor : 0.17
+Avg trade PnL : -35.95
+Best / Worst  : 72.66 / -128.06
+Streaks (W/L) : 2 / 13
+Avg hold time : 2.45 h
+Exit reasons  : exit:2, stop_loss:6, trailing_stop:43
+Max drawdown  : -18.34%
+Sharpe        : -69.70
+Total fees    : 460.73
+================================================================
+Artifacts     : ./reports\scan_price_action_engulfing_20260708_130328

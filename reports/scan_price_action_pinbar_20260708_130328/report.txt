@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : price_action_pinbar
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 9320.22
+Net PnL       : -679.78 (-6.80%)
+Trades        : 28 (W:10 L:18 WR:35.7%)
+Avg win/loss  : 32.88 / -56.03
+Expectancy    : -24.28 per trade
+Profit factor : 0.33
+Avg trade PnL : -24.28
+Best / Worst  : 105.31 / -132.06
+Streaks (W/L) : 2 / 6
+Avg hold time : 3.46 h
+Exit reasons  : exit:1, stop_loss:2, trailing_stop:25
+Max drawdown  : -6.80%
+Sharpe        : -33.91
+Total fees    : 267.39
+================================================================
+Artifacts     : ./reports\scan_price_action_pinbar_20260708_130328

@@ -1,0 +1,92 @@
+# Trend-following
+python -m delta_bt backtest --strategy ema_cross      --symbol BTCUSD --timeframe 15m --days 60  --params '{\"fast\":9,\"slow\":21}'
+python -m delta_bt backtest --strategy ema3           --symbol BTCUSD --timeframe 15m --days 60  --params '{\"fast\":9,\"mid\":21,\"slow\":55}'
+python -m delta_bt backtest --strategy macd           --symbol ETHUSD --timeframe 1h  --days 90  --params '{\"fast\":12,\"slow\":26,\"signal\":9}'
+python -m delta_bt backtest --strategy supertrend_mom --symbol BTCUSD --timeframe 15m --days 60  --params '{\"atr_period\":10,\"multiplier\":3.0,\"mom_period\":10,\"mom_thresh\":0.0}'
+python -m delta_bt backtest --strategy vwap           --symbol BTCUSD --timeframe 5m  --days 30  --params '{\"mode\":\"trend\",\"band_bps\":20}'
+
+# Mean-reversion / range
+python -m delta_bt backtest --strategy rsi_mr         --symbol SOLUSD --timeframe 15m --days 60  --params '{\"period\":14,\"oversold\":30,\"overbought\":70}'
+python -m delta_bt backtest --strategy bollinger      --symbol BTCUSD --timeframe 1h  --days 90  --params '{\"period\":20,\"stdev\":2.0,\"mode\":\"revert\"}'
+# Bollinger breakout instead of revert:
+python -m delta_bt backtest --strategy bollinger      --symbol BTCUSD --timeframe 1h  --days 90  --params period=20,stdev=2.0,mode=breakout
+
+# Price action
+python -m delta_bt backtest --strategy price_action_pinbar    --symbol BTCUSD --timeframe 1h --days 90 --params '{\"wick_ratio\":2.0,\"body_frac\":0.33,\"ema_len\":50,\"require_swing\":true,\"swing\":5}'
+python -m delta_bt backtest --strategy price_action_engulfing --symbol BTCUSD --timeframe 1h --days 90 --params '{\"ema_len\":50,\"min_body_ratio\":1.2,\"close_frac\":0.6}'
+
+# Smart Money Concepts
+python -m delta_bt backtest --strategy fvg                  --symbol BTCUSD --timeframe 15m --days 60 --params '{\"lookback_close\":50}'
+python -m delta_bt backtest --strategy smc_ob               --symbol BTCUSD --timeframe 1h  --days 90 --params '{\"impulse_bars\":3,\"impulse_mult\":1.5,\"max_age\":50}'
+python -m delta_bt backtest --strategy smc_ob_fvg           --symbol BTCUSD --timeframe 1h  --days 90 --params '{\"imp_bars\":3,\"imp_mult\":1.5,\"fvg_lookback\":40,\"max_age\":60}'
+python -m delta_bt backtest --strategy smc_choch_bos        --symbol BTCUSD --timeframe 1h  --days 90 --params '{\"swing\":5}'
+python -m delta_bt backtest --strategy smc_bos_retest       --symbol BTCUSD --timeframe 1h  --days 90 --params '{\"swing\":5,\"retest_window\":15,\"buffer_pct\":0.1}'
+python -m delta_bt backtest --strategy smc_liquidity_sweep  --symbol SOLUSD --timeframe 15m --days 60 --params '{\"lookback\":20,\"wick_ratio\":0.5,\"cooldown\":3}'
+
+
+
+# rank all strategies on BTCUSD, 15m, last 60 days
+python -m delta_bt scan --symbol BTCUSD --timeframe 15m --days 60
+
+# only show profitable ones, top 5, and save each run to SQLite so the
+# dashboard / `runs` / `plot` can see them
+python -m delta_bt scan --symbol ETHUSD --timeframe 1h --days 90 --profitable-only --top 5 --save
+
+# tune risk knobs — same values apply to every strategy in the scan
+python -m delta_bt scan --symbol BTCUSD --timeframe 15m --days 30 --sl-pct 1.5 --tp-pct 3.0 --trail-pct 1.0 --leverage 3
+
+
+# universal shortlist (default: 1h bars, min $20M turnover, top 20)
+python -m delta_bt rank-universe --top 20
+
+# bias toward trend setups (matches ema3 / supertrend_mom / macd)
+python -m delta_bt rank-universe --regime-bias trend --top 15 --out ./reports/universe/trend.csv
+
+# bias toward mean-reversion setups (matches rsi_mr / bollinger)
+python -m delta_bt rank-universe --regime-bias range --adx-range-max 18 --atr-min-pct 1.0 --atr-max-pct 4.0
+
+# rank the live production venue (default is testnet)
+python -m delta_bt rank-universe --live --min-turnover-usd 50000000
+
+
+python -m delta_bt order --venue testnet --symbol ETHUSD --side buy --size 1 --type market_order
+
+Demo
+
+python -m delta_bt paper --strategy supertrend_mom --symbol BTCUSD --timeframe 1m --duration 3600
+
+python -m delta_bt paper --strategy ema3 --symbol BTCUSD --timeframe 5m --live-orders --live-qty 1
+
+
+python -m delta_bt paper --strategy supertrend_mom --symbol BTCUSD
+  --timeframe 1m --duration 3600
+  --sl-pct 1.0 --tp-pct 2.0 --trail-pct 0.5 --capital 10000
+
+
+
+python -m delta_bt paper --strategy supertrend_mom --symbol BTCUSD --timeframe 1m --duration 3600
+
+python -m delta_bt paper --strategy ema3 --symbol BTCUSD --timeframe 5m --live-orders --live-qty 1
+
+
+python -m delta_bt paper --strategy supertrend_mom --symbol BTCUSD
+  --timeframe 1m --live-orders --live-qty 1
+  --sl-pct 1.0 --tp-pct 2.0 --trail-pct 0.5
+python -c "import os; from delta_bt.data.delta_client import DeltaClient;
+c=DeltaClient(os.environ['DELTA_BASE_URL'], os.environ['DELTA_API_KEY'], os.environ['DELTA_API_SECRET']);
+print(c.balances
+
+python -m delta_bt trade --venue testnet --strategy smc_ob_fvg --symbol SOLUSD --resolution 1h --size 1 --params '{"imp_bars":3,"imp_mult":1.5,"fvg_lookback":40,"max_age":60}'
+
+python -m delta_bt backtest --strategy smc_liquidity_sweep  --symbol SOLUSD --timeframe 15m --days 60 --params '{\"lookback\":20,\"wick_ratio\":0.5,\"cooldown\":3}'
+
+
+python -m delta_bt paper --strategy supertrend_mom --symbol BTCUSD   --timeframe 1m --duration 3600   --sl-pct 1.0 --tp-pct 2.0 --trail-pct 0.5 --capital 10000
+
+python -m delta_bt paper --strategy price_action_engulfing --symbol SOLUSD   --timeframe 1h --live-orders --live-qty 1   --sl-pct 1.0 --tp-pct 2.0 --trail-pct 0.5
+
+python -m delta_bt trade paper --symbol XRPUSD  --timeframe 4h --live-orders --live-qty 1   --sl-pct 1.0 --tp-pct 2.0 --trail-pct 0.5
+
+python -m delta_bt order --venue testnet --symbol SOLUSD --side buy --size 1 --type market_order
+
+python -m delta_bt trade --venue testnet --strategy price_action_pinbar --symbol BTCUSD --resolution 15m --size 1 --params '{"wick_ratio":2,"body_frac":0.33,"ema_len":50,"require_swing":true,"swing":5}'

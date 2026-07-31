@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : ema_cross
+Symbol / Res  : BTCUSD @ 1h
+Period        : 2025-01-01T00:00:00+00:00 → 2025-02-01T00:00:00+00:00
+Params        : {}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 8258.76
+Net PnL       : -1741.24 (-17.41%)
+Trades        : 43 (W:9 L:34 WR:20.9%)
+Avg win/loss  : 205.72 / -105.67
+Expectancy    : -40.49 per trade
+Profit factor : 0.52
+Avg trade PnL : -40.49
+Best / Worst  : 587.76 / -394.72
+Streaks (W/L) : 3 / 16
+Avg hold time : 15.95 h
+Exit reasons  : exit:42, force_close:1
+Max drawdown  : -23.49%
+Sharpe        : -31.01
+Total fees    : 410.54
+================================================================
+Artifacts     : ./reports/backtest_20260704_082306

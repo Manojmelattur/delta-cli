@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : fvg
+Symbol / Res  : BEATUSD @ 1h
+Period        : 2026-07-01T07:35:59.433813+00:00 → 2026-07-08T07:35:59.433813+00:00
+Params        : {'ema_len': 50, 'min_body_ratio': 1.2, 'close_frac': 0.6}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 7929.40
+Net PnL       : -2070.60 (-20.71%)
+Trades        : 11 (W:3 L:8 WR:27.3%)
+Avg win/loss  : 318.26 / -378.17
+Expectancy    : -188.24 per trade
+Profit factor : 0.32
+Avg trade PnL : -188.24
+Best / Worst  : 409.52 / -717.00
+Streaks (W/L) : 3 / 5
+Avg hold time : 13.73 h
+Exit reasons  : exit:10, force_close:1
+Max drawdown  : -32.39%
+Sharpe        : -45.06
+Total fees    : 99.37
+================================================================
+Artifacts     : ./reports\backtest_20260708_130800

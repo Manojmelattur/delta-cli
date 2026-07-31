@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : bollinger
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 7236.10
+Net PnL       : -2763.90 (-27.64%)
+Trades        : 79 (W:15 L:64 WR:19.0%)
+Avg win/loss  : 49.85 / -54.87
+Expectancy    : -34.99 per trade
+Profit factor : 0.21
+Avg trade PnL : -34.99
+Best / Worst  : 188.47 / -132.14
+Streaks (W/L) : 2 / 21
+Avg hold time : 3.14 h
+Exit reasons  : exit:5, stop_loss:12, trailing_stop:62
+Max drawdown  : -27.68%
+Sharpe        : -72.25
+Total fees    : 657.84
+================================================================
+Artifacts     : ./reports\scan_bollinger_20260708_130328

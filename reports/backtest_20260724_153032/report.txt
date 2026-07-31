@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : vwap_bands
+Symbol / Res  : BTCUSD @ 5m
+Period        : 2026-07-17T09:58:30.885703+00:00 → 2026-07-24T09:58:30.885703+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 9544.01
+Net PnL       : -455.99 (-4.56%)
+Trades        : 14 (W:5 L:9 WR:35.7%)
+Avg win/loss  : 50.11 / -78.50
+Expectancy    : -32.57 per trade
+Profit factor : 0.35
+Avg trade PnL : -32.57
+Best / Worst  : 138.30 / -112.05
+Streaks (W/L) : 2 / 3
+Avg hold time : 9.91 h
+Exit reasons  : exit:7, force_close:1, stop_loss:6
+Max drawdown  : -5.59%
+Sharpe        : -21.24
+Total fees    : 136.49
+================================================================
+Artifacts     : ./reports\backtest_20260724_153032

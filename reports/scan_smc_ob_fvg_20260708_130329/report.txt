@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : smc_ob_fvg
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 8896.83
+Net PnL       : -1103.17 (-11.03%)
+Trades        : 35 (W:8 L:27 WR:22.9%)
+Avg win/loss  : 31.47 / -50.18
+Expectancy    : -31.52 per trade
+Profit factor : 0.19
+Avg trade PnL : -31.52
+Best / Worst  : 76.82 / -125.47
+Streaks (W/L) : 3 / 17
+Avg hold time : 3.51 h
+Exit reasons  : exit:3, stop_loss:3, trailing_stop:29
+Max drawdown  : -11.49%
+Sharpe        : -47.07
+Total fees    : 333.16
+================================================================
+Artifacts     : ./reports\scan_smc_ob_fvg_20260708_130329

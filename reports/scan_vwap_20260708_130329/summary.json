@@ -1,0 +1,42 @@
+{
+  "starting_capital": 10000.0,
+  "ending_equity": 5085.906090647286,
+  "net_pnl": -4914.093909352714,
+  "return_pct": -49.14093909352714,
+  "trades": 224,
+  "wins": 51,
+  "losses": 173,
+  "win_rate_pct": 22.767857142857142,
+  "profit_factor": 0.3058415721332904,
+  "avg_trade_pnl": -21.93791923818177,
+  "avg_win": 42.45327433974541,
+  "avg_loss": -40.92029422358227,
+  "expectancy": -21.93791923818177,
+  "max_drawdown_pct": -49.140939093527145,
+  "sharpe": -89.33573082114646,
+  "total_fees": 1586.7455857047994,
+  "bars": 2161,
+  "exit_reasons": {
+    "trailing_stop": 197,
+    "stop_loss": 23,
+    "exit": 4
+  },
+  "avg_hold_seconds": 9916.07142857143,
+  "best_trade_pnl": 306.6018211973504,
+  "worst_trade_pnl": -128.24997871383226,
+  "max_win_streak": 5,
+  "max_loss_streak": 17,
+  "meta": {
+    "mode": "backtest",
+    "strategy": "vwap",
+    "symbol": "ETHUSD",
+    "resolution": "1h",
+    "start": "2026-04-09T07:31:27.065508+00:00",
+    "end": "2026-07-08T07:31:27.065508+00:00",
+    "params": {},
+    "sl_pct": 1.2,
+    "tp_pct": 2.4,
+    "trail_pct": 0.8,
+    "leverage": 1.0
+  }
+}

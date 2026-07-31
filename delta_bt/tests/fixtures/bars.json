@@ -1,0 +1,4014 @@
+{
+  "trend_up": [
+    {
+      "ts": "2024-01-01T00:00:00+00:00",
+      "open": 99.5,
+      "high": 101.1,
+      "low": 98.9,
+      "close": 100.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:15:00+00:00",
+      "open": 99.39999999999999,
+      "high": 100.99999999999999,
+      "low": 98.8,
+      "close": 100.39999999999999,
+      "volume": 101,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:30:00+00:00",
+      "open": 99.3,
+      "high": 100.89999999999999,
+      "low": 98.7,
+      "close": 100.3,
+      "volume": 102,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:45:00+00:00",
+      "open": 98.3,
+      "high": 99.89999999999999,
+      "low": 97.7,
+      "close": 99.3,
+      "volume": 103,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:00:00+00:00",
+      "open": 98.2,
+      "high": 99.8,
+      "low": 97.60000000000001,
+      "close": 99.2,
+      "volume": 104,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:15:00+00:00",
+      "open": 98.1,
+      "high": 99.69999999999999,
+      "low": 97.5,
+      "close": 99.1,
+      "volume": 105,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:30:00+00:00",
+      "open": 97.1,
+      "high": 98.69999999999999,
+      "low": 96.5,
+      "close": 98.1,
+      "volume": 106,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:45:00+00:00",
+      "open": 97.0,
+      "high": 98.6,
+      "low": 96.4,
+      "close": 98.0,
+      "volume": 107,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:00:00+00:00",
+      "open": 96.89999999999999,
+      "high": 98.49999999999999,
+      "low": 96.3,
+      "close": 97.89999999999999,
+      "volume": 108,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:15:00+00:00",
+      "open": 95.9,
+      "high": 97.5,
+      "low": 95.30000000000001,
+      "close": 96.9,
+      "volume": 109,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:30:00+00:00",
+      "open": 95.8,
+      "high": 97.39999999999999,
+      "low": 95.2,
+      "close": 96.8,
+      "volume": 110,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:45:00+00:00",
+      "open": 95.69999999999999,
+      "high": 97.29999999999998,
+      "low": 95.1,
+      "close": 96.69999999999999,
+      "volume": 111,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:00:00+00:00",
+      "open": 94.7,
+      "high": 96.3,
+      "low": 94.10000000000001,
+      "close": 95.7,
+      "volume": 112,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:15:00+00:00",
+      "open": 94.6,
+      "high": 96.19999999999999,
+      "low": 94.0,
+      "close": 95.6,
+      "volume": 113,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:30:00+00:00",
+      "open": 94.5,
+      "high": 96.1,
+      "low": 93.9,
+      "close": 95.5,
+      "volume": 114,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:45:00+00:00",
+      "open": 93.5,
+      "high": 95.1,
+      "low": 92.9,
+      "close": 94.5,
+      "volume": 115,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:00:00+00:00",
+      "open": 93.39999999999999,
+      "high": 94.99999999999999,
+      "low": 92.8,
+      "close": 94.39999999999999,
+      "volume": 116,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:15:00+00:00",
+      "open": 93.3,
+      "high": 94.89999999999999,
+      "low": 92.7,
+      "close": 94.3,
+      "volume": 117,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:30:00+00:00",
+      "open": 92.3,
+      "high": 93.89999999999999,
+      "low": 91.7,
+      "close": 93.3,
+      "volume": 118,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:45:00+00:00",
+      "open": 92.2,
+      "high": 93.8,
+      "low": 91.60000000000001,
+      "close": 93.2,
+      "volume": 119,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:00:00+00:00",
+      "open": 92.1,
+      "high": 93.69999999999999,
+      "low": 91.5,
+      "close": 93.1,
+      "volume": 120,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:15:00+00:00",
+      "open": 91.1,
+      "high": 92.69999999999999,
+      "low": 90.5,
+      "close": 92.1,
+      "volume": 121,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:30:00+00:00",
+      "open": 91.0,
+      "high": 92.6,
+      "low": 90.4,
+      "close": 92.0,
+      "volume": 122,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:45:00+00:00",
+      "open": 90.89999999999999,
+      "high": 92.49999999999999,
+      "low": 90.3,
+      "close": 91.89999999999999,
+      "volume": 123,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:00:00+00:00",
+      "open": 89.9,
+      "high": 91.5,
+      "low": 89.30000000000001,
+      "close": 90.9,
+      "volume": 124,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:15:00+00:00",
+      "open": 89.8,
+      "high": 91.39999999999999,
+      "low": 89.2,
+      "close": 90.8,
+      "volume": 125,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:30:00+00:00",
+      "open": 89.69999999999999,
+      "high": 91.29999999999998,
+      "low": 89.1,
+      "close": 90.69999999999999,
+      "volume": 126,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:45:00+00:00",
+      "open": 88.7,
+      "high": 90.3,
+      "low": 88.10000000000001,
+      "close": 89.7,
+      "volume": 127,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:00:00+00:00",
+      "open": 88.6,
+      "high": 90.19999999999999,
+      "low": 88.0,
+      "close": 89.6,
+      "volume": 128,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:15:00+00:00",
+      "open": 88.5,
+      "high": 90.1,
+      "low": 87.9,
+      "close": 89.5,
+      "volume": 129,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:30:00+00:00",
+      "open": 87.5,
+      "high": 89.1,
+      "low": 86.9,
+      "close": 88.5,
+      "volume": 130,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:45:00+00:00",
+      "open": 87.39999999999999,
+      "high": 88.99999999999999,
+      "low": 86.8,
+      "close": 88.39999999999999,
+      "volume": 131,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:00:00+00:00",
+      "open": 87.3,
+      "high": 88.89999999999999,
+      "low": 86.7,
+      "close": 88.3,
+      "volume": 132,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:15:00+00:00",
+      "open": 86.3,
+      "high": 87.89999999999999,
+      "low": 85.7,
+      "close": 87.3,
+      "volume": 133,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:30:00+00:00",
+      "open": 86.2,
+      "high": 87.8,
+      "low": 85.60000000000001,
+      "close": 87.2,
+      "volume": 134,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:45:00+00:00",
+      "open": 86.1,
+      "high": 87.69999999999999,
+      "low": 85.5,
+      "close": 87.1,
+      "volume": 135,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:00:00+00:00",
+      "open": 85.5,
+      "high": 87.1,
+      "low": 84.9,
+      "close": 86.5,
+      "volume": 136,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:15:00+00:00",
+      "open": 85.8,
+      "high": 87.39999999999999,
+      "low": 85.2,
+      "close": 86.8,
+      "volume": 137,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:30:00+00:00",
+      "open": 86.1,
+      "high": 87.69999999999999,
+      "low": 85.5,
+      "close": 87.1,
+      "volume": 138,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:45:00+00:00",
+      "open": 85.5,
+      "high": 87.1,
+      "low": 84.9,
+      "close": 86.5,
+      "volume": 139,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:00:00+00:00",
+      "open": 85.8,
+      "high": 87.39999999999999,
+      "low": 85.2,
+      "close": 86.8,
+      "volume": 140,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:15:00+00:00",
+      "open": 86.1,
+      "high": 87.69999999999999,
+      "low": 85.5,
+      "close": 87.1,
+      "volume": 141,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:30:00+00:00",
+      "open": 85.5,
+      "high": 87.1,
+      "low": 84.9,
+      "close": 86.5,
+      "volume": 142,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:45:00+00:00",
+      "open": 85.8,
+      "high": 87.39999999999999,
+      "low": 85.2,
+      "close": 86.8,
+      "volume": 143,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:00:00+00:00",
+      "open": 86.1,
+      "high": 87.69999999999999,
+      "low": 85.5,
+      "close": 87.1,
+      "volume": 144,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:15:00+00:00",
+      "open": 85.5,
+      "high": 87.1,
+      "low": 84.9,
+      "close": 86.5,
+      "volume": 145,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:30:00+00:00",
+      "open": 95.8,
+      "high": 97.39999999999999,
+      "low": 95.2,
+      "close": 96.8,
+      "volume": 146,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:45:00+00:00",
+      "open": 106.1,
+      "high": 107.69999999999999,
+      "low": 105.5,
+      "close": 107.1,
+      "volume": 147,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:00:00+00:00",
+      "open": 115.5,
+      "high": 117.1,
+      "low": 114.9,
+      "close": 116.5,
+      "volume": 148,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:15:00+00:00",
+      "open": 125.8,
+      "high": 127.39999999999999,
+      "low": 125.2,
+      "close": 126.8,
+      "volume": 149,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:30:00+00:00",
+      "open": 136.1,
+      "high": 137.7,
+      "low": 135.5,
+      "close": 137.1,
+      "volume": 150,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:45:00+00:00",
+      "open": 145.5,
+      "high": 147.1,
+      "low": 144.9,
+      "close": 146.5,
+      "volume": 151,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:00:00+00:00",
+      "open": 155.8,
+      "high": 157.4,
+      "low": 155.20000000000002,
+      "close": 156.8,
+      "volume": 152,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:15:00+00:00",
+      "open": 166.1,
+      "high": 167.7,
+      "low": 165.5,
+      "close": 167.1,
+      "volume": 153,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:30:00+00:00",
+      "open": 175.5,
+      "high": 177.1,
+      "low": 174.9,
+      "close": 176.5,
+      "volume": 154,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:45:00+00:00",
+      "open": 185.8,
+      "high": 187.4,
+      "low": 185.20000000000002,
+      "close": 186.8,
+      "volume": 155,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:00:00+00:00",
+      "open": 196.1,
+      "high": 197.7,
+      "low": 195.5,
+      "close": 197.1,
+      "volume": 156,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:15:00+00:00",
+      "open": 205.5,
+      "high": 207.1,
+      "low": 204.9,
+      "close": 206.5,
+      "volume": 157,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:30:00+00:00",
+      "open": 215.8,
+      "high": 217.4,
+      "low": 215.20000000000002,
+      "close": 216.8,
+      "volume": 158,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:45:00+00:00",
+      "open": 226.1,
+      "high": 227.7,
+      "low": 225.5,
+      "close": 227.1,
+      "volume": 159,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:00:00+00:00",
+      "open": 235.5,
+      "high": 237.1,
+      "low": 234.9,
+      "close": 236.5,
+      "volume": 160,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:15:00+00:00",
+      "open": 245.8,
+      "high": 247.4,
+      "low": 245.20000000000002,
+      "close": 246.8,
+      "volume": 161,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:30:00+00:00",
+      "open": 256.1,
+      "high": 257.70000000000005,
+      "low": 255.50000000000003,
+      "close": 257.1,
+      "volume": 162,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:45:00+00:00",
+      "open": 265.5,
+      "high": 267.1,
+      "low": 264.9,
+      "close": 266.5,
+      "volume": 163,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:00:00+00:00",
+      "open": 275.8,
+      "high": 277.40000000000003,
+      "low": 275.2,
+      "close": 276.8,
+      "volume": 164,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:15:00+00:00",
+      "open": 286.1,
+      "high": 287.70000000000005,
+      "low": 285.5,
+      "close": 287.1,
+      "volume": 165,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:30:00+00:00",
+      "open": 295.5,
+      "high": 297.1,
+      "low": 294.9,
+      "close": 296.5,
+      "volume": 166,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:45:00+00:00",
+      "open": 305.8,
+      "high": 307.40000000000003,
+      "low": 305.2,
+      "close": 306.8,
+      "volume": 167,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:00:00+00:00",
+      "open": 316.1,
+      "high": 317.70000000000005,
+      "low": 315.5,
+      "close": 317.1,
+      "volume": 168,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:15:00+00:00",
+      "open": 325.5,
+      "high": 327.1,
+      "low": 324.9,
+      "close": 326.5,
+      "volume": 169,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:30:00+00:00",
+      "open": 335.8,
+      "high": 337.40000000000003,
+      "low": 335.2,
+      "close": 336.8,
+      "volume": 170,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:45:00+00:00",
+      "open": 346.1,
+      "high": 347.70000000000005,
+      "low": 345.5,
+      "close": 347.1,
+      "volume": 171,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:00:00+00:00",
+      "open": 355.5,
+      "high": 357.1,
+      "low": 354.9,
+      "close": 356.5,
+      "volume": 172,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:15:00+00:00",
+      "open": 365.8,
+      "high": 367.40000000000003,
+      "low": 365.2,
+      "close": 366.8,
+      "volume": 173,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:30:00+00:00",
+      "open": 376.1,
+      "high": 377.70000000000005,
+      "low": 375.5,
+      "close": 377.1,
+      "volume": 174,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:45:00+00:00",
+      "open": 385.5,
+      "high": 387.1,
+      "low": 384.9,
+      "close": 386.5,
+      "volume": 175,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:00:00+00:00",
+      "open": 395.8,
+      "high": 397.40000000000003,
+      "low": 395.2,
+      "close": 396.8,
+      "volume": 176,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:15:00+00:00",
+      "open": 406.1,
+      "high": 407.70000000000005,
+      "low": 405.5,
+      "close": 407.1,
+      "volume": 177,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:30:00+00:00",
+      "open": 415.5,
+      "high": 417.1,
+      "low": 414.9,
+      "close": 416.5,
+      "volume": 178,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:45:00+00:00",
+      "open": 425.8,
+      "high": 427.40000000000003,
+      "low": 425.2,
+      "close": 426.8,
+      "volume": 179,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:00:00+00:00",
+      "open": 436.1,
+      "high": 437.70000000000005,
+      "low": 435.5,
+      "close": 437.1,
+      "volume": 180,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:15:00+00:00",
+      "open": 445.5,
+      "high": 447.1,
+      "low": 444.9,
+      "close": 446.5,
+      "volume": 181,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:30:00+00:00",
+      "open": 455.8,
+      "high": 457.40000000000003,
+      "low": 455.2,
+      "close": 456.8,
+      "volume": 182,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:45:00+00:00",
+      "open": 466.1,
+      "high": 467.70000000000005,
+      "low": 465.5,
+      "close": 467.1,
+      "volume": 183,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:00:00+00:00",
+      "open": 475.5,
+      "high": 477.1,
+      "low": 474.9,
+      "close": 476.5,
+      "volume": 184,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:15:00+00:00",
+      "open": 485.8,
+      "high": 487.40000000000003,
+      "low": 485.2,
+      "close": 486.8,
+      "volume": 185,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:30:00+00:00",
+      "open": 496.1,
+      "high": 497.70000000000005,
+      "low": 495.5,
+      "close": 497.1,
+      "volume": 186,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:45:00+00:00",
+      "open": 505.5,
+      "high": 507.1,
+      "low": 504.9,
+      "close": 506.5,
+      "volume": 187,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:00:00+00:00",
+      "open": 515.8,
+      "high": 517.4,
+      "low": 515.1999999999999,
+      "close": 516.8,
+      "volume": 188,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:15:00+00:00",
+      "open": 526.1,
+      "high": 527.7,
+      "low": 525.5,
+      "close": 527.1,
+      "volume": 189,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:30:00+00:00",
+      "open": 535.5,
+      "high": 537.1,
+      "low": 534.9,
+      "close": 536.5,
+      "volume": 190,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:45:00+00:00",
+      "open": 545.8,
+      "high": 547.4,
+      "low": 545.1999999999999,
+      "close": 546.8,
+      "volume": 191,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:00:00+00:00",
+      "open": 556.1,
+      "high": 557.7,
+      "low": 555.5,
+      "close": 557.1,
+      "volume": 192,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:15:00+00:00",
+      "open": 565.5,
+      "high": 567.1,
+      "low": 564.9,
+      "close": 566.5,
+      "volume": 193,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:30:00+00:00",
+      "open": 575.8,
+      "high": 577.4,
+      "low": 575.1999999999999,
+      "close": 576.8,
+      "volume": 194,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:45:00+00:00",
+      "open": 586.1,
+      "high": 587.7,
+      "low": 585.5,
+      "close": 587.1,
+      "volume": 195,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:00:00+00:00",
+      "open": 595.5,
+      "high": 597.1,
+      "low": 594.9,
+      "close": 596.5,
+      "volume": 196,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:15:00+00:00",
+      "open": 605.8,
+      "high": 607.4,
+      "low": 605.1999999999999,
+      "close": 606.8,
+      "volume": 197,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:30:00+00:00",
+      "open": 616.1,
+      "high": 617.7,
+      "low": 615.5,
+      "close": 617.1,
+      "volume": 198,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:45:00+00:00",
+      "open": 625.5,
+      "high": 627.1,
+      "low": 624.9,
+      "close": 626.5,
+      "volume": 199,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    }
+  ],
+  "trend_down": [
+    {
+      "ts": "2024-01-01T00:00:00+00:00",
+      "open": 100.5,
+      "high": 101.1,
+      "low": 98.9,
+      "close": 99.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:15:00+00:00",
+      "open": 101.2,
+      "high": 101.8,
+      "low": 99.60000000000001,
+      "close": 100.2,
+      "volume": 101,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:30:00+00:00",
+      "open": 101.89999999999999,
+      "high": 102.49999999999999,
+      "low": 100.3,
+      "close": 100.89999999999999,
+      "volume": 102,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:45:00+00:00",
+      "open": 101.7,
+      "high": 102.3,
+      "low": 100.10000000000001,
+      "close": 100.7,
+      "volume": 103,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:00:00+00:00",
+      "open": 102.39999999999999,
+      "high": 102.99999999999999,
+      "low": 100.8,
+      "close": 101.39999999999999,
+      "volume": 104,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:15:00+00:00",
+      "open": 103.1,
+      "high": 103.69999999999999,
+      "low": 101.5,
+      "close": 102.1,
+      "volume": 105,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:30:00+00:00",
+      "open": 102.9,
+      "high": 103.5,
+      "low": 101.30000000000001,
+      "close": 101.9,
+      "volume": 106,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:45:00+00:00",
+      "open": 103.6,
+      "high": 104.19999999999999,
+      "low": 102.0,
+      "close": 102.6,
+      "volume": 107,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:00:00+00:00",
+      "open": 104.3,
+      "high": 104.89999999999999,
+      "low": 102.7,
+      "close": 103.3,
+      "volume": 108,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:15:00+00:00",
+      "open": 104.1,
+      "high": 104.69999999999999,
+      "low": 102.5,
+      "close": 103.1,
+      "volume": 109,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:30:00+00:00",
+      "open": 104.8,
+      "high": 105.39999999999999,
+      "low": 103.2,
+      "close": 103.8,
+      "volume": 110,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:45:00+00:00",
+      "open": 105.5,
+      "high": 106.1,
+      "low": 103.9,
+      "close": 104.5,
+      "volume": 111,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:00:00+00:00",
+      "open": 105.3,
+      "high": 105.89999999999999,
+      "low": 103.7,
+      "close": 104.3,
+      "volume": 112,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:15:00+00:00",
+      "open": 106.0,
+      "high": 106.6,
+      "low": 104.4,
+      "close": 105.0,
+      "volume": 113,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:30:00+00:00",
+      "open": 106.69999999999999,
+      "high": 107.29999999999998,
+      "low": 105.1,
+      "close": 105.69999999999999,
+      "volume": 114,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:45:00+00:00",
+      "open": 106.5,
+      "high": 107.1,
+      "low": 104.9,
+      "close": 105.5,
+      "volume": 115,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:00:00+00:00",
+      "open": 107.2,
+      "high": 107.8,
+      "low": 105.60000000000001,
+      "close": 106.2,
+      "volume": 116,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:15:00+00:00",
+      "open": 107.89999999999999,
+      "high": 108.49999999999999,
+      "low": 106.3,
+      "close": 106.89999999999999,
+      "volume": 117,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:30:00+00:00",
+      "open": 107.7,
+      "high": 108.3,
+      "low": 106.10000000000001,
+      "close": 106.7,
+      "volume": 118,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:45:00+00:00",
+      "open": 108.39999999999999,
+      "high": 108.99999999999999,
+      "low": 106.8,
+      "close": 107.39999999999999,
+      "volume": 119,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:00:00+00:00",
+      "open": 109.1,
+      "high": 109.69999999999999,
+      "low": 107.5,
+      "close": 108.1,
+      "volume": 120,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:15:00+00:00",
+      "open": 108.9,
+      "high": 109.5,
+      "low": 107.30000000000001,
+      "close": 107.9,
+      "volume": 121,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:30:00+00:00",
+      "open": 109.6,
+      "high": 110.19999999999999,
+      "low": 108.0,
+      "close": 108.6,
+      "volume": 122,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:45:00+00:00",
+      "open": 110.3,
+      "high": 110.89999999999999,
+      "low": 108.7,
+      "close": 109.3,
+      "volume": 123,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:00:00+00:00",
+      "open": 110.1,
+      "high": 110.69999999999999,
+      "low": 108.5,
+      "close": 109.1,
+      "volume": 124,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:15:00+00:00",
+      "open": 110.8,
+      "high": 111.39999999999999,
+      "low": 109.2,
+      "close": 109.8,
+      "volume": 125,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:30:00+00:00",
+      "open": 111.5,
+      "high": 112.1,
+      "low": 109.9,
+      "close": 110.5,
+      "volume": 126,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:45:00+00:00",
+      "open": 111.3,
+      "high": 111.89999999999999,
+      "low": 109.7,
+      "close": 110.3,
+      "volume": 127,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:00:00+00:00",
+      "open": 112.0,
+      "high": 112.6,
+      "low": 110.4,
+      "close": 111.0,
+      "volume": 128,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:15:00+00:00",
+      "open": 112.69999999999999,
+      "high": 113.29999999999998,
+      "low": 111.1,
+      "close": 111.69999999999999,
+      "volume": 129,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:30:00+00:00",
+      "open": 112.5,
+      "high": 113.1,
+      "low": 110.9,
+      "close": 111.5,
+      "volume": 130,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:45:00+00:00",
+      "open": 113.2,
+      "high": 113.8,
+      "low": 111.60000000000001,
+      "close": 112.2,
+      "volume": 131,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:00:00+00:00",
+      "open": 113.89999999999999,
+      "high": 114.49999999999999,
+      "low": 112.3,
+      "close": 112.89999999999999,
+      "volume": 132,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:15:00+00:00",
+      "open": 113.7,
+      "high": 114.3,
+      "low": 112.10000000000001,
+      "close": 112.7,
+      "volume": 133,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:30:00+00:00",
+      "open": 114.39999999999999,
+      "high": 114.99999999999999,
+      "low": 112.8,
+      "close": 113.39999999999999,
+      "volume": 134,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:45:00+00:00",
+      "open": 115.1,
+      "high": 115.69999999999999,
+      "low": 113.5,
+      "close": 114.1,
+      "volume": 135,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:00:00+00:00",
+      "open": 114.5,
+      "high": 115.1,
+      "low": 112.9,
+      "close": 113.5,
+      "volume": 136,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:15:00+00:00",
+      "open": 114.8,
+      "high": 115.39999999999999,
+      "low": 113.2,
+      "close": 113.8,
+      "volume": 137,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:30:00+00:00",
+      "open": 115.1,
+      "high": 115.69999999999999,
+      "low": 113.5,
+      "close": 114.1,
+      "volume": 138,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:45:00+00:00",
+      "open": 114.5,
+      "high": 115.1,
+      "low": 112.9,
+      "close": 113.5,
+      "volume": 139,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:00:00+00:00",
+      "open": 114.8,
+      "high": 115.39999999999999,
+      "low": 113.2,
+      "close": 113.8,
+      "volume": 140,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:15:00+00:00",
+      "open": 115.1,
+      "high": 115.69999999999999,
+      "low": 113.5,
+      "close": 114.1,
+      "volume": 141,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:30:00+00:00",
+      "open": 114.5,
+      "high": 115.1,
+      "low": 112.9,
+      "close": 113.5,
+      "volume": 142,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:45:00+00:00",
+      "open": 114.8,
+      "high": 115.39999999999999,
+      "low": 113.2,
+      "close": 113.8,
+      "volume": 143,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:00:00+00:00",
+      "open": 115.1,
+      "high": 115.69999999999999,
+      "low": 113.5,
+      "close": 114.1,
+      "volume": 144,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:15:00+00:00",
+      "open": 114.5,
+      "high": 115.1,
+      "low": 112.9,
+      "close": 113.5,
+      "volume": 145,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:30:00+00:00",
+      "open": 104.8,
+      "high": 105.39999999999999,
+      "low": 103.2,
+      "close": 103.8,
+      "volume": 146,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:45:00+00:00",
+      "open": 95.1,
+      "high": 95.69999999999999,
+      "low": 93.5,
+      "close": 94.1,
+      "volume": 147,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:00:00+00:00",
+      "open": 84.5,
+      "high": 85.1,
+      "low": 82.9,
+      "close": 83.5,
+      "volume": 148,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:15:00+00:00",
+      "open": 74.8,
+      "high": 75.39999999999999,
+      "low": 73.2,
+      "close": 73.8,
+      "volume": 149,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:30:00+00:00",
+      "open": 65.1,
+      "high": 65.69999999999999,
+      "low": 63.49999999999999,
+      "close": 64.1,
+      "volume": 150,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:45:00+00:00",
+      "open": 54.5,
+      "high": 55.1,
+      "low": 52.9,
+      "close": 53.5,
+      "volume": 151,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:00:00+00:00",
+      "open": 44.8,
+      "high": 45.4,
+      "low": 43.199999999999996,
+      "close": 43.8,
+      "volume": 152,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:15:00+00:00",
+      "open": 35.1,
+      "high": 35.7,
+      "low": 33.5,
+      "close": 34.1,
+      "volume": 153,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:30:00+00:00",
+      "open": 24.5,
+      "high": 25.1,
+      "low": 22.9,
+      "close": 23.5,
+      "volume": 154,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:45:00+00:00",
+      "open": 14.8,
+      "high": 15.4,
+      "low": 13.200000000000001,
+      "close": 13.8,
+      "volume": 155,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:00:00+00:00",
+      "open": 5.1,
+      "high": 5.699999999999999,
+      "low": 3.4999999999999996,
+      "close": 4.1,
+      "volume": 156,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:15:00+00:00",
+      "open": -5.5,
+      "high": -4.9,
+      "low": -7.1,
+      "close": -6.5,
+      "volume": 157,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:30:00+00:00",
+      "open": -15.2,
+      "high": -14.6,
+      "low": -16.8,
+      "close": -16.2,
+      "volume": 158,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:45:00+00:00",
+      "open": -24.9,
+      "high": -24.299999999999997,
+      "low": -26.5,
+      "close": -25.9,
+      "volume": 159,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:00:00+00:00",
+      "open": -35.5,
+      "high": -34.9,
+      "low": -37.1,
+      "close": -36.5,
+      "volume": 160,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:15:00+00:00",
+      "open": -45.2,
+      "high": -44.6,
+      "low": -46.800000000000004,
+      "close": -46.2,
+      "volume": 161,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:30:00+00:00",
+      "open": -54.9,
+      "high": -54.3,
+      "low": -56.5,
+      "close": -55.9,
+      "volume": 162,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:45:00+00:00",
+      "open": -65.5,
+      "high": -64.9,
+      "low": -67.1,
+      "close": -66.5,
+      "volume": 163,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:00:00+00:00",
+      "open": -75.2,
+      "high": -74.60000000000001,
+      "low": -76.8,
+      "close": -76.2,
+      "volume": 164,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:15:00+00:00",
+      "open": -84.9,
+      "high": -84.30000000000001,
+      "low": -86.5,
+      "close": -85.9,
+      "volume": 165,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:30:00+00:00",
+      "open": -95.5,
+      "high": -94.9,
+      "low": -97.1,
+      "close": -96.5,
+      "volume": 166,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:45:00+00:00",
+      "open": -105.2,
+      "high": -104.60000000000001,
+      "low": -106.8,
+      "close": -106.2,
+      "volume": 167,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:00:00+00:00",
+      "open": -114.9,
+      "high": -114.30000000000001,
+      "low": -116.5,
+      "close": -115.9,
+      "volume": 168,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:15:00+00:00",
+      "open": -125.5,
+      "high": -124.9,
+      "low": -127.1,
+      "close": -126.5,
+      "volume": 169,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:30:00+00:00",
+      "open": -135.2,
+      "high": -134.6,
+      "low": -136.79999999999998,
+      "close": -136.2,
+      "volume": 170,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:45:00+00:00",
+      "open": -144.9,
+      "high": -144.3,
+      "low": -146.5,
+      "close": -145.9,
+      "volume": 171,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:00:00+00:00",
+      "open": -155.5,
+      "high": -154.9,
+      "low": -157.1,
+      "close": -156.5,
+      "volume": 172,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:15:00+00:00",
+      "open": -165.2,
+      "high": -164.6,
+      "low": -166.79999999999998,
+      "close": -166.2,
+      "volume": 173,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:30:00+00:00",
+      "open": -174.9,
+      "high": -174.3,
+      "low": -176.5,
+      "close": -175.9,
+      "volume": 174,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:45:00+00:00",
+      "open": -185.5,
+      "high": -184.9,
+      "low": -187.1,
+      "close": -186.5,
+      "volume": 175,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:00:00+00:00",
+      "open": -195.2,
+      "high": -194.6,
+      "low": -196.79999999999998,
+      "close": -196.2,
+      "volume": 176,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:15:00+00:00",
+      "open": -204.9,
+      "high": -204.3,
+      "low": -206.5,
+      "close": -205.9,
+      "volume": 177,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:30:00+00:00",
+      "open": -215.5,
+      "high": -214.9,
+      "low": -217.1,
+      "close": -216.5,
+      "volume": 178,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:45:00+00:00",
+      "open": -225.2,
+      "high": -224.6,
+      "low": -226.79999999999998,
+      "close": -226.2,
+      "volume": 179,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:00:00+00:00",
+      "open": -234.9,
+      "high": -234.3,
+      "low": -236.5,
+      "close": -235.9,
+      "volume": 180,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:15:00+00:00",
+      "open": -245.5,
+      "high": -244.9,
+      "low": -247.1,
+      "close": -246.5,
+      "volume": 181,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:30:00+00:00",
+      "open": -255.2,
+      "high": -254.6,
+      "low": -256.8,
+      "close": -256.2,
+      "volume": 182,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T20:45:00+00:00",
+      "open": -264.9,
+      "high": -264.29999999999995,
+      "low": -266.5,
+      "close": -265.9,
+      "volume": 183,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:00:00+00:00",
+      "open": -275.5,
+      "high": -274.9,
+      "low": -277.1,
+      "close": -276.5,
+      "volume": 184,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:15:00+00:00",
+      "open": -285.2,
+      "high": -284.59999999999997,
+      "low": -286.8,
+      "close": -286.2,
+      "volume": 185,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:30:00+00:00",
+      "open": -294.9,
+      "high": -294.29999999999995,
+      "low": -296.5,
+      "close": -295.9,
+      "volume": 186,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T21:45:00+00:00",
+      "open": -305.5,
+      "high": -304.9,
+      "low": -307.1,
+      "close": -306.5,
+      "volume": 187,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:00:00+00:00",
+      "open": -315.2,
+      "high": -314.59999999999997,
+      "low": -316.8,
+      "close": -316.2,
+      "volume": 188,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:15:00+00:00",
+      "open": -324.9,
+      "high": -324.29999999999995,
+      "low": -326.5,
+      "close": -325.9,
+      "volume": 189,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:30:00+00:00",
+      "open": -335.5,
+      "high": -334.9,
+      "low": -337.1,
+      "close": -336.5,
+      "volume": 190,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T22:45:00+00:00",
+      "open": -345.2,
+      "high": -344.59999999999997,
+      "low": -346.8,
+      "close": -346.2,
+      "volume": 191,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:00:00+00:00",
+      "open": -354.9,
+      "high": -354.29999999999995,
+      "low": -356.5,
+      "close": -355.9,
+      "volume": 192,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:15:00+00:00",
+      "open": -365.5,
+      "high": -364.9,
+      "low": -367.1,
+      "close": -366.5,
+      "volume": 193,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:30:00+00:00",
+      "open": -375.2,
+      "high": -374.59999999999997,
+      "low": -376.8,
+      "close": -376.2,
+      "volume": 194,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T23:45:00+00:00",
+      "open": -384.9,
+      "high": -384.29999999999995,
+      "low": -386.5,
+      "close": -385.9,
+      "volume": 195,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:00:00+00:00",
+      "open": -395.5,
+      "high": -394.9,
+      "low": -397.1,
+      "close": -396.5,
+      "volume": 196,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:15:00+00:00",
+      "open": -405.2,
+      "high": -404.59999999999997,
+      "low": -406.8,
+      "close": -406.2,
+      "volume": 197,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:30:00+00:00",
+      "open": -414.9,
+      "high": -414.29999999999995,
+      "low": -416.5,
+      "close": -415.9,
+      "volume": 198,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-02T00:45:00+00:00",
+      "open": -425.5,
+      "high": -424.9,
+      "low": -427.1,
+      "close": -426.5,
+      "volume": 199,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    }
+  ],
+  "range": [
+    {
+      "ts": "2024-01-01T00:00:00+00:00",
+      "open": 100.0,
+      "high": 106.54882590884738,
+      "low": 98.5,
+      "close": 105.04882590884738,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:15:00+00:00",
+      "open": 103.13612337358396,
+      "high": 107.49870258513614,
+      "low": 101.63612337358396,
+      "close": 105.99870258513614,
+      "volume": 101,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:30:00+00:00",
+      "open": 105.34724416036862,
+      "high": 106.84724416036862,
+      "low": 103.67925619989325,
+      "close": 105.17925619989325,
+      "volume": 102,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:45:00+00:00",
+      "open": 105.98119017072351,
+      "high": 107.48119017072351,
+      "low": 101.3321832477393,
+      "close": 102.8321832477393,
+      "volume": 103,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:00:00+00:00",
+      "open": 104.85097842291754,
+      "high": 106.35097842291754,
+      "low": 98.14975513943452,
+      "close": 99.64975513943452,
+      "volume": 104,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:15:00+00:00",
+      "open": 102.28996595231399,
+      "high": 103.78996595231399,
+      "low": 95.07063208754593,
+      "close": 96.57063208754593,
+      "volume": 105,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:30:00+00:00",
+      "open": 99.0535258351405,
+      "high": 100.5535258351405,
+      "low": 93.00300437950327,
+      "close": 94.50300437950327,
+      "volume": 106,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:45:00+00:00",
+      "open": 96.096249177609,
+      "high": 97.596249177609,
+      "low": 92.55672078419973,
+      "close": 94.05672078419973,
+      "volume": 107,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:00:00+00:00",
+      "open": 94.2903875566629,
+      "high": 96.86341307466408,
+      "low": 92.7903875566629,
+      "close": 95.36341307466408,
+      "volume": 108,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:15:00+00:00",
+      "open": 94.16858158358907,
+      "high": 99.53767111078156,
+      "low": 92.66858158358907,
+      "close": 98.03767111078156,
+      "volume": 109,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:30:00+00:00",
+      "open": 95.76675804657765,
+      "high": 102.7907199285269,
+      "low": 94.26675804657765,
+      "close": 101.2907199285269,
+      "volume": 110,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:45:00+00:00",
+      "open": 98.61353327020365,
+      "high": 105.66306966957859,
+      "low": 97.11353327020365,
+      "close": 104.16306966957859,
+      "volume": 111,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:00:00+00:00",
+      "open": 101.86924818108027,
+      "high": 107.30751803218892,
+      "low": 100.36924818108027,
+      "close": 105.80751803218892,
+      "volume": 112,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:15:00+00:00",
+      "open": 104.57362655416847,
+      "high": 107.23903339990906,
+      "low": 103.07362655416847,
+      "close": 105.73903339990906,
+      "volume": 113,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:30:00+00:00",
+      "open": 105.929009403262,
+      "high": 107.429009403262,
+      "low": 102.4778153804931,
+      "close": 103.9778153804931,
+      "volume": 114,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:45:00+00:00",
+      "open": 105.53562526143604,
+      "high": 107.03562526143604,
+      "low": 99.5433369122826,
+      "close": 101.0433369122826,
+      "volume": 115,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:00:00+00:00",
+      "open": 103.50950315735057,
+      "high": 105.00950315735057,
+      "low": 96.30112522448843,
+      "close": 97.80112522448843,
+      "volume": 116,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:15:00+00:00",
+      "open": 100.4482497423372,
+      "high": 101.9482497423372,
+      "low": 93.70747375359399,
+      "close": 95.20747375359399,
+      "volume": 117,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:30:00+00:00",
+      "open": 97.25478463734807,
+      "high": 98.75478463734807,
+      "low": 92.52738248016173,
+      "close": 94.02738248016173,
+      "volume": 118,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:45:00+00:00",
+      "open": 94.8710234276723,
+      "high": 96.3710234276723,
+      "low": 93.10892045331731,
+      "close": 94.60892045331731,
+      "volume": 119,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:00:00+00:00",
+      "open": 94.00005876069578,
+      "high": 98.28056249199739,
+      "low": 92.50005876069578,
+      "close": 96.78056249199739,
+      "volume": 120,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:15:00+00:00",
+      "open": 94.8987824974818,
+      "high": 101.40178070106195,
+      "low": 93.3987824974818,
+      "close": 99.90178070106195,
+      "volume": 121,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:30:00+00:00",
+      "open": 97.3021152127924,
+      "high": 104.55196878623426,
+      "low": 95.8021152127924,
+      "close": 103.05196878623426,
+      "volume": 122,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:45:00+00:00",
+      "open": 100.50119162494664,
+      "high": 106.80197576058781,
+      "low": 99.00119162494664,
+      "close": 105.30197576058781,
+      "volume": 123,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:00:00+00:00",
+      "open": 103.55244108824334,
+      "high": 107.48815991629817,
+      "low": 102.05244108824334,
+      "close": 105.98815991629817,
+      "volume": 124,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:15:00+00:00",
+      "open": 105.55589465685176,
+      "high": 107.05589465685176,
+      "low": 103.40813058072816,
+      "close": 104.90813058072816,
+      "volume": 125,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:30:00+00:00",
+      "open": 105.92063178564769,
+      "high": 107.42063178564769,
+      "low": 100.88044343878367,
+      "close": 102.38044343878367,
+      "volume": 126,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:45:00+00:00",
+      "open": 104.53907290984745,
+      "high": 106.03907290984745,
+      "low": 97.65064222914931,
+      "close": 99.15064222914931,
+      "volume": 127,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:00:00+00:00",
+      "open": 101.81871014047421,
+      "high": 103.31871014047421,
+      "low": 94.6713599059123,
+      "close": 96.1713599059123,
+      "volume": 128,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:15:00+00:00",
+      "open": 98.56191707669765,
+      "high": 100.06191707669765,
+      "low": 92.82133863815073,
+      "close": 94.32133863815073,
+      "volume": 129,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:30:00+00:00",
+      "open": 95.72928794578526,
+      "high": 97.22928794578526,
+      "low": 92.64624396719105,
+      "close": 94.14624396719105,
+      "volume": 130,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:45:00+00:00",
+      "open": 94.15630941755596,
+      "high": 97.19772023360247,
+      "low": 92.65630941755596,
+      "close": 95.69772023360247,
+      "volume": 131,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:00:00+00:00",
+      "open": 94.30693301249126,
+      "high": 100.01815802958028,
+      "low": 92.80693301249126,
+      "close": 98.51815802958028,
+      "volume": 132,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:15:00+00:00",
+      "open": 96.13673215728676,
+      "high": 103.27566653119794,
+      "low": 94.63673215728676,
+      "close": 101.77566653119794,
+      "volume": 133,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:30:00+00:00",
+      "open": 99.10600584511482,
+      "high": 106.0094404921129,
+      "low": 97.60600584511482,
+      "close": 104.5094404921129,
+      "volume": 134,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:45:00+00:00",
+      "open": 102.33896396347828,
+      "high": 107.41315066939072,
+      "low": 100.83896396347828,
+      "close": 105.91315066939072,
+      "volume": 135,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:00:00+00:00",
+      "open": 104.88204242504263,
+      "high": 107.07277140446344,
+      "low": 103.38204242504263,
+      "close": 105.57277140446344,
+      "volume": 136,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:15:00+00:00",
+      "open": 105.98515780668913,
+      "high": 107.48515780668913,
+      "low": 102.08869788688344,
+      "close": 103.58869788688344,
+      "volume": 137,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:30:00+00:00",
+      "open": 105.32294517215409,
+      "high": 106.82294517215409,
+      "low": 99.04613449719906,
+      "close": 100.54613449719906,
+      "volume": 138,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:45:00+00:00",
+      "open": 103.09072477099012,
+      "high": 104.59072477099012,
+      "low": 95.84248821552626,
+      "close": 97.34248821552626,
+      "volume": 139,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:00:00+00:00",
+      "open": 99.94689214425757,
+      "high": 101.44689214425757,
+      "low": 93.42267757494898,
+      "close": 94.92267757494898,
+      "volume": 140,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:15:00+00:00",
+      "open": 96.81872373034103,
+      "high": 98.31872373034103,
+      "low": 92.50042803695646,
+      "close": 94.00042803695646,
+      "volume": 141,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:30:00+00:00",
+      "open": 94.6288757930819,
+      "high": 96.34775798434042,
+      "low": 93.1288757930819,
+      "close": 94.84775798434042,
+      "volume": 142,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T10:45:00+00:00",
+      "open": 94.0232460748088,
+      "high": 98.71474663917337,
+      "low": 92.5232460748088,
+      "close": 97.21474663917337,
+      "volume": 143,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:00:00+00:00",
+      "open": 95.18046563983629,
+      "high": 101.90324843515288,
+      "low": 93.68046563983629,
+      "close": 100.40324843515288,
+      "volume": 144,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:15:00+00:00",
+      "open": 97.75921147129533,
+      "high": 104.97281171972652,
+      "low": 96.25921147129533,
+      "close": 103.47281171972652,
+      "volume": 145,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:30:00+00:00",
+      "open": 100.99888002122296,
+      "high": 107.01806586797213,
+      "low": 99.49888002122296,
+      "close": 105.51806586797213,
+      "volume": 146,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T11:45:00+00:00",
+      "open": 103.94392795408046,
+      "high": 107.4357612138451,
+      "low": 102.44392795408046,
+      "close": 105.9357612138451,
+      "volume": 147,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:00:00+00:00",
+      "open": 105.7257105669562,
+      "high": 107.2257105669562,
+      "low": 103.10269811581317,
+      "close": 104.60269811581317,
+      "volume": 148,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:15:00+00:00",
+      "open": 105.81868937501031,
+      "high": 107.31868937501031,
+      "low": 100.4120648088905,
+      "close": 101.9120648088905,
+      "volume": 149,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:30:00+00:00",
+      "open": 104.19544018993057,
+      "high": 105.69544018993057,
+      "low": 97.1574661588792,
+      "close": 98.6574661588792,
+      "volume": 150,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T12:45:00+00:00",
+      "open": 101.33474191048931,
+      "high": 102.83474191048931,
+      "low": 94.29884914860907,
+      "close": 95.79884914860907,
+      "volume": 151,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:00:00+00:00",
+      "open": 98.08036022869481,
+      "high": 99.58036022869481,
+      "low": 92.67936559775688,
+      "close": 94.17936559775688,
+      "volume": 152,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:15:00+00:00",
+      "open": 95.39217813239394,
+      "high": 96.89217813239394,
+      "low": 92.7766837276801,
+      "close": 94.2766837276801,
+      "volume": 153,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:30:00+00:00",
+      "open": 94.06307750047279,
+      "high": 97.56209946293328,
+      "low": 92.56307750047279,
+      "close": 96.06209946293328,
+      "volume": 154,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T13:45:00+00:00",
+      "open": 94.48507783477855,
+      "high": 100.50900272575855,
+      "low": 92.98507783477855,
+      "close": 99.00900272575855,
+      "volume": 155,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:00:00+00:00",
+      "open": 96.53370973332562,
+      "high": 103.7482015818968,
+      "low": 95.03370973332562,
+      "close": 102.2482015818968,
+      "volume": 156,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:15:00+00:00",
+      "open": 99.60472725938926,
+      "high": 106.32429123244141,
+      "low": 98.10472725938926,
+      "close": 104.82429123244141,
+      "volume": 157,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:30:00+00:00",
+      "open": 102.79233085812976,
+      "high": 107.47745157252919,
+      "low": 101.29233085812976,
+      "close": 105.97745157252919,
+      "volume": 158,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T14:45:00+00:00",
+      "open": 105.15633380112888,
+      "high": 106.86755685756715,
+      "low": 103.65633380112888,
+      "close": 105.36755685756715,
+      "volume": 159,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:00:00+00:00",
+      "open": 105.99947116064361,
+      "high": 107.49947116064361,
+      "low": 101.67449611672015,
+      "close": 103.17449611672015,
+      "volume": 160,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:15:00+00:00",
+      "open": 105.07305876654605,
+      "high": 106.57305876654605,
+      "low": 98.54511471180601,
+      "close": 100.04511471180601,
+      "volume": 161,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:30:00+00:00",
+      "open": 102.65034284001534,
+      "high": 104.15034284001534,
+      "low": 95.40242667952043,
+      "close": 96.90242667952043,
+      "volume": 162,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T15:45:00+00:00",
+      "open": 99.44590575940973,
+      "high": 100.94590575940973,
+      "low": 93.17337085902173,
+      "close": 94.67337085902173,
+      "volume": 163,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:00:00+00:00",
+      "open": 96.4048993047144,
+      "high": 97.9048993047144,
+      "low": 92.51540939527811,
+      "close": 94.01540939527811,
+      "volume": 164,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:15:00+00:00",
+      "open": 94.42427123658197,
+      "high": 96.62260865095358,
+      "low": 92.92427123658197,
+      "close": 95.12260865095358,
+      "volume": 165,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:30:00+00:00",
+      "open": 94.08820969695279,
+      "high": 99.16839914723597,
+      "low": 92.58820969695279,
+      "close": 97.66839914723597,
+      "volume": 166,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T16:45:00+00:00",
+      "open": 95.49583635817534,
+      "high": 102.40189754377403,
+      "low": 93.99583635817534,
+      "close": 100.90189754377403,
+      "volume": 167,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:00:00+00:00",
+      "open": 98.2319703909985,
+      "high": 105.36938039766923,
+      "low": 96.7319703909985,
+      "close": 103.86938039766923,
+      "volume": 168,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:15:00+00:00",
+      "open": 101.4895864470225,
+      "high": 107.19558580460472,
+      "low": 99.9895864470225,
+      "close": 105.69558580460472,
+      "volume": 169,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:30:00+00:00",
+      "open": 104.30784755662987,
+      "high": 107.34187273416987,
+      "low": 102.80784755662987,
+      "close": 105.84187273416987,
+      "volume": 170,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T17:45:00+00:00",
+      "open": 105.85550491161969,
+      "high": 107.35550491161969,
+      "low": 102.76509371665652,
+      "close": 104.26509371665652,
+      "volume": 171,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:00:00+00:00",
+      "open": 105.67607549576145,
+      "high": 107.17607549576145,
+      "low": 99.93032123049335,
+      "close": 101.43032123049335,
+      "volume": 172,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:15:00+00:00",
+      "open": 103.8224821867757,
+      "high": 105.3224821867757,
+      "low": 96.67367413017926,
+      "close": 98.17367413017926,
+      "volume": 173,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:30:00+00:00",
+      "open": 100.84144410296243,
+      "high": 102.34144410296243,
+      "low": 93.95570359091901,
+      "close": 95.45570359091901,
+      "volume": 174,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T18:45:00+00:00",
+      "open": 97.61222127665998,
+      "high": 99.11222127665998,
+      "low": 92.57807762132373,
+      "close": 94.07807762132373,
+      "volume": 175,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:00:00+00:00",
+      "open": 95.08727606723892,
+      "high": 96.58727606723892,
+      "low": 92.94712831797203,
+      "close": 94.44712831797203,
+      "volume": 176,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:15:00+00:00",
+      "open": 94.01134347776517,
+      "high": 97.95400382511895,
+      "low": 92.51134347776517,
+      "close": 96.45400382511895,
+      "volume": 177,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:30:00+00:00",
+      "open": 94.7017708539675,
+      "high": 101.00677429359739,
+      "low": 93.2017708539675,
+      "close": 99.50677429359739,
+      "volume": 178,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T19:45:00+00:00",
+      "open": 96.95491598126863,
+      "high": 104.20502215564431,
+      "low": 95.45491598126863,
+      "close": 102.70502215564431,
+      "volume": 179,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    }
+  ],
+  "bollinger_touch": [
+    {
+      "ts": "2024-01-01T00:00:00+00:00",
+      "open": 96.5,
+      "high": 97.8,
+      "low": 95.7,
+      "close": 97.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:15:00+00:00",
+      "open": 97.7,
+      "high": 98.5,
+      "low": 96.4,
+      "close": 97.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:30:00+00:00",
+      "open": 96.9,
+      "high": 98.2,
+      "low": 96.10000000000001,
+      "close": 97.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:45:00+00:00",
+      "open": 98.1,
+      "high": 98.89999999999999,
+      "low": 96.8,
+      "close": 97.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:00:00+00:00",
+      "open": 97.3,
+      "high": 98.6,
+      "low": 96.5,
+      "close": 97.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:15:00+00:00",
+      "open": 98.5,
+      "high": 99.3,
+      "low": 97.2,
+      "close": 98.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:30:00+00:00",
+      "open": 97.7,
+      "high": 99.0,
+      "low": 96.9,
+      "close": 98.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:45:00+00:00",
+      "open": 98.9,
+      "high": 99.7,
+      "low": 97.60000000000001,
+      "close": 98.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:00:00+00:00",
+      "open": 98.1,
+      "high": 99.39999999999999,
+      "low": 97.3,
+      "close": 98.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:15:00+00:00",
+      "open": 99.3,
+      "high": 100.1,
+      "low": 98.0,
+      "close": 98.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:30:00+00:00",
+      "open": 98.5,
+      "high": 99.8,
+      "low": 97.7,
+      "close": 99.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:45:00+00:00",
+      "open": 99.7,
+      "high": 100.5,
+      "low": 98.4,
+      "close": 99.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:00:00+00:00",
+      "open": 98.9,
+      "high": 100.2,
+      "low": 98.10000000000001,
+      "close": 99.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:15:00+00:00",
+      "open": 100.1,
+      "high": 100.89999999999999,
+      "low": 98.8,
+      "close": 99.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:30:00+00:00",
+      "open": 99.3,
+      "high": 100.6,
+      "low": 98.5,
+      "close": 99.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:45:00+00:00",
+      "open": 100.5,
+      "high": 101.3,
+      "low": 99.2,
+      "close": 100.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:00:00+00:00",
+      "open": 99.7,
+      "high": 101.0,
+      "low": 98.9,
+      "close": 100.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:15:00+00:00",
+      "open": 100.9,
+      "high": 101.7,
+      "low": 99.60000000000001,
+      "close": 100.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:30:00+00:00",
+      "open": 100.1,
+      "high": 101.39999999999999,
+      "low": 99.3,
+      "close": 100.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:45:00+00:00",
+      "open": 101.3,
+      "high": 102.1,
+      "low": 100.0,
+      "close": 100.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:00:00+00:00",
+      "open": 100.5,
+      "high": 101.8,
+      "low": 99.7,
+      "close": 101.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:15:00+00:00",
+      "open": 101.7,
+      "high": 102.5,
+      "low": 100.4,
+      "close": 101.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:30:00+00:00",
+      "open": 100.9,
+      "high": 102.2,
+      "low": 100.10000000000001,
+      "close": 101.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:45:00+00:00",
+      "open": 102.1,
+      "high": 102.89999999999999,
+      "low": 100.8,
+      "close": 101.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:00:00+00:00",
+      "open": 101.3,
+      "high": 102.6,
+      "low": 100.5,
+      "close": 101.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:15:00+00:00",
+      "open": 102.5,
+      "high": 103.3,
+      "low": 101.2,
+      "close": 102.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:30:00+00:00",
+      "open": 101.7,
+      "high": 103.0,
+      "low": 100.9,
+      "close": 102.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:45:00+00:00",
+      "open": 102.9,
+      "high": 103.7,
+      "low": 101.60000000000001,
+      "close": 102.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:00:00+00:00",
+      "open": 102.1,
+      "high": 103.39999999999999,
+      "low": 101.3,
+      "close": 102.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:15:00+00:00",
+      "open": 103.3,
+      "high": 104.1,
+      "low": 102.0,
+      "close": 102.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:30:00+00:00",
+      "open": 94.0,
+      "high": 95.3,
+      "low": 93.2,
+      "close": 94.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:45:00+00:00",
+      "open": 95.5,
+      "high": 96.3,
+      "low": 94.2,
+      "close": 95.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:00:00+00:00",
+      "open": 98.5,
+      "high": 99.8,
+      "low": 97.7,
+      "close": 99.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:15:00+00:00",
+      "open": 100.7,
+      "high": 101.5,
+      "low": 99.4,
+      "close": 100.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:30:00+00:00",
+      "open": 99.9,
+      "high": 101.2,
+      "low": 99.10000000000001,
+      "close": 100.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:45:00+00:00",
+      "open": 101.1,
+      "high": 101.89999999999999,
+      "low": 99.8,
+      "close": 100.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:00:00+00:00",
+      "open": 100.3,
+      "high": 101.6,
+      "low": 99.5,
+      "close": 100.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:15:00+00:00",
+      "open": 101.5,
+      "high": 102.3,
+      "low": 100.2,
+      "close": 101.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:30:00+00:00",
+      "open": 100.7,
+      "high": 102.0,
+      "low": 99.9,
+      "close": 101.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:45:00+00:00",
+      "open": 101.9,
+      "high": 102.7,
+      "low": 100.60000000000001,
+      "close": 101.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    }
+  ],
+  "pinbar_rejection": [
+    {
+      "ts": "2024-01-01T00:00:00+00:00",
+      "open": 99.8,
+      "high": 100.5,
+      "low": 99.3,
+      "close": 100.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:15:00+00:00",
+      "open": 100.7,
+      "high": 101.2,
+      "low": 100.0,
+      "close": 100.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:30:00+00:00",
+      "open": 100.8,
+      "high": 101.5,
+      "low": 100.3,
+      "close": 101.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:45:00+00:00",
+      "open": 101.7,
+      "high": 102.2,
+      "low": 101.0,
+      "close": 101.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:00:00+00:00",
+      "open": 101.8,
+      "high": 102.5,
+      "low": 101.3,
+      "close": 102.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:15:00+00:00",
+      "open": 102.7,
+      "high": 103.2,
+      "low": 102.0,
+      "close": 102.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:30:00+00:00",
+      "open": 102.8,
+      "high": 103.5,
+      "low": 102.3,
+      "close": 103.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:45:00+00:00",
+      "open": 103.7,
+      "high": 104.2,
+      "low": 103.0,
+      "close": 103.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:00:00+00:00",
+      "open": 103.8,
+      "high": 104.5,
+      "low": 103.3,
+      "close": 104.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:15:00+00:00",
+      "open": 104.7,
+      "high": 105.2,
+      "low": 104.0,
+      "close": 104.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:30:00+00:00",
+      "open": 104.8,
+      "high": 105.5,
+      "low": 104.3,
+      "close": 105.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:45:00+00:00",
+      "open": 105.7,
+      "high": 106.2,
+      "low": 105.0,
+      "close": 105.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:00:00+00:00",
+      "open": 105.8,
+      "high": 106.5,
+      "low": 105.3,
+      "close": 106.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:15:00+00:00",
+      "open": 106.7,
+      "high": 107.2,
+      "low": 106.0,
+      "close": 106.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:30:00+00:00",
+      "open": 106.8,
+      "high": 107.5,
+      "low": 106.3,
+      "close": 107.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:45:00+00:00",
+      "open": 107.7,
+      "high": 108.2,
+      "low": 107.0,
+      "close": 107.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:00:00+00:00",
+      "open": 107.8,
+      "high": 108.5,
+      "low": 107.3,
+      "close": 108.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:15:00+00:00",
+      "open": 108.7,
+      "high": 109.2,
+      "low": 108.0,
+      "close": 108.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:30:00+00:00",
+      "open": 108.8,
+      "high": 109.5,
+      "low": 108.3,
+      "close": 109.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:45:00+00:00",
+      "open": 109.7,
+      "high": 110.2,
+      "low": 109.0,
+      "close": 109.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:00:00+00:00",
+      "open": 109.8,
+      "high": 110.5,
+      "low": 109.3,
+      "close": 110.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:15:00+00:00",
+      "open": 110.7,
+      "high": 111.2,
+      "low": 110.0,
+      "close": 110.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:30:00+00:00",
+      "open": 110.8,
+      "high": 111.5,
+      "low": 110.3,
+      "close": 111.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:45:00+00:00",
+      "open": 111.7,
+      "high": 112.2,
+      "low": 111.0,
+      "close": 111.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:00:00+00:00",
+      "open": 111.8,
+      "high": 112.5,
+      "low": 111.3,
+      "close": 112.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:15:00+00:00",
+      "open": 112.7,
+      "high": 113.2,
+      "low": 112.0,
+      "close": 112.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:30:00+00:00",
+      "open": 112.8,
+      "high": 113.5,
+      "low": 112.3,
+      "close": 113.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:45:00+00:00",
+      "open": 113.7,
+      "high": 114.2,
+      "low": 113.0,
+      "close": 113.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:00:00+00:00",
+      "open": 113.8,
+      "high": 114.5,
+      "low": 113.3,
+      "close": 114.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:15:00+00:00",
+      "open": 114.7,
+      "high": 115.2,
+      "low": 114.0,
+      "close": 114.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:30:00+00:00",
+      "open": 114.8,
+      "high": 115.5,
+      "low": 114.3,
+      "close": 115.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:45:00+00:00",
+      "open": 115.7,
+      "high": 116.2,
+      "low": 115.0,
+      "close": 115.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:00:00+00:00",
+      "open": 115.8,
+      "high": 116.5,
+      "low": 115.3,
+      "close": 116.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:15:00+00:00",
+      "open": 116.7,
+      "high": 117.2,
+      "low": 116.0,
+      "close": 116.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:30:00+00:00",
+      "open": 116.8,
+      "high": 117.5,
+      "low": 116.3,
+      "close": 117.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:45:00+00:00",
+      "open": 117.5,
+      "high": 120.0,
+      "low": 116.0,
+      "close": 117.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:00:00+00:00",
+      "open": 116.3,
+      "high": 117.0,
+      "low": 115.8,
+      "close": 116.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:15:00+00:00",
+      "open": 115.8,
+      "high": 116.3,
+      "low": 115.1,
+      "close": 115.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:30:00+00:00",
+      "open": 115.0,
+      "high": 115.7,
+      "low": 114.5,
+      "close": 115.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:45:00+00:00",
+      "open": 115.0,
+      "high": 115.5,
+      "low": 114.3,
+      "close": 114.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    }
+  ],
+  "engulfing": [
+    {
+      "ts": "2024-01-01T00:00:00+00:00",
+      "open": 99.8,
+      "high": 100.5,
+      "low": 99.3,
+      "close": 100.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:15:00+00:00",
+      "open": 100.0,
+      "high": 100.5,
+      "low": 99.3,
+      "close": 99.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:30:00+00:00",
+      "open": 99.39999999999999,
+      "high": 100.1,
+      "low": 98.89999999999999,
+      "close": 99.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T00:45:00+00:00",
+      "open": 99.60000000000001,
+      "high": 100.10000000000001,
+      "low": 98.9,
+      "close": 99.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:00:00+00:00",
+      "open": 99.0,
+      "high": 99.7,
+      "low": 98.5,
+      "close": 99.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:15:00+00:00",
+      "open": 99.2,
+      "high": 99.7,
+      "low": 98.5,
+      "close": 99.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:30:00+00:00",
+      "open": 98.6,
+      "high": 99.3,
+      "low": 98.1,
+      "close": 98.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T01:45:00+00:00",
+      "open": 98.8,
+      "high": 99.3,
+      "low": 98.1,
+      "close": 98.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:00:00+00:00",
+      "open": 98.2,
+      "high": 98.9,
+      "low": 97.7,
+      "close": 98.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:15:00+00:00",
+      "open": 98.4,
+      "high": 98.9,
+      "low": 97.7,
+      "close": 98.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:30:00+00:00",
+      "open": 97.8,
+      "high": 98.5,
+      "low": 97.3,
+      "close": 98.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T02:45:00+00:00",
+      "open": 98.0,
+      "high": 98.5,
+      "low": 97.3,
+      "close": 97.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:00:00+00:00",
+      "open": 97.39999999999999,
+      "high": 98.1,
+      "low": 96.89999999999999,
+      "close": 97.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:15:00+00:00",
+      "open": 97.60000000000001,
+      "high": 98.10000000000001,
+      "low": 96.9,
+      "close": 97.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:30:00+00:00",
+      "open": 97.0,
+      "high": 97.7,
+      "low": 96.5,
+      "close": 97.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T03:45:00+00:00",
+      "open": 97.2,
+      "high": 97.7,
+      "low": 96.5,
+      "close": 97.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:00:00+00:00",
+      "open": 96.6,
+      "high": 97.3,
+      "low": 96.1,
+      "close": 96.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:15:00+00:00",
+      "open": 96.8,
+      "high": 97.3,
+      "low": 96.1,
+      "close": 96.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:30:00+00:00",
+      "open": 96.2,
+      "high": 96.9,
+      "low": 95.7,
+      "close": 96.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T04:45:00+00:00",
+      "open": 96.4,
+      "high": 96.9,
+      "low": 95.7,
+      "close": 96.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:00:00+00:00",
+      "open": 95.8,
+      "high": 96.5,
+      "low": 95.3,
+      "close": 96.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:15:00+00:00",
+      "open": 96.0,
+      "high": 96.5,
+      "low": 95.3,
+      "close": 95.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:30:00+00:00",
+      "open": 95.39999999999999,
+      "high": 96.1,
+      "low": 94.89999999999999,
+      "close": 95.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T05:45:00+00:00",
+      "open": 95.60000000000001,
+      "high": 96.10000000000001,
+      "low": 94.9,
+      "close": 95.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:00:00+00:00",
+      "open": 95.0,
+      "high": 95.7,
+      "low": 94.5,
+      "close": 95.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:15:00+00:00",
+      "open": 95.2,
+      "high": 95.7,
+      "low": 94.5,
+      "close": 95.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:30:00+00:00",
+      "open": 94.6,
+      "high": 95.3,
+      "low": 94.1,
+      "close": 94.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T06:45:00+00:00",
+      "open": 94.8,
+      "high": 95.3,
+      "low": 94.1,
+      "close": 94.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:00:00+00:00",
+      "open": 94.2,
+      "high": 94.9,
+      "low": 93.7,
+      "close": 94.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:15:00+00:00",
+      "open": 94.4,
+      "high": 94.9,
+      "low": 93.7,
+      "close": 94.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:30:00+00:00",
+      "open": 93.8,
+      "high": 94.5,
+      "low": 93.3,
+      "close": 94.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T07:45:00+00:00",
+      "open": 94.0,
+      "high": 94.5,
+      "low": 93.3,
+      "close": 93.8,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:00:00+00:00",
+      "open": 93.39999999999999,
+      "high": 94.1,
+      "low": 92.89999999999999,
+      "close": 93.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:15:00+00:00",
+      "open": 93.60000000000001,
+      "high": 94.10000000000001,
+      "low": 92.9,
+      "close": 93.4,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:30:00+00:00",
+      "open": 93.0,
+      "high": 93.7,
+      "low": 92.5,
+      "close": 93.2,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T08:45:00+00:00",
+      "open": 93.0,
+      "high": 93.5,
+      "low": 92.0,
+      "close": 92.5,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:00:00+00:00",
+      "open": 92.5,
+      "high": 95.5,
+      "low": 92.0,
+      "close": 95.0,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:15:00+00:00",
+      "open": 95.5,
+      "high": 96.0,
+      "low": 94.8,
+      "close": 95.3,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:30:00+00:00",
+      "open": 95.39999999999999,
+      "high": 96.1,
+      "low": 94.89999999999999,
+      "close": 95.6,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    },
+    {
+      "ts": "2024-01-01T09:45:00+00:00",
+      "open": 96.10000000000001,
+      "high": 96.60000000000001,
+      "low": 95.4,
+      "close": 95.9,
+      "volume": 100,
+      "symbol": "BTCUSD",
+      "resolution": "15m"
+    }
+  ]
+}

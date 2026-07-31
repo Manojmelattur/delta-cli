@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : vwap
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 5085.91
+Net PnL       : -4914.09 (-49.14%)
+Trades        : 224 (W:51 L:173 WR:22.8%)
+Avg win/loss  : 42.45 / -40.92
+Expectancy    : -21.94 per trade
+Profit factor : 0.31
+Avg trade PnL : -21.94
+Best / Worst  : 306.60 / -128.25
+Streaks (W/L) : 5 / 17
+Avg hold time : 2.75 h
+Exit reasons  : exit:4, stop_loss:23, trailing_stop:197
+Max drawdown  : -49.14%
+Sharpe        : -89.34
+Total fees    : 1586.75
+================================================================
+Artifacts     : ./reports\scan_vwap_20260708_130329

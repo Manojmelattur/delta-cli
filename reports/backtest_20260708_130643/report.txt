@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : fvg
+Symbol / Res  : BTCUSD @ 1h
+Period        : 2026-04-09T07:34:42.021998+00:00 → 2026-07-08T07:34:42.021998+00:00
+Params        : {'ema_len': 50, 'min_body_ratio': 1.2, 'close_frac': 0.6}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 8198.79
+Net PnL       : -1801.21 (-18.01%)
+Trades        : 141 (W:59 L:82 WR:41.8%)
+Avg win/loss  : 83.54 / -82.07
+Expectancy    : -12.77 per trade
+Profit factor : 0.73
+Avg trade PnL : -12.77
+Best / Worst  : 799.83 / -432.90
+Streaks (W/L) : 5 / 8
+Avg hold time : 15.17 h
+Exit reasons  : exit:140, force_close:1
+Max drawdown  : -22.33%
+Sharpe        : -13.65
+Total fees    : 1233.13
+================================================================
+Artifacts     : ./reports\backtest_20260708_130643

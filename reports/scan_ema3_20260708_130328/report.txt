@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : ema3
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 9298.69
+Net PnL       : -701.31 (-7.01%)
+Trades        : 42 (W:13 L:29 WR:31.0%)
+Avg win/loss  : 82.84 / -61.32
+Expectancy    : -16.70 per trade
+Profit factor : 0.61
+Avg trade PnL : -16.70
+Best / Worst  : 396.50 / -138.54
+Streaks (W/L) : 3 / 8
+Avg hold time : 3.43 h
+Exit reasons  : force_close:1, stop_loss:4, trailing_stop:37
+Max drawdown  : -11.68%
+Sharpe        : -18.44
+Total fees    : 422.68
+================================================================
+Artifacts     : ./reports\scan_ema3_20260708_130328

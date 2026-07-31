@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : supertrend_mom
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 10000.00
+Net PnL       : 0.00 (0.00%)
+Trades        : 0 (W:0 L:0 WR:0.0%)
+Avg win/loss  : 0.00 / 0.00
+Expectancy    : 0.00 per trade
+Profit factor : 0.00
+Avg trade PnL : 0.00
+Best / Worst  : 0.00 / 0.00
+Streaks (W/L) : 0 / 0
+Avg hold time : 0.00 h
+Exit reasons  : —
+Max drawdown  : 0.00%
+Sharpe        : 0.00
+Total fees    : 0.00
+================================================================
+Artifacts     : ./reports\scan_supertrend_mom_20260708_130329

@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : ema_cross
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 7396.56
+Net PnL       : -2603.44 (-26.03%)
+Trades        : 102 (W:22 L:80 WR:21.6%)
+Avg win/loss  : 48.52 / -45.89
+Expectancy    : -25.52 per trade
+Profit factor : 0.29
+Avg trade PnL : -25.52
+Best / Worst  : 283.72 / -129.98
+Streaks (W/L) : 3 / 14
+Avg hold time : 3.15 h
+Exit reasons  : exit:7, stop_loss:7, trailing_stop:88
+Max drawdown  : -26.40%
+Sharpe        : -64.00
+Total fees    : 876.76
+================================================================
+Artifacts     : ./reports\scan_ema_cross_20260708_130328

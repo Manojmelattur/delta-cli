@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : rsi_mr
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 4494.91
+Net PnL       : -5505.09 (-55.05%)
+Trades        : 287 (W:90 L:197 WR:31.4%)
+Avg win/loss  : 35.79 / -44.30
+Expectancy    : -19.18 per trade
+Profit factor : 0.37
+Avg trade PnL : -19.18
+Best / Worst  : 175.96 / -128.48
+Streaks (W/L) : 5 / 13
+Avg hold time : 2.87 h
+Exit reasons  : exit:1, force_close:1, stop_loss:50, trailing_stop:235
+Max drawdown  : -57.09%
+Sharpe        : -87.09
+Total fees    : 1842.89
+================================================================
+Artifacts     : ./reports\scan_rsi_mr_20260708_130328

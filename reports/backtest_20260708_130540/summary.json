@@ -1,0 +1,45 @@
+{
+  "starting_capital": 10000.0,
+  "ending_equity": 7374.700250249864,
+  "net_pnl": -2625.2997497501356,
+  "return_pct": -26.25299749750135,
+  "trades": 38,
+  "wins": 9,
+  "losses": 29,
+  "win_rate_pct": 23.684210526315788,
+  "profit_factor": 0.9427235840120941,
+  "avg_trade_pnl": -69.08683551974063,
+  "avg_win": 4801.146134937199,
+  "avg_loss": -1580.5384470408599,
+  "expectancy": -69.08683551974059,
+  "max_drawdown_pct": -83.85829638791022,
+  "sharpe": 7.319885578668851,
+  "total_fees": 443.4448140588404,
+  "bars": 2161,
+  "exit_reasons": {
+    "exit": 37,
+    "force_close": 1
+  },
+  "avg_hold_seconds": 204347.36842105264,
+  "best_trade_pnl": 15466.278105209154,
+  "worst_trade_pnl": -10557.00085018086,
+  "max_win_streak": 2,
+  "max_loss_streak": 11,
+  "meta": {
+    "mode": "backtest",
+    "strategy": "price_action_engulfing",
+    "symbol": "BEATUSD",
+    "resolution": "1h",
+    "start": "2026-04-09T07:33:39.843190+00:00",
+    "end": "2026-07-08T07:33:39.843190+00:00",
+    "params": {
+      "ema_len": 50,
+      "min_body_ratio": 1.2,
+      "close_frac": 0.6
+    },
+    "sl_pct": 0.0,
+    "tp_pct": 0.0,
+    "trail_pct": 0.0,
+    "leverage": 1.0
+  }
+}

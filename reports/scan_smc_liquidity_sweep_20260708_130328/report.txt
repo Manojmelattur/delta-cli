@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : smc_liquidity_sweep
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 9034.93
+Net PnL       : -965.07 (-9.65%)
+Trades        : 19 (W:2 L:17 WR:10.5%)
+Avg win/loss  : 56.31 / -63.39
+Expectancy    : -50.79 per trade
+Profit factor : 0.10
+Avg trade PnL : -50.79
+Best / Worst  : 77.87 / -132.52
+Streaks (W/L) : 1 / 16
+Avg hold time : 3.89 h
+Exit reasons  : stop_loss:3, trailing_stop:16
+Max drawdown  : -9.96%
+Sharpe        : -50.91
+Total fees    : 182.68
+================================================================
+Artifacts     : ./reports\scan_smc_liquidity_sweep_20260708_130328

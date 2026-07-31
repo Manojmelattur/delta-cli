@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : fvg
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 5611.31
+Net PnL       : -4388.69 (-43.89%)
+Trades        : 130 (W:21 L:109 WR:16.2%)
+Avg win/loss  : 46.75 / -49.27
+Expectancy    : -33.76 per trade
+Profit factor : 0.18
+Avg trade PnL : -33.76
+Best / Worst  : 190.74 / -121.92
+Streaks (W/L) : 2 / 19
+Avg hold time : 2.54 h
+Exit reasons  : exit:12, stop_loss:14, trailing_stop:104
+Max drawdown  : -44.02%
+Sharpe        : -108.17
+Total fees    : 1006.39
+================================================================
+Artifacts     : ./reports\scan_fvg_20260708_130328

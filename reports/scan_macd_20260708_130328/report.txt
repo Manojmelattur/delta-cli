@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : macd
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 6009.12
+Net PnL       : -3990.88 (-39.91%)
+Trades        : 159 (W:43 L:116 WR:27.0%)
+Avg win/loss  : 33.26 / -46.73
+Expectancy    : -25.10 per trade
+Profit factor : 0.26
+Avg trade PnL : -25.10
+Best / Worst  : 141.29 / -133.23
+Streaks (W/L) : 4 / 11
+Avg hold time : 3.01 h
+Exit reasons  : exit:10, stop_loss:17, trailing_stop:132
+Max drawdown  : -41.47%
+Sharpe        : -91.41
+Total fees    : 1244.06
+================================================================
+Artifacts     : ./reports\scan_macd_20260708_130328

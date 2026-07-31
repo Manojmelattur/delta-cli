@@ -1,0 +1,41 @@
+{
+  "starting_capital": 10000.0,
+  "ending_equity": 8258.757367859258,
+  "net_pnl": -1741.242632140742,
+  "return_pct": -17.412426321407416,
+  "trades": 43,
+  "wins": 9,
+  "losses": 34,
+  "win_rate_pct": 20.930232558139537,
+  "profit_factor": 0.5153474128051285,
+  "avg_trade_pnl": -40.49401470094739,
+  "avg_win": 205.7246570358272,
+  "avg_loss": -105.66954545479949,
+  "expectancy": -40.494014700947396,
+  "max_drawdown_pct": -23.494532203809353,
+  "sharpe": -31.01126909851205,
+  "total_fees": 410.54309143674766,
+  "bars": 746,
+  "exit_reasons": {
+    "exit": 42,
+    "force_close": 1
+  },
+  "avg_hold_seconds": 57432.558139534885,
+  "best_trade_pnl": 587.7571482322484,
+  "worst_trade_pnl": -394.72464888231286,
+  "max_win_streak": 3,
+  "max_loss_streak": 16,
+  "meta": {
+    "mode": "backtest",
+    "strategy": "ema_cross",
+    "symbol": "BTCUSD",
+    "resolution": "1h",
+    "start": "2025-01-01T00:00:00+00:00",
+    "end": "2025-02-01T00:00:00+00:00",
+    "params": {},
+    "sl_pct": 0.0,
+    "tp_pct": 0.0,
+    "trail_pct": 0.0,
+    "leverage": 1.0
+  }
+}

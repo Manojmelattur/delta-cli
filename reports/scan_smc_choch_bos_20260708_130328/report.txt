@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : smc_choch_bos
+Symbol / Res  : ETHUSD @ 1h
+Period        : 2026-04-09T07:31:27.065508+00:00 → 2026-07-08T07:31:27.065508+00:00
+Params        : {}
+Risk (SL/TP/Tr): 1.2% / 2.4% / 0.8%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 6161.97
+Net PnL       : -3838.03 (-38.38%)
+Trades        : 126 (W:30 L:96 WR:23.8%)
+Avg win/loss  : 34.08 / -50.63
+Expectancy    : -30.46 per trade
+Profit factor : 0.21
+Avg trade PnL : -30.46
+Best / Worst  : 163.88 / -131.85
+Streaks (W/L) : 3 / 17
+Avg hold time : 3.47 h
+Exit reasons  : exit:9, stop_loss:15, trailing_stop:102
+Max drawdown  : -38.64%
+Sharpe        : -95.82
+Total fees    : 996.69
+================================================================
+Artifacts     : ./reports\scan_smc_choch_bos_20260708_130328

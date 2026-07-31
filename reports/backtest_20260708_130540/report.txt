@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : price_action_engulfing
+Symbol / Res  : BEATUSD @ 1h
+Period        : 2026-04-09T07:33:39.843190+00:00 → 2026-07-08T07:33:39.843190+00:00
+Params        : {'ema_len': 50, 'min_body_ratio': 1.2, 'close_frac': 0.6}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 7374.70
+Net PnL       : -2625.30 (-26.25%)
+Trades        : 38 (W:9 L:29 WR:23.7%)
+Avg win/loss  : 4801.15 / -1580.54
+Expectancy    : -69.09 per trade
+Profit factor : 0.94
+Avg trade PnL : -69.09
+Best / Worst  : 15466.28 / -10557.00
+Streaks (W/L) : 2 / 11
+Avg hold time : 56.76 h
+Exit reasons  : exit:37, force_close:1
+Max drawdown  : -83.86%
+Sharpe        : 7.32
+Total fees    : 443.44
+================================================================
+Artifacts     : ./reports\backtest_20260708_130540
