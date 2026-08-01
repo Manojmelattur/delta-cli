@@ -230,7 +230,8 @@ def build_parser() -> argparse.ArgumentParser:
     lv.add_argument("--duration", type=int, default=None)
     lv.add_argument("--lot", dest="live_qty", type=int, default=1, help="Contracts per order")
     lv.add_argument(
-        "--i-understand",
+        "--i-understand", "--i-understand-live",
+        dest="i_understand",
         action="store_true",
         help="Required. Confirms you will trade real funds.",
     )
@@ -497,7 +498,7 @@ def build_parser() -> argparse.ArgumentParser:
     da.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], required=True)
     da.add_argument("--strategy", required=True)
     da.add_argument("--symbol", required=True)
-    da.add_argument("--resolution", default="15m")
+    da.add_argument("--resolution", "--timeframe", dest="resolution", default="15m")
     da.add_argument("--lot", dest="size", type=float, required=True)
     da.add_argument("--params", type=_parse_params, default={})
     da.add_argument("--sl-pct", type=float, default=0)
@@ -505,7 +506,7 @@ def build_parser() -> argparse.ArgumentParser:
     da.add_argument("--trail-pct", type=float, default=0)
     da.add_argument("--interval", type=int, default=300, help="Seconds between checks")
     da.add_argument("--reduce-only", action="store_true")
-    da.add_argument("--i-understand-live", action="store_true")
+    da.add_argument("--i-understand-live", "--i-understand", dest="i_understand_live", action="store_true")
     for name in ("pause", "resume", "stop", "close", "rm"):
         p2 = dsub.add_parser(name, help=f"{name} deployment")
         p2.add_argument("pos_id", type=int, nargs="?", default=None, help="Deployment ID (positional)")

@@ -106,52 +106,52 @@ def format_pct(val: Optional[float], color: bool = True, decimals: int = 1) -> s
 
 
 def render_box_table(headers: List[str], rows: List[List[str]], title: Optional[str] = None) -> str:
-    """Render minimalist Unicode box table with cyan borders and ANSI-aware column alignment."""
+    """Render minimalist plain table to prevent Unicode emoji misalignment."""
     if not headers:
         return ""
 
+    # Calculate max column widths
     col_widths = [visible_len(h) for h in headers]
     for row in rows:
         for i, cell in enumerate(row):
             if i < len(col_widths):
                 col_widths[i] = max(col_widths[i], visible_len(cell))
-
-    top_border = "┌" + "┬".join("─" * (w + 2) for w in col_widths) + "┐"
-    mid_border = "├" + "┼".join("─" * (w + 2) for w in col_widths) + "┤"
-    bot_border = "└" + "┴".join("─" * (w + 2) for w in col_widths) + "┘"
+                
+    # Add a bit of padding to each column
+    for i in range(len(col_widths)):
+        col_widths[i] += 1
 
     lines = []
     if title:
-        title_line = f"┌─ {title} "
-        rem_len = max(0, sum(col_widths) + len(col_widths) * 3 - visible_len(title_line) + 1)
-        lines.append(f"{C_CYAN}{title_line}{'─' * rem_len}┐{C_RESET}")
+        lines.append(f"{C_CYAN}── {C_BOLD}{title.upper()}{C_RESET} {C_CYAN}{'─' * 50}{C_RESET}")
     else:
-        lines.append(f"{C_CYAN}{top_border}{C_RESET}")
+        lines.append(f"{C_CYAN}{'─' * 60}{C_RESET}")
 
     # Headers
-    hdr_str = f"{C_CYAN}│{C_RESET}"
+    hdr_str = ""
     for i, h in enumerate(headers):
         v_len = visible_len(h)
         pad = " " * (col_widths[i] - v_len)
-        hdr_str += f" {C_BOLD}{h}{pad}{C_RESET} {C_CYAN}│{C_RESET}"
+        hdr_str += f" {C_BOLD}{h}{pad}{C_RESET}  "
     lines.append(hdr_str)
-    lines.append(f"{C_CYAN}{mid_border}{C_RESET}")
+    
+    # Separator
+    lines.append(f"{C_CYAN}{'─' * visible_len(hdr_str)}{C_RESET}")
 
     # Rows
     if not rows:
-        empty_str = " (no records) ".center(sum(col_widths) + len(col_widths) * 3 - 1)
-        lines.append(f"{C_CYAN}│{C_RESET}{C_DIM}{empty_str}{C_RESET}{C_CYAN}│{C_RESET}")
+        lines.append("  (no records) ")
     else:
         for r in rows:
-            row_str = f"{C_CYAN}│{C_RESET}"
+            row_str = ""
             for i, cell in enumerate(r):
                 w = col_widths[i]
                 v_len = visible_len(cell)
                 pad = " " * (w - v_len)
-                row_str += f" {cell}{pad} {C_CYAN}│{C_RESET}"
+                row_str += f" {cell}{pad}  "
             lines.append(row_str)
 
-    lines.append(f"{C_CYAN}{bot_border}{C_RESET}")
+    lines.append(f"{C_CYAN}{'─' * visible_len(hdr_str)}{C_RESET}")
     return "\n".join(lines)
 
 
