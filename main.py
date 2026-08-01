@@ -141,11 +141,11 @@ def menu_scheduled_trade():
         strategy = select_strategy_interactive(default="supertrend_mom")
         symbol = input(f" {C_CYAN}Symbol{C_RESET} [BTCUSD]: ").strip() or "BTCUSD"
         tf = input(f" {C_CYAN}Timeframe{C_RESET} [15m]: ").strip() or "15m"
-        size = input(f" {C_CYAN}Size{C_RESET} [0.001]: ").strip() or "0.001"
+        size = input(f" {C_CYAN}Lot Size{C_RESET} [1]: ").strip() or "1"
         interval = input(f" {C_CYAN}Schedule Interval (sec){C_RESET} [300]: ").strip() or "300"
         
         args = ["deployments", "add", "--name", name, "--venue", venue, "--strategy", strategy,
-                "--symbol", symbol, "--resolution", tf, "--size", size, "--interval", interval]
+                "--symbol", symbol, "--resolution", tf, "--lot", size, "--interval", interval]
         if venue == "live": args.append("--i-understand-live")
         run_cli_command(args)
     elif c == "2":
@@ -153,9 +153,9 @@ def menu_scheduled_trade():
         strategy = select_strategy_interactive(default="smc_ob_fvg")
         symbol = input(f" {C_CYAN}Symbol{C_RESET} [BTCUSD]: ").strip() or "BTCUSD"
         tf = input(f" {C_CYAN}Timeframe{C_RESET} [15m]: ").strip() or "15m"
-        size = input(f" {C_CYAN}Size{C_RESET} [1]: ").strip() or "1"
+        size = input(f" {C_CYAN}Lot Size{C_RESET} [1]: ").strip() or "1"
         
-        args = ["trade", "--venue", venue, "--strategy", strategy, "--symbol", symbol, "--resolution", tf, "--size", size]
+        args = ["trade", "--venue", venue, "--strategy", strategy, "--symbol", symbol, "--resolution", tf, "--lot", size]
         if venue == "live": args.append("--i-understand-live")
         run_cli_command(args)
     elif c == "3":
@@ -236,7 +236,7 @@ def menu_deployments():
         bots = _load_bots()
 
         if bots:
-            print(f" {'#':<4} {'ID':<5} {'Status':<9} {'Venue':<11} {'Strategy':<18} {'Symbol':<12} {'TF':<5} {'Size':<7} {'SL%':<6} {'TP%':<6} {'PnL $'}")
+            print(f" {'#':<4} {'ID':<5} {'Status':<9} {'Venue':<11} {'Strategy':<18} {'Symbol':<12} {'TF':<5} {'Lot':<7} {'SL%':<6} {'TP%':<6} {'PnL $'}")
             print(f" {C_DIM}{'─'*100}{C_RESET}")
             for idx, b in enumerate(bots, 1):
                 sc  = C_GREEN if b["status"] == "running" else (C_YELLOW if b["status"] == "paused" else C_DIM)
@@ -260,7 +260,7 @@ def menu_deployments():
         print(f"""
   {C_CYAN}1.{C_RESET} 🔍 View Bot Detail
   {C_CYAN}2.{C_RESET} ➕ Deploy New Bot
-  {C_CYAN}3.{C_RESET} ✏️  Edit Bot Parameters  (venue / size / SL / TP / trail / strategy / …)
+  {C_CYAN}3.{C_RESET} ✏️  Edit Bot Parameters  (venue / lot / SL / TP / trail / strategy / …)
   {C_CYAN}4.{C_RESET} ⏸  Pause Bot
   {C_CYAN}5.{C_RESET} ▶  Resume Bot
   {C_CYAN}6.{C_RESET} 🛑 Stop Bot
@@ -297,7 +297,7 @@ def menu_deployments():
             args = [
                 "deployments", "add",
                 "--name", name, "--venue", venue, "--strategy", strategy,
-                "--symbol", symbol, "--resolution", tf, "--size", size,
+                "--symbol", symbol, "--resolution", tf, "--lot", size,
                 "--sl-pct", sl, "--tp-pct", tp, "--trail-pct", trail,
             ]
             if venue == "live": args.append("--i-understand-live")
@@ -361,7 +361,7 @@ def menu_deployments():
             if sr:
                 try:
                     if float(sr) != float(cur_size):
-                        args += ["--size", sr]; changed = True
+                        args += ["--lot", sr]; changed = True
                 except ValueError:
                     print(f"   {C_YELLOW}Invalid — keeping {cur_size}{C_RESET}")
 

@@ -173,17 +173,17 @@ python -m delta_bt paper --strategy supertrend_mom --symbol BTCUSD --timeframe 1
 #### `live`
 Launch a live trading bot sending real orders to Delta Exchange (requires `--i-understand-live`).
 ```bash
-python -m delta_bt live --strategy smc_ob_fvg --symbol BTCUSD --timeframe 15m --size 0.001 --i-understand-live
+python -m delta_bt live --strategy smc_ob_fvg --symbol BTCUSD --timeframe 15m --lot 1 --i-understand-live
 ```
 
 #### `trade`
 Evaluate strategy signals on recent candles and place a one-shot market order.
 ```bash
 # Trade on testnet
-python -m delta_bt trade --venue testnet --strategy smc_ob_fvg --symbol BTCUSD --resolution 15m --size 1
+python -m delta_bt trade --venue testnet --strategy smc_ob_fvg --symbol BTCUSD --resolution 15m --lot 1
 
 # Trade on live
-python -m delta_bt trade --venue live --strategy supertrend_mom --symbol ETHUSD --resolution 15m --size 0.01 --i-understand-live
+python -m delta_bt trade --venue live --strategy supertrend_mom --symbol ETHUSD --resolution 15m --lot 10 --i-understand-live
 ```
 
 ---
@@ -208,13 +208,16 @@ nohup python -m delta_bt watch --interval 15 > watcher.log 2>&1 &
 Deploy a new scheduled trading bot.
 ```bash
 # Paper trading deployment
-python -m delta_bt deployments add --name "Paper Grid Bot" --venue paper --strategy grid --symbol BTCUSD --size 0.001
+python -m delta_bt deployments add --name "Paper Grid Bot" --venue paper --strategy grid --symbol BTCUSD --lot 1
 
 # Testnet deployment
-python -m delta_bt deployments add --name "Testnet SMC" --venue testnet --strategy smc_ob_fvg --symbol ETHUSD --size 0.01
+python -m delta_bt deployments add --name "Testnet SMC" --venue testnet --strategy smc_ob_fvg --symbol ETHUSD --lot 10
 
 # Live deployment
-python -m delta_bt deployments add --name "Live Trend" --venue live --strategy supertrend_mom --symbol BTCUSD --size 0.001 --i-understand-live
+python -m delta_bt deployments add --name "Live Trend" --venue live --strategy supertrend_mom --symbol BTCUSD --lot 1 --i-understand-live
+
+# One-Shot Deployment (Auto-stops bot after a single complete trade cycle)
+python -m delta_bt deployments add --name "One Shot Sniper" --venue live --strategy supertrend_mom --symbol BTCUSD --lot 1 --sl-pct 1.5 --tp-pct 3.0 --params '{"one_shot": true}' --i-understand-live
 ```
 
 #### Batch Control (`pause-all`, `resume-all`, `stop-all`)

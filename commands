@@ -49,7 +49,7 @@ python -m delta_bt rank-universe --regime-bias range --adx-range-max 18 --atr-mi
 python -m delta_bt rank-universe --live --min-turnover-usd 50000000
 
 
-python -m delta_bt order --venue testnet --symbol ETHUSD --side buy --size 1 --type market_order
+python -m delta_bt order --venue testnet --symbol ETHUSD --side buy --lot 1 --type market_order
 
 Demo
 
@@ -76,7 +76,7 @@ python -c "import os; from delta_bt.data.delta_client import DeltaClient;
 c=DeltaClient(os.environ['DELTA_BASE_URL'], os.environ['DELTA_API_KEY'], os.environ['DELTA_API_SECRET']);
 print(c.balances
 
-python -m delta_bt trade --venue testnet --strategy smc_ob_fvg --symbol SOLUSD --resolution 1h --size 1 --params '{"imp_bars":3,"imp_mult":1.5,"fvg_lookback":40,"max_age":60}'
+python -m delta_bt trade --venue testnet --strategy smc_ob_fvg --symbol SOLUSD --resolution 1h --lot 1 --params '{"imp_bars":3,"imp_mult":1.5,"fvg_lookback":40,"max_age":60}'
 
 python -m delta_bt backtest --strategy smc_liquidity_sweep  --symbol SOLUSD --timeframe 15m --days 60 --params '{\"lookback\":20,\"wick_ratio\":0.5,\"cooldown\":3}'
 
@@ -87,6 +87,6 @@ python -m delta_bt paper --strategy price_action_engulfing --symbol SOLUSD   --t
 
 python -m delta_bt trade paper --symbol XRPUSD  --timeframe 4h --live-orders --live-qty 1   --sl-pct 1.0 --tp-pct 2.0 --trail-pct 0.5
 
-python -m delta_bt order --venue testnet --symbol SOLUSD --side buy --size 1 --type market_order
+python -m delta_bt order --venue testnet --symbol SOLUSD --side buy --lot 1 --type market_order
 
-python -m delta_bt trade --venue testnet --strategy price_action_pinbar --symbol BTCUSD --resolution 15m --size 1 --params '{"wick_ratio":2,"body_frac":0.33,"ema_len":50,"require_swing":true,"swing":5}'
+python -m delta_bt trade --venue testnet --strategy price_action_pinbar --symbol BTCUSD --resolution 15m --lot 1 --params '{"wick_ratio":2,"body_frac":0.33,"ema_len":50,"require_swing":true,"swing":5}'

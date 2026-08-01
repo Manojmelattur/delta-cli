@@ -221,14 +221,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="POST real orders to the demo venue (still testnet)",
     )
     pp.add_argument(
-        "--live-qty", type=int, default=1, help="Contracts per order when --live-orders"
+        "--lot", dest="live_qty", type=int, default=1, help="Contracts per order when --live-orders"
     )
     pp.add_argument("--single-run", action="store_true", help="Evaluate once and place an order (redirects to trade)")
 
     lv = sub.add_parser("live", help="REAL orders on the production venue")
     _add_common(lv)
     lv.add_argument("--duration", type=int, default=None)
-    lv.add_argument("--live-qty", type=int, default=1, help="Contracts per order")
+    lv.add_argument("--lot", dest="live_qty", type=int, default=1, help="Contracts per order")
     lv.add_argument(
         "--i-understand",
         action="store_true",
@@ -460,7 +460,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_common(tr)
     tr.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default="testnet")
-    tr.add_argument("--size", type=int, default=1, help="Contracts per order")
+    tr.add_argument("--lot", dest="size", type=int, default=1, help="Contracts per order")
     tr.add_argument("--warmup-bars", type=int, default=400)
     tr.add_argument("--dry-run", action="store_true", help="Evaluate only; do not place an order")
     tr.add_argument("--reduce-only", action="store_true")
@@ -471,7 +471,7 @@ def build_parser() -> argparse.ArgumentParser:
     od.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default="testnet")
     od.add_argument("--symbol", required=True)
     od.add_argument("--side", choices=["buy", "sell"], required=True)
-    od.add_argument("--size", type=int, required=True)
+    od.add_argument("--lot", dest="size", type=int, required=True)
     od.add_argument("--type", "--order-type", dest="order_type", choices=["market_order", "limit_order", "market", "limit"], default="market_order")
     od.add_argument("--limit-price", default=None)
     od.add_argument("--reduce-only", action="store_true")
@@ -498,7 +498,7 @@ def build_parser() -> argparse.ArgumentParser:
     da.add_argument("--strategy", required=True)
     da.add_argument("--symbol", required=True)
     da.add_argument("--resolution", default="15m")
-    da.add_argument("--size", type=float, required=True)
+    da.add_argument("--lot", dest="size", type=float, required=True)
     da.add_argument("--params", type=_parse_params, default={})
     da.add_argument("--sl-pct", type=float, default=0)
     da.add_argument("--tp-pct", type=float, default=0)
@@ -530,7 +530,7 @@ def build_parser() -> argparse.ArgumentParser:
     de.add_argument("--strategy",          default=None)
     de.add_argument("--symbol",            default=None)
     de.add_argument("--resolution",        default=None)
-    de.add_argument("--size",              type=float, default=None, help="Lot size (contracts)")
+    de.add_argument("--lot", dest="size", type=float, default=None, help="Lot size (contracts)")
     de.add_argument("--sl-pct",            type=float, default=None, dest="sl_pct")
     de.add_argument("--tp-pct",            type=float, default=None, dest="tp_pct")
     de.add_argument("--trail-pct",         type=float, default=None, dest="trail_pct")
@@ -603,7 +603,7 @@ def build_parser() -> argparse.ArgumentParser:
     ad.add_argument("--symbol", default=None, help="Optional specific symbol to auto-deploy (skips market scan)")
     ad.add_argument("--timeframe", "--resolution", dest="resolution", default="15m", help="Timeframe to sweep (e.g. 1m, 5m, 15m, 1h, 4h, 1d) (default: 15m)")
     ad.add_argument("--days", type=int, default=7, help="Lookback days for market scanning and strategy sweep (default: 7)")
-    ad.add_argument("--size", type=float, default=0.001, help="Order size per deployment")
+    ad.add_argument("--lot", dest="size", type=float, default=1, help="Lot size per deployment")
     ad.add_argument("--sl-pct", type=float, default=1.2, help="Stop loss percentage")
     ad.add_argument("--tp-pct", type=float, default=2.4, help="Take profit percentage")
     ad.add_argument("--trail-pct", type=float, default=0.8, help="Trailing stop percentage")
@@ -1512,7 +1512,7 @@ def cmd_deployments(a) -> int:
             changed.append(f"params_json → {a.params}")
 
         if not sets:
-            print(f"Nothing to update — pass at least one flag (e.g. --sl-pct 2.0 --size 5)", file=sys.stderr)
+            print(f"Nothing to update — pass at least one flag (e.g. --sl-pct 2.0 --lot 5)", file=sys.stderr)
             return 1
 
         with dep.open_db() as db:
@@ -1923,7 +1923,7 @@ def cmd_auto_deploy(a) -> int:
             "--strategy", best_strategy,
             "--symbol", symbol,
             "--resolution", a.resolution,
-            "--size", str(a.size),
+            "--lot", str(a.size),
             "--sl-pct", str(a.sl_pct),
             "--tp-pct", str(a.tp_pct),
             "--trail-pct", str(a.trail_pct)

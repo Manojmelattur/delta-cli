@@ -779,11 +779,12 @@ def _close_position(row, exit_price: float, reason: str) -> None:
     # If this deployment was launched by the auto-scan one-cycle scanner,
     # automatically stop it after the first closed trade so it never re-enters.
     try:
-        tag = row["tag"] if "tag" in row.keys() else None
-    except (IndexError, KeyError, TypeError):
-        tag = None
+        params_dict = json.loads(dict(row).get("params_json") or "{}")
+        is_one_cycle = params_dict.get("one_cycle") or params_dict.get("one_shot")
+    except Exception:
+        is_one_cycle = False
 
-    if tag == "one_cycle":
+    if is_one_cycle:
         try:
             set_status(row["id"], "stopped")
             record_event_full(
