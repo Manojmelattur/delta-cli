@@ -628,7 +628,7 @@ def _check_risk_exit(row, mark: float) -> Optional[str]:
     entry = float(entry)
 
     # Check primary Stop Loss (computed by update_peak_and_arm)
-    sl_px = row.get("last_sl_px")
+    sl_px = dict(row).get("last_sl_px")
     if sl_px is not None:
         sl_px = float(sl_px)
         if side == "buy" and mark <= sl_px:
@@ -671,7 +671,7 @@ def _check_risk_exit(row, mark: float) -> Optional[str]:
                 return f"tp_level_{i}_hit"
 
     # Check primary Take Profit (computed by bracket logic)
-    tp_px = row.get("tp_stop_price")
+    tp_px = dict(row).get("tp_stop_price")
     if tp_px is not None:
         tp_px = float(tp_px)
         if side == "buy" and mark >= tp_px:

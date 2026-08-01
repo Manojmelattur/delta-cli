@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import io
 import os
+import sys
 import tempfile
 from datetime import datetime
 from typing import List, Optional
@@ -48,6 +49,10 @@ def create_app(db_path: Optional[str] = None):
 
 
     app = FastAPI(title="delta_bt web", version="0.1")
+    from .add_pnl_routes import add_pnl_routes
+    add_pnl_routes(app)
+    from .add_mutations import add_mutations
+    add_mutations(app, db_path or os.getenv("DELTA_BT_DB") or "delta.db")
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -63,6 +68,15 @@ def create_app(db_path: Optional[str] = None):
     def redis_health():
         cache = get_cache()
         return cache.status()
+
+    @app.get("/api/strategies")
+    def api_strategies():
+        from .core.registry import discover_strategies
+        return list(discover_strategies().keys())
+
+    @app.get("/api/symbols")
+    def api_symbols():
+        return ["BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "ADAUSD", "AVAXUSD", "DOGEUSD", "DOTUSD", "LINKUSD", "MATICUSD", "BNBUSD"]
 
     @app.get("/api/runs")
     def api_runs(limit: int = 100, strategy: Optional[str] = None,
@@ -487,6 +501,232 @@ def create_app(db_path: Optional[str] = None):
         except Exception as e:
             from fastapi import HTTPException
             raise HTTPException(500, str(e))
+
+
+    from pydantic import BaseModel
+    
+    class BacktestRequest(BaseModel):
+        strategy: str
+        symbol: str
+        timeframe: str = "15m"
+        days: Optional[int] = 30
+        start: Optional[str] = None
+        end: Optional[str] = None
+        capital: float = 10000.0
+        fee_bps: float = 5.0
+        slippage_bps: float = 2.0
+        qty_pct: float = 1.0
+        leverage: float = 1.0
+        sl_pct: float = 0.0
+        tp_pct: float = 0.0
+        trail_pct: float = 0.0
+        live: bool = False
+        params: dict = {}
+        
+    class ScanRequest(BaseModel):
+        strategy: Optional[str] = None
+        symbol: Optional[str] = None
+        timeframe: str = "15m"
+        top: int = 10
+        days: int = 30
+        capital: float = 10000.0
+        fee_bps: float = 5.0
+        slippage_bps: float = 2.0
+        qty_pct: float = 1.0
+        leverage: float = 1.0
+        sl_pct: float = 1.2
+        tp_pct: float = 2.4
+        trail_pct: float = 0.8
+        sort_by: str = "pnl"
+        min_trades: int = 1
+        profitable_only: bool = False
+        adx_filter: bool = False
+        save: bool = False
+        live: bool = False
+
+    class TaskRequest(BaseModel):
+        name: str
+        script: str
+        interval: int = 900
+        desc: str = ""
+        params: dict = {}
+        
+    class DeployRequest(BaseModel):
+        name: str
+        venue: str = "paper"
+        strategy: str
+        symbol: str
+        timeframe: str = "15m"
+        lot: float = 1.0
+        sl_pct: float = 0.0
+        tp_pct: float = 0.0
+        trail_pct: float = 0.0
+        params: dict = {}
+
+    @app.post("/api/backtest")
+    def api_backtest(req: BacktestRequest):
+        import subprocess
+        import json
+        try:
+            cmd = [
+                sys.executable, "-m", "delta_bt", "backtest",
+                "--strategy", req.strategy,
+                "--symbol", req.symbol,
+                "--timeframe", req.timeframe,
+                "--capital", str(req.capital),
+                "--fee-bps", str(req.fee_bps),
+                "--slippage-bps", str(req.slippage_bps),
+                "--qty-pct", str(req.qty_pct),
+                "--leverage", str(req.leverage),
+                "--sl-pct", str(req.sl_pct),
+                "--tp-pct", str(req.tp_pct),
+                "--trail-pct", str(req.trail_pct),
+                "--params", json.dumps(req.params),
+                "--save"
+            ]
+            if req.days is not None:
+                cmd.extend(["--days", str(req.days)])
+            if req.start:
+                cmd.extend(["--start", req.start])
+            if req.end:
+                cmd.extend(["--end", req.end])
+            if req.live:
+                cmd.append("--live")
+            else:
+                cmd.append("--testnet")
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                raise HTTPException(500, detail=res.stderr)
+            return {"ok": True, "logs": res.stdout}
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
+
+    @app.post("/api/scan")
+    def api_scan(req: ScanRequest):
+        import subprocess
+        try:
+            cmd = [
+                sys.executable, "-m", "delta_bt", "scan",
+                "--timeframe", req.timeframe,
+                "--days", str(req.days),
+                "--capital", str(req.capital),
+                "--fee-bps", str(req.fee_bps),
+                "--slippage-bps", str(req.slippage_bps),
+                "--qty-pct", str(req.qty_pct),
+                "--leverage", str(req.leverage),
+                "--sl-pct", str(req.sl_pct),
+                "--tp-pct", str(req.tp_pct),
+                "--trail-pct", str(req.trail_pct),
+                "--sort", req.sort_by,
+                "--min-trades", str(req.min_trades)
+            ]
+            if req.strategy:
+                cmd.extend(["--strategy", req.strategy])
+            if req.symbol:
+                cmd.extend(["--symbol", req.symbol])
+            if req.top > 0:
+                cmd.extend(["--top", str(req.top)])
+            if req.profitable_only:
+                cmd.append("--profitable-only")
+            if req.adx_filter:
+                cmd.append("--adx-filter")
+            if req.save:
+                cmd.append("--save")
+            if req.live:
+                cmd.append("--live")
+            else:
+                cmd.append("--testnet")
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                raise HTTPException(500, detail=res.stderr)
+            return {"ok": True, "output": res.stdout}
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
+            
+    @app.get("/api/tasks/catalog")
+    def api_tasks_catalog():
+        from .task_registry import get_catalog
+        return get_catalog()
+
+    @app.get("/api/tasks/{task_id}/logs")
+    def api_tasks_logs(task_id: int):
+        import subprocess
+        try:
+            cmd = [sys.executable, "-m", "delta_bt", "tasks", "logs", "--id", str(task_id), "--limit", "100"]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                raise HTTPException(500, detail=res.stderr)
+            return {"ok": True, "logs": res.stdout}
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
+
+    @app.post("/api/tasks/action_all")
+    def api_tasks_action_all(action: str = Query(..., description="pause-all or resume-all")):
+        import subprocess
+        try:
+            if action not in ("pause-all", "resume-all"):
+                raise HTTPException(400, detail="Invalid action")
+            cmd = [sys.executable, "-m", "delta_bt", "tasks", action]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                raise HTTPException(500, detail=res.stderr)
+            return {"ok": True, "output": res.stdout}
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
+            
+    @app.get("/api/deployments/{dep_id}/logs")
+    def api_deployments_logs(dep_id: int):
+        from .store.db import connect
+        with connect(db_path) as conn:
+            cur = conn.execute("SELECT ts, kind, message, order_id, pnl FROM deployment_events WHERE deployment_id=? ORDER BY ts DESC LIMIT 100", (dep_id,))
+            cols = [c[0] for c in cur.description]
+            return [dict(zip(cols, r)) for r in cur.fetchall()]
+
+    @app.post("/api/tasks/create")
+    def api_tasks_create(req: TaskRequest):
+        import subprocess
+        import json
+        try:
+            cmd = [
+                sys.executable, "-m", "delta_bt", "tasks", "add",
+                "--name", req.name,
+                "--script", req.script,
+                "--interval", str(req.interval),
+                "--desc", req.desc,
+                "--params", json.dumps(req.params)
+            ]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                raise HTTPException(500, detail=res.stderr)
+            return {"ok": True, "output": res.stdout}
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
+            
+    @app.post("/api/deployments/create")
+    def api_deployments_create(req: DeployRequest):
+        import subprocess
+        import json
+        try:
+            cmd = [
+                sys.executable, "-m", "delta_bt", "deployments", "add",
+                "--name", req.name,
+                "--venue", req.venue,
+                "--strategy", req.strategy,
+                "--symbol", req.symbol,
+                "--timeframe", req.timeframe,
+                "--lot", str(req.lot),
+                "--sl-pct", str(req.sl_pct),
+                "--tp-pct", str(req.tp_pct),
+                "--trail-pct", str(req.trail_pct),
+                "--params", json.dumps(req.params),
+                "--i-understand"
+            ]
+            res = subprocess.run(cmd, capture_output=True, text=True)
+            if res.returncode != 0:
+                raise HTTPException(500, detail=res.stderr)
+            return {"ok": True, "output": res.stdout}
+        except Exception as e:
+            raise HTTPException(500, detail=str(e))
 
     return app
 

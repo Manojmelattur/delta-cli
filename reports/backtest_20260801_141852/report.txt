@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : time_breakout
+Symbol / Res  : BTCUSD @ 5m
+Period        : 2026-07-02T08:46:50.033155+00:00 → 2026-08-01T08:46:50.033155+00:00
+Params        : {}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 8363.69
+Net PnL       : -1636.31 (-16.36%)
+Trades        : 20 (W:3 L:17 WR:15.0%)
+Avg win/loss  : 66.25 / -107.94
+Expectancy    : -81.82 per trade
+Profit factor : 0.11
+Avg trade PnL : -81.82
+Best / Worst  : 114.61 / -417.66
+Streaks (W/L) : 2 / 14
+Avg hold time : 34.50 h
+Exit reasons  : exit:19, force_close:1
+Max drawdown  : -19.28%
+Sharpe        : -14.96
+Total fees    : 176.67
+================================================================
+Artifacts     : ./reports/backtest_20260801_141852

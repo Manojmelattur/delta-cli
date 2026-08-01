@@ -309,9 +309,10 @@ def build_parser() -> argparse.ArgumentParser:
     sv.add_argument("--db", default=None, help="Override sqlite DB path")
 
     sc = sub.add_parser(
-        "scan", help="Backtest ALL strategies on one symbol/timeframe and rank them"
+        "scan", help="Scan ALL strategies on one symbol, or ONE strategy across market universe"
     )
-    sc.add_argument("--symbol", required=True, help="e.g. BTCUSD, ETHUSD")
+    sc.add_argument("--symbol", default=None, help="e.g. BTCUSD, ETHUSD")
+    sc.add_argument("--strategy", default=None, help="Strategy to scan across the universe")
     sc.add_argument("--timeframe", "--resolution", dest="resolution", default="15m")
     sc.add_argument("--days", type=int, default=30)
     sc.add_argument("--start", type=_parse_dt, default=None)
@@ -689,9 +690,16 @@ def build_parser() -> argparse.ArgumentParser:
 
     # PnL & Analytics
     pn = sub.add_parser("pnl", help="Show portfolio PnL summary, win rate, and ASCII equity chart")
-    pn.add_argument("--days", type=int, default=30, help="Number of daily breakdown rows to show")
+    pn.add_argument("--days", type=int, default=None, help="Filter trades within last N days")
+    pn.add_argument("--venue", default=None, help="Filter by venue")
+    pn.add_argument("--strategy", default=None, help="Filter by strategy")
+    pn.add_argument("--symbol", default=None, help="Filter by symbol")
 
     pns = sub.add_parser("pnl-strategy", help="Show performance breakdown per strategy")
+    pns.add_argument("--days", type=int, default=None, help="Filter trades within last N days")
+    pns.add_argument("--venue", default=None, help="Filter by venue")
+    pns.add_argument("--strategy", default=None, help="Filter by strategy")
+    pns.add_argument("--symbol", default=None, help="Filter by symbol")
 
     # Terminal Monitor & Emergency Kill-switch
     mn = sub.add_parser("monitor", help="Launch live terminal console PnL dashboard")
@@ -1015,8 +1023,12 @@ def cmd_plot(a) -> int:
 
 
 def cmd_scan(a) -> int:
-    """Run every registered strategy against one symbol/timeframe and rank them."""
-    # --- resolve window (same clamping rules as cmd_backtest) ---
+    """Run every strategy against one symbol, OR run one strategy against many symbols."""
+    if not a.symbol and not a.strategy:
+        print("You must provide either --symbol (to scan all strategies on an asset) or --strategy (to scan all assets for a strategy).", file=sys.stderr)
+        return 2
+
+    # --- resolve window ---
     if a.start and a.end:
         start, end = a.start, a.end
     else:
@@ -1034,27 +1046,10 @@ def cmd_scan(a) -> int:
     base, _ = _resolve_urls(a, live=live)
     key, sec = _resolve_keys(a, live=live)
     client = DeltaClient(base, key, sec)
-    print(
-        f"[scan] {a.symbol} @ {a.resolution}  {start.date()} → {end.date()}  "
-        f"(SL {a.sl_pct}% / TP {a.tp_pct}% / trail {a.trail_pct}% / lev {a.leverage}x)  "
-        f"venue={base}"
-    )
-
-    # --- pull history ONCE and reuse for every strategy ---
-    bars = load_history(client, a.symbol, a.resolution, start, end)
-    if not bars:
-        msg = "no data returned; check symbol/timeframe/dates"
-        if not live:
-            msg += " — testnet has very limited history; retry without --testnet"
-        print(msg, file=sys.stderr)
-        return 2
-    print(
-        f"[scan] {len(bars)} bars loaded — running {len(discover_strategies())} strategies"
-    )
 
     cfg = RunConfig(
         strategy="_scan",
-        symbol=a.symbol,
+        symbol=a.symbol or "UNIVERSE",
         resolution=a.resolution,
         capital=a.capital,
         params={},
@@ -1076,83 +1071,94 @@ def cmd_scan(a) -> int:
     )
 
     from .reports.report import summarize
+    from .pnl_analytics import render_box_table
 
-    results = []
-    for name in sorted(discover_strategies().keys()):
-        try:
-            strat = load_strategy(name, {})
-            pf = run_backtest(bars, strat, cfg)
-            s = summarize(pf)
-            results.append({"strategy": name, "summary": s, "pf": pf})
-            if a.save:
-                out = os.path.join(a.reports_dir, _run_id(f"scan_{name}"))
-                write_report(
-                    pf,
-                    out,
-                    {
-                        "mode": "backtest",
-                        "strategy": name,
-                        "symbol": a.symbol,
-                        "resolution": a.resolution,
-                        "start": start.isoformat(),
-                        "end": end.isoformat(),
-                        "params": {},
-                        "sl_pct": a.sl_pct,
-                        "tp_pct": a.tp_pct,
-                        "trail_pct": a.trail_pct,
-                        "leverage": a.leverage,
-                    },
-                )
-            print(
-                f"  ✓ {name:<24} ret {s['return_pct']:>7.2f}%  "
-                f"trades {s['trades']:>4}  wr {s['win_rate_pct']:>5.1f}%  "
-                f"pf {s['profit_factor']:>5.2f}  dd {s['max_drawdown_pct']:>6.2f}%"
+    if a.symbol and not a.strategy:
+        # MODE 1: Scan all strategies against ONE symbol
+        print(f"[scan] {a.symbol} @ {a.resolution}  {start.date()} → {end.date()}  venue={base}")
+        bars = load_history(client, a.symbol, a.resolution, start, end)
+        if not bars:
+            print("no data returned; check symbol/timeframe/dates", file=sys.stderr)
+            return 2
+            
+        print(f"[scan] {len(bars)} bars loaded — running {len(discover_strategies())} strategies")
+        
+        results = []
+        table_rows = []
+        for name in sorted(discover_strategies().keys()):
+            try:
+                strat = load_strategy(name, {})
+                pf = run_backtest(bars, strat, cfg)
+                s = summarize(pf)
+                results.append({"strategy": name, "summary": s, "pf": pf})
+                table_rows.append([
+                    name, f"{s['return_pct']:.2f}%", str(s['trades']),
+                    f"{s['win_rate_pct']:.1f}%", f"{s['profit_factor']:.2f}",
+                    f"{s['max_drawdown_pct']:.2f}%", "✓ OK"
+                ])
+            except Exception as e:
+                table_rows.append([name, "-", "-", "-", "-", "-", f"✗ ERROR: {e}"])
+                
+        headers = ["Strategy", "Return %", "Trades", "Win Rate %", "Profit Factor", "Max DD %", "Status"]
+        print("\n" + render_box_table(headers, table_rows, title=f"MARKET SCANNER ({a.symbol} @ {a.resolution})") + "\n")
+        
+    elif a.strategy:
+        # MODE 2: Scan ONE strategy against MANY symbols
+        symbols = []
+        if a.symbol:
+            symbols = [a.symbol]
+        else:
+            print(f"[scan] Fetching top {a.top or 20} symbols from Delta Exchange to scan against...")
+            from .scanner.rank_universe import rank_universe
+            top_symbols = rank_universe(
+                client, resolution=a.resolution, lookback_bars=getattr(a, "lookback_bars", 100),
+                adx_len=getattr(a, "adx_len", 14), 
+                trend_min=getattr(a, "adx_trend_min", 25.0), 
+                range_max=getattr(a, "adx_range_max", 20.0),
+                min_turnover_usd=500_000, max_funding_pct=2.0, atr_min_pct=0.0, atr_max_pct=100.0,
+                quote_symbol_suffix="USD", contract_types="perpetual_futures",
+                regime_bias="trend", top=getattr(a, "top", 20) or 20, workers=4
             )
-        except Exception as e:
-            print(f"  ✗ {name:<24} ERROR: {e}")
-
-    # --- rank ---
-    ranked = [r for r in results if r["summary"]["trades"] >= a.min_trades]
-    if a.profitable_only:
-        ranked = [r for r in ranked if r["summary"]["return_pct"] > 0]
-    ranked.sort(key=lambda r: r["summary"]["return_pct"], reverse=True)
-    if a.top and a.top > 0:
-        ranked = ranked[: a.top]
-
-    from .pnl_analytics import render_box_table, format_pnl, format_pct
-
-    headers = ["Rank", "Strategy", "Return %", "Net PnL ($)", "Trades", "WinRate%", "PF", "Max DD%", "Sharpe", "Profitable"]
-    table_rows = []
-    for i, r in enumerate(ranked, 1):
-        s = r["summary"]
-        flag = "YES 🟢" if s["return_pct"] > 0 else "no 🔴"
-        table_rows.append([
-            str(i),
-            r["strategy"],
-            format_pct(s["return_pct"]),
-            format_pnl(s["net_pnl"]),
-            str(s["trades"]),
-            f"{s['win_rate_pct']:.1f}%",
-            f"{s['profit_factor']:.2f}",
-            f"{s['max_drawdown_pct']:.2f}%",
-            f"{s['sharpe']:.2f}",
-            flag
-        ])
-
-    title = f"LEADERBOARD — {a.symbol} @ {a.resolution} ({len(ranked)} strategies)"
-    print("\n" + render_box_table(headers, table_rows, title=title))
-    profitable = [r for r in results if r["summary"]["return_pct"] > 0]
-    print(
-        f"\nProfitable: {len(profitable)} / {len(results)}   "
-        f"(SL/TP/trail active on all runs — tune with --sl-pct / --tp-pct / --trail-pct)"
-    )
-    if not a.save:
-        print(
-            "(runs NOT saved to SQLite — pass --save to persist for `runs`/`plot`/dashboard)"
-        )
-    print()
+            symbols = [s.symbol for s in top_symbols]
+            
+        if not symbols:
+            print("No symbols found to scan.", file=sys.stderr)
+            return 2
+            
+        print(f"[scan] Running '{a.strategy}' against {len(symbols)} symbols @ {a.resolution}")
+        
+        table_rows = []
+        for sym in symbols:
+            try:
+                bars = load_history(client, sym, a.resolution, start, end)
+                if not bars:
+                    table_rows.append([sym, "-", "-", "-", "-", "-", "✗ NO DATA"])
+                    continue
+                    
+                cfg.symbol = sym
+                strat = load_strategy(a.strategy, {})
+                pf = run_backtest(bars, strat, cfg)
+                s = summarize(pf)
+                table_rows.append([
+                    sym, f"{s['return_pct']:.2f}%", str(s['trades']),
+                    f"{s['win_rate_pct']:.1f}%", f"{s['profit_factor']:.2f}",
+                    f"{s['max_drawdown_pct']:.2f}%", "✓ OK"
+                ])
+            except Exception as e:
+                table_rows.append([sym, "-", "-", "-", "-", "-", f"✗ ERROR: {e}"])
+                
+        def sort_key(row):
+            try:
+                if row[1] == "-": return -999999
+                return float(row[1].replace("%", ""))
+            except:
+                return -999999
+        table_rows.sort(key=sort_key, reverse=True)
+                
+        headers = ["Symbol", "Return %", "Trades", "Win Rate %", "Profit Factor", "Max DD %", "Status"]
+        print("\n" + render_box_table(headers, table_rows, title=f"STRATEGY SCANNER ({a.strategy} @ {a.resolution})") + "\n")
+        
     return 0
-
 
 def cmd_serve(a) -> int:
     from .server import serve
@@ -1184,6 +1190,40 @@ def cmd_plot_diag(a) -> int:
     print(f"[plot-diag] wrote {out}")
     print(f"           source: {csv_path}")
     return 0
+
+
+def cmd_serve(a) -> int:
+    from .server import serve
+
+    return serve(host=a.host, port=a.port, db_path=a.db)
+
+
+
+def cmd_plot_diag(a) -> int:
+    run_dir = a.run_dir or (os.path.join(a.reports_dir, a.run_id) if a.run_id else None)
+    if not run_dir:
+        print("plot-diag needs --run-dir OR --run-id", file=sys.stderr)
+        return 2
+    if not os.path.isdir(run_dir):
+        print(f"not a directory: {run_dir}", file=sys.stderr)
+        return 2
+    csv_path = os.path.join(run_dir, "diagnostics.csv")
+    if not os.path.exists(csv_path):
+        print(
+            f"no diagnostics.csv in {run_dir} — re-run the backtest with --diagnostics",
+            file=sys.stderr,
+        )
+        return 2
+    if a.csv_only:
+        print(csv_path)
+        return 0
+    from .store.diag_plot import plot_diagnostics
+
+    out = plot_diagnostics(run_dir, out_path=a.out, title=a.title)
+    print(f"[plot-diag] wrote {out}")
+    print(f"           source: {csv_path}")
+    return 0
+
 
 
 def cmd_rank_universe(a) -> int:
@@ -2203,7 +2243,12 @@ def cmd_tasks(a) -> int:
 
 def cmd_pnl(a) -> int:
     from .pnl_analytics import get_portfolio_pnl, get_daily_pnl, generate_ascii_chart, render_box_table, format_pnl
-    summary = get_portfolio_pnl()
+    venue = getattr(a, 'venue', None)
+    strategy = getattr(a, 'strategy', None)
+    symbol = getattr(a, 'symbol', None)
+    days = getattr(a, 'days', None)
+    
+    summary = get_portfolio_pnl(venue=venue, strategy=strategy, symbol=symbol, days=days)
     
     print("\n\033[1;36m┌─────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│\033[0m \033[1m📊 PORTFOLIO PnL & PERFORMANCE SUMMARY\033[0m                        \033[1;36m│\033[0m")
@@ -2224,7 +2269,7 @@ def cmd_pnl(a) -> int:
         print("\n📈 EQUITY CURVE (ASCII):")
         print(generate_ascii_chart(summary["equity_points"]))
 
-    daily = get_daily_pnl(limit=a.days)
+    daily = get_daily_pnl(limit=a.days or 30, venue=venue, strategy=strategy, symbol=symbol, days=days)
     if daily:
         headers = ["Date", "Trades", "WinRate%", "Daily PnL ($)", "Max Win ($)", "Max Loss ($)"]
         rows = []
@@ -2242,9 +2287,13 @@ def cmd_pnl(a) -> int:
     return 0
 
 
-def cmd_pnl_strategy(_a) -> int:
+def cmd_pnl_strategy(a) -> int:
     from .pnl_analytics import get_strategy_pnl_breakdown, render_box_table, format_pnl
-    rows_data = get_strategy_pnl_breakdown()
+    venue = getattr(a, 'venue', None)
+    strategy = getattr(a, 'strategy', None)
+    symbol = getattr(a, 'symbol', None)
+    days = getattr(a, 'days', None)
+    rows_data = get_strategy_pnl_breakdown(venue=venue, strategy=strategy, symbol=symbol, days=days)
     headers = ["Strategy", "Runs", "Trades", "WinRate%", "Net PnL ($)", "Sharpe", "Max DD%"]
     rows = []
     for r in rows_data:

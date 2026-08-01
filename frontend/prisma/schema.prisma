@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model deployment_events {
+  id            Int         @id @default(autoincrement())
+  deployment_id Int
+  ts            String
+  kind          String
+  message       String?
+  order_id      String?
+  pnl           Float?
+  side          String?
+  qty           Float?
+  price         Float?
+  sl            Float?
+  tp            Float?
+  trail         Float?
+  equity_after  Float?
+  upnl          Float?
+  deployments   deployments @relation(fields: [deployment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([deployment_id, id(sort: Desc)], map: "ix_events_dep")
+}
+
+model deployments {
+  id                Int                 @id @default(autoincrement())
+  name              String
+  venue             String
+  strategy          String
+  symbol            String
+  resolution        String
+  size              Float
+  params_json       String              @default("{}")
+  sl_pct            Float               @default(0)
+  tp_pct            Float               @default(0)
+  trail_pct         Float               @default(0)
+  reduce_only       Int                 @default(0)
+  interval_sec      Int                 @default(300)
+  status            String              @default("running")
+  i_understand_live Int                 @default(0)
+  created_at        String
+  started_at        String?
+  stopped_at        String?
+  last_tick_at      String?
+  last_signal       String?
+  last_error        String?
+  realized_pnl      Float               @default(0)
+  prior_signal      String?
+  open_side         String?
+  open_qty          Float?
+  open_price        Float?
+  ticks             Int?                @default(0)
+  deployment_events deployment_events[]
+
+  @@index([status], map: "ix_deployments_status")
+}
+
+model diag {
+  run_id   String
+  seq      Int
+  row_json String
+  runs     runs   @relation(fields: [run_id], references: [run_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([run_id, seq])
+}
+
+model equity {
+  run_id         String
+  ts             String
+  equity         Float?
+  cash           Float?
+  position_value Float?
+  runs           runs   @relation(fields: [run_id], references: [run_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([run_id, ts])
+}
+
+model fills {
+  run_id String
+  seq    Int
+  ts     String?
+  symbol String?
+  side   String?
+  qty    Float?
+  price  Float?
+  fee    Float?
+  tag    String?
+  runs   runs    @relation(fields: [run_id], references: [run_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([run_id, seq])
+}
+
+model paper_accounts {
+  id         Int    @id @default(autoincrement())
+  cash       Float  @default(10000)
+  created_at String
+}
+
+model paper_fills {
+  id           Int    @id @default(autoincrement())
+  order_id     Int
+  ts           String
+  symbol       String
+  side         String
+  qty          Float
+  price        Float
+  fee          Float
+  realized_pnl Float  @default(0)
+}
+
+model paper_orders {
+  id          Int     @id @default(autoincrement())
+  ts          String
+  symbol      String
+  side        String
+  qty         Float
+  order_type  String
+  limit_price Float?
+  fill_price  Float?
+  state       String
+  reason      String?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model paper_positions {
+  symbol       String? @id
+  side         String
+  qty          Float   @default(0)
+  avg_price    Float   @default(0)
+  realized_pnl Float   @default(0)
+  updated_at   String
+
+  @@ignore
+}
+
+model runs {
+  id                Int      @id @default(autoincrement())
+  run_id            String   @unique(map: "sqlite_autoindex_runs_1")
+  mode              String
+  strategy          String
+  symbol            String
+  resolution        String
+  period_start      String?
+  period_end        String?
+  params_json       String?
+  sl_pct            Float?
+  tp_pct            Float?
+  trail_pct         Float?
+  leverage          Float?
+  starting_cap      Float?
+  ending_equity     Float?
+  net_pnl           Float?
+  return_pct        Float?
+  trades            Int?
+  win_rate_pct      Float?
+  profit_factor     Float?
+  max_dd_pct        Float?
+  sharpe            Float?
+  expectancy        Float?
+  summary_json      String?
+  created_at        String
+  exit_reasons_json String?
+  notes             String?
+  fee_bps           Float?
+  slippage_bps      Float?
+  qty_pct           Float?
+  best_trade_pnl    Float?
+  worst_trade_pnl   Float?
+  avg_hold_seconds  Float?
+  max_win_streak    Int?
+  max_loss_streak   Int?
+  total_fees        Float?
+  bars              Int?
+  diag              diag[]
+  equity            equity[]
+  fills             fills[]
+  trades_list       trades[]
+
+  @@index([created_at], map: "ix_runs_created")
+  @@index([symbol], map: "ix_runs_symbol")
+  @@index([strategy], map: "ix_runs_strategy")
+}
+
+model trades {
+  run_id      String
+  seq         Int
+  symbol      String?
+  side        String?
+  qty         Float?
+  entry_ts    String?
+  entry_price Float?
+  exit_ts     String?
+  exit_price  Float?
+  pnl         Float?
+  fees        Float?
+  return_pct  Float?
+  runs        runs    @relation(fields: [run_id], references: [run_id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([run_id, seq])
+}

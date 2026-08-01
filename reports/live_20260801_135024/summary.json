@@ -1,0 +1,41 @@
+{
+  "starting_capital": 10000.0,
+  "ending_equity": 9949.606595288278,
+  "net_pnl": -50.393404711721814,
+  "return_pct": -0.503934047117216,
+  "trades": 2,
+  "wins": 0,
+  "losses": 2,
+  "win_rate_pct": 0.0,
+  "profit_factor": 0.0,
+  "avg_trade_pnl": -21.63242447529931,
+  "avg_win": 0.0,
+  "avg_loss": -21.63242447529931,
+  "expectancy": -21.63242447529931,
+  "max_drawdown_pct": -0.5039340471172182,
+  "sharpe": -232.50811871097088,
+  "total_fees": 19.98175697985141,
+  "bars": 37,
+  "exit_reasons": {
+    "exit": 2
+  },
+  "avg_hold_seconds": 2400.0,
+  "best_trade_pnl": -19.942790905126024,
+  "worst_trade_pnl": -23.32205804547259,
+  "max_win_streak": 0,
+  "max_loss_streak": 2,
+  "meta": {
+    "mode": "live",
+    "strategy": "supertrend_mom",
+    "symbol": "BTCUSD",
+    "resolution": "5m",
+    "start": null,
+    "end": null,
+    "params": {},
+    "sl_pct": 0.0,
+    "tp_pct": 0.0,
+    "trail_pct": 0.0,
+    "leverage": 1.0,
+    "base_url": "https://api.india.delta.exchange"
+  }
+}

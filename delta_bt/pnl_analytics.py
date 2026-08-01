@@ -121,22 +121,27 @@ def render_box_table(headers: List[str], rows: List[List[str]], title: Optional[
     for i in range(len(col_widths)):
         col_widths[i] += 1
 
-    lines = []
-    if title:
-        lines.append(f"{C_CYAN}── {C_BOLD}{title.upper()}{C_RESET} {C_CYAN}{'─' * 50}{C_RESET}")
-    else:
-        lines.append(f"{C_CYAN}{'─' * 60}{C_RESET}")
-
     # Headers
     hdr_str = ""
     for i, h in enumerate(headers):
         v_len = visible_len(h)
         pad = " " * (col_widths[i] - v_len)
         hdr_str += f" {C_BOLD}{h}{pad}{C_RESET}  "
+        
+    total_len = visible_len(hdr_str)
+
+    lines = []
+    if title:
+        title_len = visible_len(title) + 4
+        rem_len = max(0, total_len - title_len)
+        lines.append(f"{C_CYAN}── {C_BOLD}{title.upper()}{C_RESET} {C_CYAN}{'─' * rem_len}{C_RESET}")
+    else:
+        lines.append(f"{C_CYAN}{'─' * total_len}{C_RESET}")
+
     lines.append(hdr_str)
     
     # Separator
-    lines.append(f"{C_CYAN}{'─' * visible_len(hdr_str)}{C_RESET}")
+    lines.append(f"{C_CYAN}{'─' * total_len}{C_RESET}")
 
     # Rows
     if not rows:
@@ -187,11 +192,36 @@ def generate_ascii_chart(points: List[float], width: int = 50, height: int = 8) 
     return "\n".join(lines)
 
 
-def get_portfolio_pnl(db_path: Optional[str] = None) -> Dict:
+def get_portfolio_pnl(db_path=None, venue=None, strategy=None, symbol=None, days=None):
     """Calculate aggregate portfolio PnL across all runs and deployments."""
     db_file = _resolve_db(db_path)
+    
+    conds_runs = []
+    args_runs = []
+    if venue: conds_runs.append("venue = ?"); args_runs.append(venue)
+    if strategy: conds_runs.append("strategy = ?"); args_runs.append(strategy)
+    if symbol: conds_runs.append("symbol = ?"); args_runs.append(symbol)
+    if days: conds_runs.append("created_at >= datetime('now', '-' || ? || ' days')"); args_runs.append(days)
+    where_runs = (" WHERE " + " AND ".join(conds_runs)) if conds_runs else ""
+
+    conds_deps = []
+    args_deps = []
+    if venue: conds_deps.append("venue = ?"); args_deps.append(venue)
+    if strategy: conds_deps.append("strategy = ?"); args_deps.append(strategy)
+    if symbol: conds_deps.append("symbol = ?"); args_deps.append(symbol)
+    if days: conds_deps.append("created_at >= datetime('now', '-' || ? || ' days')"); args_deps.append(days)
+    where_deps = (" WHERE " + " AND ".join(conds_deps)) if conds_deps else ""
+
+    conds_trades = []
+    args_trades = []
+    if venue: conds_trades.append("COALESCE(r.venue, d.venue) = ?"); args_trades.append(venue)
+    if strategy: conds_trades.append("COALESCE(r.strategy, d.strategy) = ?"); args_trades.append(strategy)
+    if symbol: conds_trades.append("t.symbol = ?"); args_trades.append(symbol)
+    if days: conds_trades.append("t.exit_ts >= datetime('now', '-' || ? || ' days')"); args_trades.append(days)
+    where_trades = (" WHERE " + " AND ".join(conds_trades)) if conds_trades else ""
+    
     with connect(str(db_file)) as conn:
-        run_stats = conn.execute("""
+        run_stats = conn.execute(f"""
             SELECT 
                 COUNT(*) as total_runs,
                 COALESCE(SUM(starting_cap), 0) as start_cap,
@@ -200,28 +230,31 @@ def get_portfolio_pnl(db_path: Optional[str] = None) -> Dict:
                 COALESCE(AVG(sharpe), 0) as avg_sharpe,
                 COALESCE(AVG(max_dd_pct), 0) as avg_max_dd,
                 COALESCE(SUM(trades), 0) as total_trades
-            FROM runs
-        """).fetchone()
+            FROM runs {where_runs}
+        """, args_runs).fetchone()
 
-        bot_stats = conn.execute("""
+        bot_stats = conn.execute(f"""
             SELECT 
                 COUNT(*) as total_bots,
                 COALESCE(SUM(realized_pnl), 0) as bot_pnl,
                 COUNT(CASE WHEN status='running' THEN 1 END) as active_bots
-            FROM deployments
-        """).fetchone()
+            FROM deployments {where_deps}
+        """, args_deps).fetchone()
 
-        trade_stats = conn.execute("""
+        trade_stats = conn.execute(f"""
             SELECT 
                 COUNT(*) as count,
-                COUNT(CASE WHEN pnl > 0 THEN 1 END) as wins,
-                COUNT(CASE WHEN pnl <= 0 THEN 1 END) as losses,
-                COALESCE(SUM(pnl), 0) as net_pnl,
-                COALESCE(MAX(pnl), 0) as max_win,
-                COALESCE(MIN(pnl), 0) as max_loss,
-                COALESCE(SUM(fees), 0) as total_fees
-            FROM trades
-        """).fetchone()
+                COUNT(CASE WHEN t.pnl > 0 THEN 1 END) as wins,
+                COUNT(CASE WHEN t.pnl <= 0 THEN 1 END) as losses,
+                COALESCE(SUM(t.pnl), 0) as net_pnl,
+                COALESCE(MAX(t.pnl), 0) as max_win,
+                COALESCE(MIN(t.pnl), 0) as max_loss,
+                COALESCE(SUM(t.fees), 0) as total_fees
+            FROM trades t
+            LEFT JOIN runs r ON r.run_id = t.run_id
+            LEFT JOIN deployments d ON ('d_' || d.id) = t.run_id
+            {where_trades}
+        """, args_trades).fetchone()
 
         equity_rows = conn.execute("SELECT equity FROM equity ORDER BY rowid ASC").fetchall()
         equity_pts = [r[0] for r in equity_rows if r[0] is not None]
@@ -248,25 +281,36 @@ def get_portfolio_pnl(db_path: Optional[str] = None) -> Dict:
     }
 
 
-def get_daily_pnl(limit: int = 30, db_path: Optional[str] = None) -> List[Dict]:
+def get_daily_pnl(limit=30, db_path=None, venue=None, strategy=None, symbol=None, days=None):
     """Calculate daily PnL breakdown from closed trades."""
     db_file = _resolve_db(db_path)
+    
+    conds_trades = ["t.exit_ts IS NOT NULL AND t.exit_ts != ''"]
+    args_trades = []
+    if venue: conds_trades.append("COALESCE(r.venue, d.venue) = ?"); args_trades.append(venue)
+    if strategy: conds_trades.append("COALESCE(r.strategy, d.strategy) = ?"); args_trades.append(strategy)
+    if symbol: conds_trades.append("t.symbol = ?"); args_trades.append(symbol)
+    if days: conds_trades.append("t.exit_ts >= datetime('now', '-' || ? || ' days')"); args_trades.append(days)
+    where_trades = (" WHERE " + " AND ".join(conds_trades))
+    
     with connect(str(db_file)) as conn:
-        rows = conn.execute("""
+        rows = conn.execute(f"""
             SELECT 
-                SUBSTR(exit_ts, 1, 10) as date,
+                SUBSTR(t.exit_ts, 1, 10) as date,
                 COUNT(*) as trades,
-                COUNT(CASE WHEN pnl > 0 THEN 1 END) as wins,
-                SUM(pnl) as daily_pnl,
-                MAX(pnl) as max_win,
-                MIN(pnl) as max_loss,
-                SUM(fees) as fees
-            FROM trades
-            WHERE exit_ts IS NOT NULL AND exit_ts != ''
-            GROUP BY SUBSTR(exit_ts, 1, 10)
+                COUNT(CASE WHEN t.pnl > 0 THEN 1 END) as wins,
+                SUM(t.pnl) as daily_pnl,
+                MAX(t.pnl) as max_win,
+                MIN(t.pnl) as max_loss,
+                SUM(t.fees) as fees
+            FROM trades t
+            LEFT JOIN runs r ON r.run_id = t.run_id
+            LEFT JOIN deployments d ON ('d_' || d.id) = t.run_id
+            {where_trades}
+            GROUP BY SUBSTR(t.exit_ts, 1, 10)
             ORDER BY date DESC
             LIMIT ?
-        """, (limit,)).fetchall()
+        """, args_trades + [limit]).fetchall()
 
     result = []
     for r in rows:
@@ -286,11 +330,20 @@ def get_daily_pnl(limit: int = 30, db_path: Optional[str] = None) -> List[Dict]:
     return result
 
 
-def get_strategy_pnl_breakdown(db_path: Optional[str] = None) -> List[Dict]:
+def get_strategy_pnl_breakdown(db_path=None, venue=None, strategy=None, symbol=None, days=None):
     """Calculate PnL breakdown grouped by strategy."""
     db_file = _resolve_db(db_path)
+    
+    conds_runs = []
+    args_runs = []
+    if venue: conds_runs.append("venue = ?"); args_runs.append(venue)
+    if strategy: conds_runs.append("strategy = ?"); args_runs.append(strategy)
+    if symbol: conds_runs.append("symbol = ?"); args_runs.append(symbol)
+    if days: conds_runs.append("created_at >= datetime('now', '-' || ? || ' days')"); args_runs.append(days)
+    where_runs = (" WHERE " + " AND ".join(conds_runs)) if conds_runs else ""
+    
     with connect(str(db_file)) as conn:
-        rows = conn.execute("""
+        rows = conn.execute(f"""
             SELECT 
                 strategy,
                 COUNT(*) as total_runs,
@@ -300,9 +353,10 @@ def get_strategy_pnl_breakdown(db_path: Optional[str] = None) -> List[Dict]:
                 AVG(max_dd_pct) as avg_max_dd,
                 SUM(trades) as total_trades
             FROM runs
+            {where_runs}
             GROUP BY strategy
             ORDER BY total_pnl DESC
-        """).fetchall()
+        """, args_runs).fetchall()
 
     out = []
     for r in rows:
@@ -316,3 +370,4 @@ def get_strategy_pnl_breakdown(db_path: Optional[str] = None) -> List[Dict]:
             "trades": r[6] or 0
         })
     return out
+
