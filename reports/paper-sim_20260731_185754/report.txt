@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — paper-sim
+================================================================
+Strategy      : ema3
+Symbol / Res  : BTCUSD @ 5m
+Period        : None → None
+Params        : {}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 10000.00
+Net PnL       : 0.00 (0.00%)
+Trades        : 0 (W:0 L:0 WR:0.0%)
+Avg win/loss  : 0.00 / 0.00
+Expectancy    : 0.00 per trade
+Profit factor : 0.00
+Avg trade PnL : 0.00
+Best / Worst  : 0.00 / 0.00
+Streaks (W/L) : 0 / 0
+Avg hold time : 0.00 h
+Exit reasons  : —
+Max drawdown  : 0.00%
+Sharpe        : 0.00
+Total fees    : 0.00
+================================================================
+Artifacts     : ./reports/paper-sim_20260731_185754

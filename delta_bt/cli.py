@@ -223,6 +223,7 @@ def build_parser() -> argparse.ArgumentParser:
     pp.add_argument(
         "--live-qty", type=int, default=1, help="Contracts per order when --live-orders"
     )
+    pp.add_argument("--single-run", action="store_true", help="Evaluate once and place an order (redirects to trade)")
 
     lv = sub.add_parser("live", help="REAL orders on the production venue")
     _add_common(lv)
@@ -233,6 +234,7 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Required. Confirms you will trade real funds.",
     )
+    lv.add_argument("--single-run", action="store_true", help="Evaluate once and place an order (redirects to trade)")
 
     sub.add_parser("list-strategies", help="List available strategies")
 
@@ -463,6 +465,7 @@ def build_parser() -> argparse.ArgumentParser:
     tr.add_argument("--dry-run", action="store_true", help="Evaluate only; do not place an order")
     tr.add_argument("--reduce-only", action="store_true")
     tr.add_argument("--i-understand-live", action="store_true", help="Required for --venue live")
+    tr.add_argument("--single-run", action="store_true", help="Alias (trade is inherently a single-run)")
 
     od = sub.add_parser("order", help="Place an immediate market/limit order without strategy evaluation")
     od.add_argument("--venue", choices=["paper", "paper_live", "testnet", "live"], default="testnet")
@@ -479,7 +482,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     w = sub.add_parser("watch", help="Run the deployment scheduler loop (Ctrl-C to stop)")
     w.add_argument("--interval", type=int, default=15, help="Loop tick seconds (default 15)")
-    w.add_argument("--once", action="store_true", help="Run one tick and exit")
+    w.add_argument("--once", "--single-run", dest="once", action="store_true", help="Run one tick and exit")
 
     dp = sub.add_parser("deployments", help="Manage scheduled strategy deployments")
     dsub = dp.add_subparsers(dest="dcmd", required=True)
@@ -825,6 +828,18 @@ def cmd_backtest(a) -> int:
 
 
 def _paper_or_live(a, *, live_venue: bool) -> int:
+    if getattr(a, "single_run", False):
+        if live_venue:
+            a.venue = "live"
+        else:
+            a.venue = "paper_live" if getattr(a, "live_orders", False) else "paper"
+        a.size = getattr(a, "live_qty", 1)
+        a.warmup_bars = 400
+        a.dry_run = False
+        a.reduce_only = False
+        a.i_understand_live = getattr(a, "i_understand", False)
+        return cmd_trade(a)
+
     # Paper honors --live / --testnet for choosing the market-data venue.
     # (Live-venue command always uses production.)
     if live_venue:
@@ -1377,7 +1392,7 @@ def cmd_deployments(a) -> int:
                 str(r["name"])[:20],
                 str(r["venue"]),
                 str(r["strategy"])[:16],
-                str(r["symbol"]),
+                str(r["symbol"])[:12],
                 str(r["resolution"]),
                 str(r["status"]),
                 str(r["last_signal"] or "-"),

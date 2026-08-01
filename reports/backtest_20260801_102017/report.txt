@@ -1,0 +1,26 @@
+================================================================
+Delta Backtest / Paper report — backtest
+================================================================
+Strategy      : supertrend_mom
+Symbol / Res  : BTCUSD @ 5m
+Period        : 2026-07-27T04:48:16.820101+00:00 → 2026-08-01T04:48:16.820101+00:00
+Params        : {}
+Risk (SL/TP/Tr): 0.0% / 0.0% / 0.0%   Leverage: 1.0x
+----------------------------------------------------------------
+Starting cap  : 10000.00
+Ending equity : 8869.64
+Net PnL       : -1130.36 (-11.30%)
+Trades        : 51 (W:8 L:43 WR:15.7%)
+Avg win/loss  : 66.83 / -38.72
+Expectancy    : -22.16 per trade
+Profit factor : 0.32
+Avg trade PnL : -22.16
+Best / Worst  : 212.73 / -139.00
+Streaks (W/L) : 2 / 13
+Avg hold time : 2.33 h
+Exit reasons  : exit:50, force_close:1
+Max drawdown  : -12.00%
+Sharpe        : -53.08
+Total fees    : 480.46
+================================================================
+Artifacts     : ./reports/backtest_20260801_102017

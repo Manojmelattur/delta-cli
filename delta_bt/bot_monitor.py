@@ -100,7 +100,7 @@ def run_live_terminal_monitor(refresh_sec: int = 3):
     print("\033[2J\033[H", end="")
     try:
         while True:
-            print("\033[H", end="")
+            print("\033[H\033[J", end="")  # Move to top-left and clear to end of screen to prevent overlaps
             now_str = time.strftime("%Y-%m-%d %H:%M:%S")
             pnl_data = get_portfolio_pnl()
             positions = fetch_open_positions()
@@ -137,7 +137,7 @@ def run_live_terminal_monitor(refresh_sec: int = 3):
                     str(b["name"])[:18],
                     str(b["venue"]),
                     str(b["strategy"])[:16],
-                    str(b["symbol"]),
+                    str(b["symbol"])[:12],
                     str(b["resolution"]),
                     str(int(b["ticks"] or 0)),
                     pnl_str,

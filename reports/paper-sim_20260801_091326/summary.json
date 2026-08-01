@@ -1,0 +1,17 @@
+{
+  "error": "no equity points",
+  "meta": {
+    "mode": "paper-sim",
+    "strategy": "ema3",
+    "symbol": "BTCUSD",
+    "resolution": "5m",
+    "start": null,
+    "end": null,
+    "params": {},
+    "sl_pct": 0.0,
+    "tp_pct": 0.0,
+    "trail_pct": 0.0,
+    "leverage": 1.0,
+    "base_url": "https://api.india.delta.exchange"
+  }
+}

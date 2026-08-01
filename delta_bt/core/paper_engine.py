@@ -37,8 +37,7 @@ def run_paper(
     stream.start()
     strat.on_start()
     t0 = time.time()
-    print(f"[paper] streaming {cfg.symbol} @ {cfg.resolution} …  Ctrl-C to stop")
-
+    print(f"\n \033[1m{cfg.symbol} @ {cfg.resolution}\033[0m • Orders: {'Live' if live_orders else 'Simulated'} • Press Ctrl+C to stop")
     try:
         for bar in stream.bars():
             ctx = StrategyContext(pf.position, pf.equity(bar.close), pf.cash)
@@ -49,12 +48,13 @@ def run_paper(
                     broker.handle_signal(sig, bar)
                 except Exception as e:
                     print(f"[paper] live order failed: {e}")
-            print(f"[bar] {bar.ts.isoformat()} close={bar.close:.2f} "
-                  f"sig={sig.value} eq={pf.equity(bar.close):.2f}")
+            time_str = bar.ts.strftime('%H:%M:%S')
+            sig_color = "\033[92m" if sig.value == "BUY" else ("\033[91m" if sig.value == "SELL" else "\033[90m")
+            print(f" 🕒 {time_str}   💵 {bar.close:>8.2f}   🚦 {sig_color}{sig.value:4}\033[0m   💰 ${pf.equity(bar.close):>10.2f}")
             if duration_s and (time.time() - t0) >= duration_s:
                 break
     except KeyboardInterrupt:
-        print("\n[paper] stopped by user")
+        print(f"\n \033[93mStream stopped by user.\033[0m")
     finally:
         stream.stop()
         strat.on_stop()

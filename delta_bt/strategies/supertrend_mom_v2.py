@@ -65,10 +65,8 @@ class SupertrendMomentumV2(Strategy):
 
         # Clamp bands using the previous close (not the current close).
         if self._prev_upper is not None and self._prev_lower is not None:
-            # Only tighten upper when previous close was above previous upper (uptrend).
-            upper = min(upper, self._prev_upper) if (prev_close is not None and prev_close >= self._prev_upper) else upper
-            # Only raise lower when previous close was below previous lower (downtrend).
-            lower = max(lower, self._prev_lower) if (prev_close is not None and prev_close <= self._prev_lower) else lower
+            upper = min(upper, self._prev_upper) if (prev_close is not None and prev_close <= self._prev_upper) else upper
+            lower = max(lower, self._prev_lower) if (prev_close is not None and prev_close >= self._prev_lower) else lower
 
         self._prev_upper = upper
         self._prev_lower = lower

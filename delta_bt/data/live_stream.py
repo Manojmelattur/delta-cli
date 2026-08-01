@@ -60,8 +60,6 @@ class LiveBarStream:
             self._cur_start = b_start
             self._o = self._h = self._l = self._c = price
             self._v = size
-            print(f"[ws] first tick received  price={price}  "
-                  f"bucket_ends_in={int(b_start + self.bucket - ts)}s")
             return
         if b_start != self._cur_start:
             # emit closed bar
@@ -82,7 +80,7 @@ class LiveBarStream:
 
     # ------------------------------------------------------------------
     def _on_open(self, ws):
-        print(f"[ws] connected  {self.ws_url}  subscribing {self.symbol} v2/ticker")
+        # Silenced initial WS connection print for cleaner CLI
         sub = {
             "type": "subscribe",
             "payload": {
@@ -101,9 +99,7 @@ class LiveBarStream:
         except Exception:
             return
         self._msg_count = getattr(self, "_msg_count", 0) + 1
-        if self._msg_count <= 3:
-            preview = message[:200]
-            print(f"[ws] msg#{self._msg_count}: {preview}")
+        
         # v2/ticker payload has "mark_price" / "close" / "timestamp" (micros)
         price = None
         for k in ("close", "mark_price", "spot_price", "last_price"):

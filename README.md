@@ -262,6 +262,10 @@ python -m delta_bt bots --all --status stopped --venue paper
 
 ---
 
+
+### Restart
+`sudo systemctl restart delta-cli`
+
 ### Terminal Monitoring & Emergency Kill-Switches
 
 #### `monitor`

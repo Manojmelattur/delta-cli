@@ -242,10 +242,14 @@ def menu_deployments():
                 sc  = C_GREEN if b["status"] == "running" else (C_YELLOW if b["status"] == "paused" else C_DIM)
                 pnl = b.get("realized_pnl", 0) or 0
                 pc  = C_GREEN if pnl >= 0 else C_RED
+                
+                strat = str(b.get('strategy', ''))[:18]
+                sym = str(b.get('symbol', ''))[:12]
+                
                 print(
                     f" {C_DIM}{idx:<4}{C_RESET} {b['id']:<5}"
                     f" {sc}{b['status']:<9}{C_RESET}"
-                    f" {b['venue']:<11} {b['strategy']:<18} {b['symbol']:<12}"
+                    f" {b['venue']:<11} {strat:<18} {sym:<12}"
                     f" {b['resolution']:<5} {b['size']:<7}"
                     f" {b.get('sl_pct',0):<6} {b.get('tp_pct',0):<6}"
                     f" {pc}{pnl:+.2f}{C_RESET}"
