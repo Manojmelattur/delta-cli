@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-import { fetchSymbols, fetchStrategies, createDeployment } from "@/lib/api";
+import { fetchSymbols, fetchStrategies, createDeployment, fetchStrategyManifest } from "@/lib/api";
 
 const DEFAULT_STRATEGY_PARAMS: Record<string, string> = {
   "ema_cross": '{\n  "fast": 9,\n  "slow": 21\n}',
@@ -38,10 +38,20 @@ export default function CreateDeploymentPage() {
   
   const [symbols, setSymbols] = useState<string[]>([]);
   const [strategies, setStrategies] = useState<string[]>([]);
+  const [manifestDefaults, setManifestDefaults] = useState<Record<string, any>>({});
 
   useEffect(() => {
     fetchSymbols().then(setSymbols).catch(() => {});
     fetchStrategies().then(setStrategies).catch(() => {});
+    fetchStrategyManifest().then(m => {
+      if (m && Array.isArray(m.strategies)) {
+        const defaultsMap: Record<string, any> = {};
+        m.strategies.forEach((s: any) => {
+          defaultsMap[s.name] = s.defaults || {};
+        });
+        setManifestDefaults(defaultsMap);
+      }
+    }).catch(() => {});
   }, []);
 
   async function handleCreate() {
@@ -68,7 +78,12 @@ export default function CreateDeploymentPage() {
       const urlParams = new URLSearchParams(window.location.search);
       const isFromBacktest = urlParams.get("from_backtest");
       
-      let pStr = DEFAULT_STRATEGY_PARAMS[newDep.strategy] || "{}";
+      let defaultParams = manifestDefaults[newDep.strategy] || {};
+      if (Object.keys(defaultParams).length === 0 && DEFAULT_STRATEGY_PARAMS[newDep.strategy]) {
+        try { defaultParams = JSON.parse(DEFAULT_STRATEGY_PARAMS[newDep.strategy]); } catch {}
+      }
+      
+      let pStr = JSON.stringify(defaultParams);
       let baseDep = { ...newDep };
 
       if (isFromBacktest) {
@@ -86,8 +101,8 @@ export default function CreateDeploymentPage() {
         }
       }
 
-      let p = {};
-      try { p = JSON.parse(pStr); } catch { p = {}; }
+      let p: any = {};
+      try { p = JSON.parse(pStr); } catch { p = { ...defaultParams }; }
       
       p.use_kelly_sizer = true;
       p.kelly_fraction = 0.5;
@@ -115,7 +130,7 @@ export default function CreateDeploymentPage() {
     } catch {
       // Ignore
     }
-  }, []);
+  }, [manifestDefaults]);
 
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-8">
@@ -139,35 +154,39 @@ export default function CreateDeploymentPage() {
                 <Select 
                   value={newDep.strategy} 
                   onValueChange={v => {
-                    setNewDep({...newDep, strategy: v});
-                    let pStr = DEFAULT_STRATEGY_PARAMS[v] || "{}";
-                    try {
-                      let p = JSON.parse(pStr);
-                      p.use_kelly_sizer = true;
-                      p.kelly_fraction = 0.5;
-                      p.use_maker_limit = true;
-                      p.maker_limit_offset_bps = 5;
-                      p.use_atr_risk = true;
-                      p.atr_multiplier = 2.0;
-                      p.risk_type = "percentage";
-                      p.multiple_tp = true;
-                      p.tp_levels = p.tp_levels || [
-                        { price_pct: 1.5, qty_pct: 50 },
-                        { price_pct: 3.0, qty_pct: 50 }
-                      ];
-                      p.multiple_sl = true;
-                      p.sl_levels = p.sl_levels || [
-                        { price_pct: -1.0, qty_pct: 50 },
-                        { price_pct: -2.0, qty_pct: 50 }
-                      ];
-                      p.multiple_tsl = true;
-                      p.tsl_levels = p.tsl_levels || [
-                        { activation_pct: 1.0, trail_pct: 0.5, qty_pct: 50 },
-                        { activation_pct: 2.0, trail_pct: 1.0, qty_pct: 50 }
-                      ];
-                      pStr = JSON.stringify(p, null, 2);
-                    } catch {}
-                    setNewParamsStr(pStr);
+                    if (v) {
+                      setNewDep({...newDep, strategy: v});
+                      let defaultParams = manifestDefaults[v] || {};
+                      if (Object.keys(defaultParams).length === 0 && DEFAULT_STRATEGY_PARAMS[v]) {
+                        try { defaultParams = JSON.parse(DEFAULT_STRATEGY_PARAMS[v]); } catch {}
+                      }
+                      try {
+                        let p = { ...defaultParams };
+                        p.use_kelly_sizer = true;
+                        p.kelly_fraction = 0.5;
+                        p.use_maker_limit = true;
+                        p.maker_limit_offset_bps = 5;
+                        p.use_atr_risk = true;
+                        p.atr_multiplier = 2.0;
+                        p.risk_type = "percentage";
+                        p.multiple_tp = true;
+                        p.tp_levels = p.tp_levels || [
+                          { price_pct: 1.5, qty_pct: 50 },
+                          { price_pct: 3.0, qty_pct: 50 }
+                        ];
+                        p.multiple_sl = true;
+                        p.sl_levels = p.sl_levels || [
+                          { price_pct: -1.0, qty_pct: 50 },
+                          { price_pct: -2.0, qty_pct: 50 }
+                        ];
+                        p.multiple_tsl = true;
+                        p.tsl_levels = p.tsl_levels || [
+                          { activation_pct: 1.0, trail_pct: 0.5, qty_pct: 50 },
+                          { activation_pct: 2.0, trail_pct: 1.0, qty_pct: 50 }
+                        ];
+                        setNewParamsStr(JSON.stringify(p, null, 2));
+                      } catch {}
+                    }
                   }}
                 >
                   <SelectTrigger className="w-full h-10"><SelectValue placeholder="Strategy" /></SelectTrigger>
@@ -195,7 +214,7 @@ export default function CreateDeploymentPage() {
               </div>
               <div className="space-y-2 col-span-2">
                 <label className="text-sm font-medium">Venue</label>
-                <Select value={newDep.venue} onValueChange={v => setNewDep({...newDep, venue: v})}>
+                <Select value={newDep.venue} onValueChange={v => { if (v) setNewDep({...newDep, venue: v}); }}>
                   <SelectTrigger className="w-full h-10"><SelectValue placeholder="Venue" /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="paper">Paper</SelectItem>

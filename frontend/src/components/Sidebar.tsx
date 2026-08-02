@@ -12,7 +12,8 @@ import {
   Clock,
   ListTodo,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  Settings
 } from "lucide-react";
 import { Button } from "./ui/button";
 
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { href: "/scan", label: "Market Scanner", icon: Radar },
   { href: "/scheduler", label: "Scheduler", icon: Clock },
   { href: "/tasks", label: "Tasks", icon: ListTodo },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function Sidebar() {

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fetchSymbols, fetchStrategies, createBacktest } from "@/lib/api";
+import { fetchSymbols, fetchStrategies, createBacktest, fetchStrategyManifest } from "@/lib/api";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +27,7 @@ export default function CreateBacktestPage() {
   const router = useRouter();
 
   const [newRun, setNewRun] = useState({ 
-    strategy: "time_breakout", symbol: "BTC-USDT", timeframe: "15m", 
+    strategy: "time_breakout", symbol: "BTCUSD", timeframe: "15m", 
     days: 30, capital: 1000, fee_bps: 5, slippage_bps: 2, leverage: 1, qty_pct: 1.0,
     sl_pct: 0.0, tp_pct: 0.0, trail_pct: 0.0,
     live: false, start: "", end: ""
@@ -38,17 +38,31 @@ export default function CreateBacktestPage() {
   
   const [symbols, setSymbols] = useState<string[]>([]);
   const [strategies, setStrategies] = useState<string[]>([]);
+  const [manifestDefaults, setManifestDefaults] = useState<Record<string, any>>({});
 
   useEffect(() => {
     fetchSymbols().then(setSymbols);
     fetchStrategies().then(setStrategies);
+    fetchStrategyManifest().then(m => {
+      if (m && Array.isArray(m.strategies)) {
+        const defaultsMap: Record<string, any> = {};
+        m.strategies.forEach((s: any) => {
+          defaultsMap[s.name] = s.defaults || {};
+        });
+        setManifestDefaults(defaultsMap);
+      }
+    });
   }, []);
 
   // Inject user's requested advanced risk properties on init
   useEffect(() => {
     try {
-      const pStr = DEFAULT_STRATEGY_PARAMS[newRun.strategy] || "{}";
-      const p = JSON.parse(pStr);
+      let defaultParams = manifestDefaults[newRun.strategy] || {};
+      if (Object.keys(defaultParams).length === 0 && DEFAULT_STRATEGY_PARAMS[newRun.strategy]) {
+        try { defaultParams = JSON.parse(DEFAULT_STRATEGY_PARAMS[newRun.strategy]); } catch {}
+      }
+      
+      const p = { ...defaultParams };
       p.use_kelly_sizer = true;
       p.kelly_fraction = 0.5;
       p.use_maker_limit = true;
@@ -75,7 +89,7 @@ export default function CreateBacktestPage() {
     } catch {
       // Ignore
     }
-  }, []);
+  }, [manifestDefaults]);
 
   async function handleCreate() {
     let parsedParams: any = {};
@@ -117,11 +131,14 @@ export default function CreateBacktestPage() {
                 <label className="text-sm font-medium">Strategy</label>
                 <Select 
                   value={newRun.strategy} 
-                  onValueChange={(val: string) => {
+                  onValueChange={(val: any) => {
                     setNewRun({...newRun, strategy: val});
-                    let pStr = DEFAULT_STRATEGY_PARAMS[val] || "{}";
+                    let defaultParams = manifestDefaults[val] || {};
+                    if (Object.keys(defaultParams).length === 0 && DEFAULT_STRATEGY_PARAMS[val]) {
+                      try { defaultParams = JSON.parse(DEFAULT_STRATEGY_PARAMS[val]); } catch {}
+                    }
                     try {
-                      let p = JSON.parse(pStr);
+                      let p = { ...defaultParams };
                       p.use_kelly_sizer = true;
                       p.kelly_fraction = 0.5;
                       p.use_maker_limit = true;
@@ -144,9 +161,8 @@ export default function CreateBacktestPage() {
                         { activation_pct: 1.0, trail_pct: 0.5, qty_pct: 50 },
                         { activation_pct: 2.0, trail_pct: 1.0, qty_pct: 50 }
                       ];
-                      pStr = JSON.stringify(p, null, 2);
+                      setParamsStr(JSON.stringify(p, null, 2));
                     } catch {}
-                    setParamsStr(pStr);
                   }}
                 >
                   <SelectTrigger className="w-full h-10"><SelectValue placeholder="Select Strategy" /></SelectTrigger>

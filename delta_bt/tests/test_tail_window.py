@@ -12,7 +12,7 @@ import pytest
 
 from delta_bt.core.registry import load_strategy
 from delta_bt.core.strategy import StrategyContext
-from delta_bt.core.types import Bar, Position, Signal
+from delta_bt.core.types import Bar, Position, Signal, Side
 
 
 TAIL_ONLY_STRATEGIES = {
@@ -158,7 +158,16 @@ def test_bollinger_intent_stays_valid_until_middle_band():
     strat.on_start()
     ctx = StrategyContext(Position(symbol="BTCUSD"), 0.0, 0.0)
     for i, close in enumerate([100, 100, 100, 100, 96, 98]):
-        strat.on_bar(_bar(close, i), ctx)
+        sig = strat.on_bar(_bar(close, i), ctx)
+        if sig == Signal.BUY:
+            ctx.position.qty = 1.0
+            ctx.position.side = Side.LONG
+        elif sig == Signal.SELL:
+            ctx.position.qty = 1.0
+            ctx.position.side = Side.SHORT
+        elif sig == Signal.FLAT:
+            ctx.position.qty = 0.0
+            ctx.position.side = None
     assert strat.intent(_bar(98, 6)) == Signal.BUY
 
 
@@ -167,5 +176,14 @@ def test_rsi_mr_intent_stays_valid_until_midline_exit():
     strat.on_start()
     ctx = StrategyContext(Position(symbol="BTCUSD"), 0.0, 0.0)
     for i, close in enumerate([100, 96, 92, 90, 91]):
-        strat.on_bar(_bar(close, i), ctx)
+        sig = strat.on_bar(_bar(close, i), ctx)
+        if sig == Signal.BUY:
+            ctx.position.qty = 1.0
+            ctx.position.side = Side.LONG
+        elif sig == Signal.SELL:
+            ctx.position.qty = 1.0
+            ctx.position.side = Side.SHORT
+        elif sig == Signal.FLAT:
+            ctx.position.qty = 0.0
+            ctx.position.side = None
     assert strat.intent(_bar(91, 5)) == Signal.BUY

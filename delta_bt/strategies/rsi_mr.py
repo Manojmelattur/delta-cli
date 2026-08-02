@@ -67,7 +67,7 @@ class RsiMeanRev(Strategy):
 
         return Signal.HOLD
 
-    def intent(self) -> Signal:
+    def intent(self, bar: Bar = None) -> Signal:
         if self._rsi is None:
             return Signal.HOLD
         if self._state == 1:

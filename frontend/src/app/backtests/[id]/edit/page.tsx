@@ -76,41 +76,40 @@ export default function EditBacktestPage() {
           p = {};
         }
 
-        if (p.use_kelly_sizer === undefined) {
-          p.use_kelly_sizer = true;
-          p.kelly_fraction = 0.5;
-        }
-        if (p.use_maker_limit === undefined) {
-          p.use_maker_limit = true;
-          p.maker_limit_offset_bps = 5;
-        }
-        if (p.use_atr_risk === undefined) {
-          p.use_atr_risk = true;
-          p.atr_multiplier = 2.0;
-        }
+        // Merge loaded parameters with strategy default parameters
+        const strat = data.run.strategy || "time_breakout";
+        const defStr = DEFAULT_STRATEGY_PARAMS[strat] || "{}";
+        let defaultParams: any = {};
+        try {
+          defaultParams = JSON.parse(defStr);
+        } catch {}
+        p = { ...defaultParams, ...p };
+
+        if (p.use_kelly_sizer === undefined) p.use_kelly_sizer = true;
+        if (p.kelly_fraction === undefined) p.kelly_fraction = 0.5;
+        if (p.use_maker_limit === undefined) p.use_maker_limit = true;
+        if (p.maker_limit_offset_bps === undefined) p.maker_limit_offset_bps = 5;
+        if (p.use_atr_risk === undefined) p.use_atr_risk = true;
+        if (p.atr_multiplier === undefined) p.atr_multiplier = 2.0;
         if (p.risk_type === undefined) p.risk_type = "percentage";
         
-        if (p.multiple_tp === undefined) {
-          p.multiple_tp = true;
-          p.tp_levels = p.tp_levels || [
-            { price_pct: 1.5, qty_pct: 50 },
-            { price_pct: 3.0, qty_pct: 50 }
-          ];
-        }
-        if (p.multiple_sl === undefined) {
-          p.multiple_sl = true;
-          p.sl_levels = p.sl_levels || [
-            { price_pct: -1.0, qty_pct: 50 },
-            { price_pct: -2.0, qty_pct: 50 }
-          ];
-        }
-        if (p.multiple_tsl === undefined) {
-          p.multiple_tsl = true;
-          p.tsl_levels = p.tsl_levels || [
-            { activation_pct: 1.0, trail_pct: 0.5, qty_pct: 50 },
-            { activation_pct: 2.0, trail_pct: 1.0, qty_pct: 50 }
-          ];
-        }
+        if (p.multiple_tp === undefined) p.multiple_tp = true;
+        p.tp_levels = p.tp_levels || [
+          { price_pct: 1.5, qty_pct: 50 },
+          { price_pct: 3.0, qty_pct: 50 }
+        ];
+
+        if (p.multiple_sl === undefined) p.multiple_sl = true;
+        p.sl_levels = p.sl_levels || [
+          { price_pct: -1.0, qty_pct: 50 },
+          { price_pct: -2.0, qty_pct: 50 }
+        ];
+
+        if (p.multiple_tsl === undefined) p.multiple_tsl = true;
+        p.tsl_levels = p.tsl_levels || [
+          { activation_pct: 1.0, trail_pct: 0.5, qty_pct: 50 },
+          { activation_pct: 2.0, trail_pct: 1.0, qty_pct: 50 }
+        ];
         
         setParamsStr(JSON.stringify(p, null, 2));
       }
@@ -161,14 +160,17 @@ export default function EditBacktestPage() {
                 <label className="text-sm font-medium">Strategy</label>
                 <Select 
                   value={newRun.strategy} 
-                  onValueChange={(val: string) => {
+                  onValueChange={(val: any) => {
                     setNewRun({...newRun, strategy: val});
                     let pStr = DEFAULT_STRATEGY_PARAMS[val] || "{}";
                     try {
                       let p = JSON.parse(pStr);
                       p.use_kelly_sizer = true;
+                      p.kelly_fraction = 0.5;
                       p.use_maker_limit = true;
+                      p.maker_limit_offset_bps = 5;
                       p.use_atr_risk = true;
+                      p.atr_multiplier = 2.0;
                       p.risk_type = "percentage";
                       p.multiple_tp = true;
                       p.tp_levels = p.tp_levels || [

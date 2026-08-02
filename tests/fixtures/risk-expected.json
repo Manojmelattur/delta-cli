@@ -1,0 +1,269 @@
+[
+  {
+    "name": "long_trail_activation_and_exit",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": null
+      },
+      {
+        "kind": "trail_arm",
+        "mark": 101.5,
+        "peak": 101.5,
+        "trough": 100,
+        "profit_pct": 1.5,
+        "sl_px": 99.47
+      },
+      {
+        "kind": "sl_move",
+        "mark": 102,
+        "peak": 102,
+        "trough": 100,
+        "profit_pct": 2,
+        "sl_px": 99.96
+      },
+      {
+        "kind": "sl_move",
+        "mark": 103,
+        "peak": 103,
+        "trough": 100,
+        "profit_pct": 3,
+        "sl_px": 100.94
+      },
+      {
+        "kind": "exit_trail",
+        "mark": 100.9,
+        "peak": 103,
+        "trough": 100,
+        "profit_pct": 0.9,
+        "sl_px": 100.94
+      }
+    ]
+  },
+  {
+    "name": "long_breakeven_then_sl",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": 99
+      },
+      {
+        "kind": "be_arm",
+        "mark": 100.6,
+        "peak": 100.6,
+        "trough": 100,
+        "profit_pct": 0.6,
+        "sl_px": 100
+      },
+      {
+        "kind": "sl_move",
+        "mark": 100.6,
+        "peak": 100.6,
+        "trough": 100,
+        "profit_pct": 0.6,
+        "sl_px": 100
+      },
+      {
+        "kind": "exit_sl",
+        "mark": 99.95,
+        "peak": 100.6,
+        "trough": 100,
+        "profit_pct": -0.05,
+        "sl_px": 100
+      }
+    ]
+  },
+  {
+    "name": "short_trail_hit",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": null
+      },
+      {
+        "kind": "trail_arm",
+        "mark": 99,
+        "peak": 100,
+        "trough": 99,
+        "profit_pct": 1,
+        "sl_px": 99.99
+      },
+      {
+        "kind": "sl_move",
+        "mark": 98.5,
+        "peak": 100,
+        "trough": 98.5,
+        "profit_pct": 1.5,
+        "sl_px": 99.485
+      },
+      {
+        "kind": "exit_trail",
+        "mark": 99.5,
+        "peak": 100,
+        "trough": 98.5,
+        "profit_pct": 0.5,
+        "sl_px": 99.485
+      }
+    ]
+  },
+  {
+    "name": "long_tp_hit",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": 99
+      },
+      {
+        "kind": "exit_tp",
+        "mark": 102.1,
+        "peak": 102.1,
+        "trough": 100,
+        "profit_pct": 2.1,
+        "sl_px": 99
+      }
+    ]
+  },
+  {
+    "name": "long_static_sl_hit",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": 99
+      },
+      {
+        "kind": "exit_sl",
+        "mark": 98.9,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": -1.1,
+        "sl_px": 99
+      }
+    ]
+  },
+  {
+    "name": "long_trail_widens_never_regresses",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": null
+      },
+      {
+        "kind": "trail_arm",
+        "mark": 100.6,
+        "peak": 100.6,
+        "trough": 100,
+        "profit_pct": 0.6,
+        "sl_px": 98.588
+      },
+      {
+        "kind": "sl_move",
+        "mark": 101.5,
+        "peak": 101.5,
+        "trough": 100,
+        "profit_pct": 1.5,
+        "sl_px": 99.47
+      },
+      {
+        "kind": "sl_move",
+        "mark": 102.5,
+        "peak": 102.5,
+        "trough": 100,
+        "profit_pct": 2.5,
+        "sl_px": 100.45
+      },
+      {
+        "kind": "exit_trail",
+        "mark": 100.4,
+        "peak": 102.5,
+        "trough": 100,
+        "profit_pct": 0.4,
+        "sl_px": 100.45
+      }
+    ]
+  },
+  {
+    "name": "combined_be_and_trail",
+    "events": [
+      {
+        "kind": "entry",
+        "mark": 100,
+        "peak": 100,
+        "trough": 100,
+        "profit_pct": 0,
+        "sl_px": 99
+      },
+      {
+        "kind": "be_arm",
+        "mark": 101.1,
+        "peak": 101.1,
+        "trough": 100,
+        "profit_pct": 1.1,
+        "sl_px": 100
+      },
+      {
+        "kind": "sl_move",
+        "mark": 101.1,
+        "peak": 101.1,
+        "trough": 100,
+        "profit_pct": 1.1,
+        "sl_px": 100
+      },
+      {
+        "kind": "trail_arm",
+        "mark": 102.3,
+        "peak": 102.3,
+        "trough": 100,
+        "profit_pct": 2.3,
+        "sl_px": 100.7655
+      },
+      {
+        "kind": "sl_move",
+        "mark": 102.3,
+        "peak": 102.3,
+        "trough": 100,
+        "profit_pct": 2.3,
+        "sl_px": 100.7655
+      },
+      {
+        "kind": "sl_move",
+        "mark": 103.5,
+        "peak": 103.5,
+        "trough": 100,
+        "profit_pct": 3.5,
+        "sl_px": 101.9475
+      },
+      {
+        "kind": "exit_trail",
+        "mark": 101.8,
+        "peak": 103.5,
+        "trough": 100,
+        "profit_pct": 1.8,
+        "sl_px": 101.9475
+      }
+    ]
+  }
+]

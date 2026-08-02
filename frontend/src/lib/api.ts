@@ -59,9 +59,42 @@ export async function scanMarket(params: any) {
   return res.json();
 }
 
-export async function fetchPnlSummary() {
+export async function runAutoDeploy(params: any) {
+  const res = await fetch(`${API_URL}/system/auto-deploy`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+  return res.json();
+}
+
+export async function runRankUniverse(params: any) {
+  const res = await fetch(`${API_URL}/system/rank-universe`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+  return res.json();
+}
+
+export async function runSweep(params: any) {
+  const res = await fetch(`${API_URL}/system/sweep`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(params)
+  });
+  return res.json();
+}
+
+export async function fetchPnlSummary(filters?: { days?: number; venue?: string; strategy?: string; symbol?: string }) {
   try {
-    const res = await fetch(`${API_URL}/pnl/summary`, { cache: 'no-store' });
+    const params = new URLSearchParams();
+    if (filters?.days) params.append('days', filters.days.toString());
+    if (filters?.venue) params.append('venue', filters.venue);
+    if (filters?.strategy) params.append('strategy', filters.strategy);
+    if (filters?.symbol) params.append('symbol', filters.symbol);
+    
+    const res = await fetch(`${API_URL}/pnl/summary?${params.toString()}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch (e) {
@@ -69,9 +102,14 @@ export async function fetchPnlSummary() {
   }
 }
 
-export async function fetchPnlStrategy() {
+export async function fetchPnlStrategy(filters?: { days?: number; venue?: string; symbol?: string }) {
   try {
-    const res = await fetch(`${API_URL}/pnl/strategy`, { cache: 'no-store' });
+    const params = new URLSearchParams();
+    if (filters?.days) params.append('days', filters.days.toString());
+    if (filters?.venue) params.append('venue', filters.venue);
+    if (filters?.symbol) params.append('symbol', filters.symbol);
+    
+    const res = await fetch(`${API_URL}/pnl/strategy?${params.toString()}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch (e) {
@@ -89,8 +127,9 @@ export async function fetchSchedulerLogs() {
   }
 }
 
-export async function restartScheduler() {
-  const res = await fetch(`${API_URL}/scheduler/restart`, { method: 'POST' });
+export async function restartScheduler(reason?: string) {
+  const url = reason ? `${API_URL}/scheduler/restart?reason=${encodeURIComponent(reason)}` : `${API_URL}/scheduler/restart`;
+  const res = await fetch(url, { method: 'POST' });
   return res.json();
 }
 
@@ -104,6 +143,16 @@ export async function fetchStrategies() {
   const res = await fetch(`${API_URL}/strategies`, { cache: 'no-store' });
   if (!res.ok) return [];
   return res.json();
+}
+
+export async function fetchStrategyManifest() {
+  try {
+    const res = await fetch(`${API_URL}/strategies/manifest`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
 }
 
 export async function fetchTasks() {
@@ -286,5 +335,35 @@ export async function actionAllTasks(action: 'pause-all' | 'resume-all') {
 export async function fetchDeploymentLogs(id: string | number) {
   const res = await fetch(`${API_URL}/deployments/${id}/logs`, { cache: 'no-store' });
   if (!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+export async function fetchSystemIp() {
+  try {
+    const res = await fetch(`${API_URL}/system/ip`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function clearBacktests() {
+  const res = await fetch(`${API_URL}/system/clear-backtests`, { method: 'POST' });
+  return res.json();
+}
+
+export async function clearDeployments() {
+  const res = await fetch(`${API_URL}/system/clear-deployments`, { method: 'POST' });
+  return res.json();
+}
+
+export async function seedDefaultTasks() {
+  const res = await fetch(`${API_URL}/system/seed-default-tasks`, { method: 'POST' });
+  return res.json();
+}
+
+export async function factoryReset() {
+  const res = await fetch(`${API_URL}/system/factory-reset`, { method: 'POST' });
   return res.json();
 }

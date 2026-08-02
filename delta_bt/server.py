@@ -120,7 +120,8 @@ def create_app(db_path: Optional[str] = None):
     from .add_pnl_routes import add_pnl_routes
     add_pnl_routes(app)
     from .add_mutations import add_mutations
-    add_mutations(app, db_path or os.getenv("DELTA_BT_DB") or "delta.db")
+    from .store.db import _resolve_db
+    add_mutations(app, str(_resolve_db(db_path)))
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -141,6 +142,19 @@ def create_app(db_path: Optional[str] = None):
     def api_strategies():
         from .core.registry import discover_strategies
         return list(discover_strategies().keys())
+
+    @app.get("/api/strategies/manifest")
+    def api_strategies_manifest():
+        try:
+            cwd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            manifest_path = os.path.join(cwd, "strategy_manifest.json")
+            if os.path.exists(manifest_path):
+                with open(manifest_path, "r") as f:
+                    import json
+                    return json.load(f)
+            return {"error": "Manifest file not found"}
+        except Exception as e:
+            return {"error": str(e)}
 
     # Cache to prevent rate limiting
     symbols_cache = []

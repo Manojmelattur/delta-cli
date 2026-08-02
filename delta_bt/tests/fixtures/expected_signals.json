@@ -35,20 +35,20 @@
       "engulfing": "BUY"
     },
     "supertrend_mom": {
-      "trend_up": "HOLD",
-      "trend_down": "HOLD",
+      "trend_up": "BUY",
+      "trend_down": "SELL",
       "range": "HOLD",
-      "bollinger_touch": "HOLD",
-      "pinbar_rejection": "HOLD",
-      "engulfing": "HOLD"
+      "bollinger_touch": "SELL",
+      "pinbar_rejection": "BUY",
+      "engulfing": "SELL"
     },
     "supertrend_mom_v2": {
-      "trend_up": "HOLD",
-      "trend_down": "HOLD",
+      "trend_up": "BUY",
+      "trend_down": "SELL",
       "range": "HOLD",
-      "bollinger_touch": "HOLD",
-      "pinbar_rejection": "HOLD",
-      "engulfing": "HOLD"
+      "bollinger_touch": "SELL",
+      "pinbar_rejection": "BUY",
+      "engulfing": "SELL"
     },
     "bollinger": {
       "trend_up": "SELL",
@@ -67,10 +67,10 @@
       "engulfing": "SELL"
     },
     "fvg": {
-      "trend_up": "HOLD",
-      "trend_down": "HOLD",
+      "trend_up": "BUY",
+      "trend_down": "SELL",
       "range": "HOLD",
-      "bollinger_touch": "SELL",
+      "bollinger_touch": "HOLD",
       "pinbar_rejection": "HOLD",
       "engulfing": "HOLD"
     },
@@ -133,7 +133,7 @@
     "rsi_divergence": {
       "trend_up": "HOLD",
       "trend_down": "HOLD",
-      "range": "SELL",
+      "range": "HOLD",
       "bollinger_touch": "HOLD",
       "pinbar_rejection": "HOLD",
       "engulfing": "HOLD"

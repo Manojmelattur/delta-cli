@@ -1,0 +1,93 @@
+[
+  {
+    "name": "long_trail_activation_and_exit",
+    "params": {
+      "side": "buy",
+      "entry": 100,
+      "sl_pct": 0,
+      "tp_pct": 0,
+      "trail_pct": 2,
+      "trail_activate_pct": 1,
+      "breakeven_after_pct": 0
+    },
+    "marks": [100.4, 101.5, 102.0, 103.0, 101.5, 100.9]
+  },
+  {
+    "name": "long_breakeven_then_sl",
+    "params": {
+      "side": "buy",
+      "entry": 100,
+      "sl_pct": 1,
+      "tp_pct": 0,
+      "trail_pct": 0,
+      "trail_activate_pct": 0,
+      "breakeven_after_pct": 0.5
+    },
+    "marks": [100.2, 100.6, 100.4, 100.1, 99.95]
+  },
+  {
+    "name": "short_trail_hit",
+    "params": {
+      "side": "sell",
+      "entry": 100,
+      "sl_pct": 0,
+      "tp_pct": 0,
+      "trail_pct": 1,
+      "trail_activate_pct": 0.5,
+      "breakeven_after_pct": 0
+    },
+    "marks": [99.6, 99.0, 98.5, 99.5]
+  },
+  {
+    "name": "long_tp_hit",
+    "params": {
+      "side": "buy",
+      "entry": 100,
+      "sl_pct": 1,
+      "tp_pct": 2,
+      "trail_pct": 0,
+      "trail_activate_pct": 0,
+      "breakeven_after_pct": 0
+    },
+    "marks": [100.5, 101.9, 102.1]
+  },
+  {
+    "name": "long_static_sl_hit",
+    "params": {
+      "side": "buy",
+      "entry": 100,
+      "sl_pct": 1,
+      "tp_pct": 0,
+      "trail_pct": 0,
+      "trail_activate_pct": 0,
+      "breakeven_after_pct": 0
+    },
+    "marks": [99.6, 99.1, 98.9]
+  },
+  {
+    "name": "long_trail_widens_never_regresses",
+    "params": {
+      "side": "buy",
+      "entry": 100,
+      "sl_pct": 0,
+      "tp_pct": 0,
+      "trail_pct": 2,
+      "trail_activate_pct": 0.5,
+      "breakeven_after_pct": 0
+    },
+    "marks": [100.6, 100.4, 101.5, 100.8, 102.5, 101.0, 100.4]
+  },
+  {
+    "name": "combined_be_and_trail",
+    "params": {
+      "side": "buy",
+      "entry": 100,
+      "sl_pct": 1,
+      "tp_pct": 5,
+      "trail_pct": 1.5,
+      "trail_activate_pct": 2,
+      "breakeven_after_pct": 1
+    },
+    "marks": [100.5, 101.1, 101.8, 102.3, 103.5, 102.0, 101.8]
+  }
+]

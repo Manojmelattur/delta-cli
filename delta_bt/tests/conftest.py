@@ -64,7 +64,7 @@ def last_actionable(signals: List[str]) -> str:
 
 @pytest.fixture
 def manifest() -> Dict[str, Any]:
-    root = HERE.parent.parent.parent
+    root = HERE.parent.parent
     return json.loads((root / "strategy_manifest.json").read_text())
 
 

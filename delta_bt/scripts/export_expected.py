@@ -20,7 +20,7 @@ from delta_bt.core.registry import load_strategy
 from delta_bt.core.types import Bar, Signal
 
 PY_FIX = Path(__file__).resolve().parents[1] / "tests" / "fixtures"
-TS_FIX = Path(__file__).resolve().parents[3] / "tests" / "strategies" / "fixtures"
+TS_FIX = Path(__file__).resolve().parents[2] / "tests" / "strategies" / "fixtures"
 
 FIXTURES = json.loads((PY_FIX / "bars.json").read_text())
 

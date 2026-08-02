@@ -145,8 +145,17 @@ export default function DeploymentsPage() {
             defaultSort={{ key: "id", dir: "desc" }}
             columns={[
               { key: "id", header: "#", sortable: true, className: "font-medium w-12",
-                render: (v: any) => `#${v}` },
-              { key: "name", header: "Name", sortable: true },
+                render: (v: any, dep: any) => (
+                  <Link href={`/deployments/${dep.id}`} className="hover:underline text-primary">
+                    #{v}
+                  </Link>
+                ) },
+              { key: "name", header: "Name", sortable: true,
+                render: (v: any, dep: any) => (
+                  <Link href={`/deployments/${dep.id}`} className="hover:underline font-semibold text-primary">
+                    {v}
+                  </Link>
+                ) },
               { key: "strategy", header: "Strategy", sortable: true },
               { key: "symbol", header: "Symbol", sortable: true },
               { key: "timeframe", header: "TF", sortable: true },

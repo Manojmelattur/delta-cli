@@ -203,8 +203,8 @@ export default function BacktestDetailPage() {
                 />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '8px' }}
-                  labelFormatter={(val) => new Date(val).toLocaleString()}
-                  formatter={(value: number) => [`$${value.toFixed(2)}`, 'Equity']}
+                  labelFormatter={(val: any) => new Date(val).toLocaleString()}
+                  formatter={(value: any) => [`$${value.toFixed(2)}`, 'Equity']}
                 />
                 <Line 
                   type="monotone" 

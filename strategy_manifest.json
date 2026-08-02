@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "strategies": [
+    {
+      "name": "ema_cross",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "fast": 9, "slow": 21 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "ema3",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "fast": 8, "mid": 13, "slow": 21 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "rsi_mr",
+      "regime": "range",
+      "tail_only": true,
+      "defaults": { "period": 14, "oversold": 30, "overbought": 70 },
+      "adx_default": "range"
+    },
+    {
+      "name": "macd",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "fast": 12, "slow": 26, "signal": 9 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "supertrend_mom",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "period": 10, "multiplier": 3.0, "mom_len": 14 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "supertrend_mom_v2",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "period": 10, "multiplier": 3.0, "roc_len": 14 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "bollinger",
+      "regime": "range",
+      "tail_only": true,
+      "defaults": { "period": 20, "stdev": 2.0, "mode": "revert" },
+      "adx_default": "range"
+    },
+    {
+      "name": "vwap",
+      "regime": "any",
+      "tail_only": false,
+      "defaults": { "band_bps": 20, "mode": "trend" },
+      "adx_default": "any"
+    },
+    {
+      "name": "fvg",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "min_gap_pct": 0.1 },
+      "adx_default": "range"
+    },
+    {
+      "name": "price_action_engulfing",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "ema_len": 20 },
+      "adx_default": "range"
+    },
+    {
+      "name": "price_action_pinbar",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "ema_len": 20 },
+      "adx_default": "range"
+    },
+    {
+      "name": "smc_bos_retest",
+      "regime": "trend",
+      "tail_only": true,
+      "defaults": { "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "smc_choch_bos",
+      "regime": "trend",
+      "tail_only": true,
+      "defaults": { "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "smc_liquidity_sweep",
+      "regime": "range",
+      "tail_only": true,
+      "defaults": { "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "smc_ob",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "smc_ob_fvg",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "rsi_divergence",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "rsi_len": 14, "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "macd_divergence",
+      "regime": "any",
+      "tail_only": true,
+      "defaults": { "fast": 12, "slow": 26, "signal": 9, "swing_len": 5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "turtle",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "entry_len": 20, "exit_len": 10 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "bb_ha_supertrend",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "bb_period": 20, "bb_stdev": 2.0, "st_period": 10, "st_multiplier": 3.0 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "ema_rsi",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "ema_period": 50, "rsi_period": 14, "oversold": 30, "overbought": 70 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "grid",
+      "regime": "mean_reversion",
+      "tail_only": false,
+      "defaults": { "grid_size": 10, "deviation": 0.5 },
+      "adx_default": "range"
+    },
+    {
+      "name": "ichimoku_cloud",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "tenkan_period": 9, "kijun_period": 26, "senkou_b_period": 52 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "keltner_squeeze",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "bb_period": 20, "bb_std": 2.0, "kc_period": 20, "kc_mult": 1.5 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "momentum_breakout",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "lookback": 10, "vol_mult": 1.5 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "move_volatility_straddle",
+      "regime": "any",
+      "tail_only": false,
+      "defaults": { "atr_period": 14, "iv_annual": 0.65, "mode": "long_vol" },
+      "adx_default": "any"
+    },
+    {
+      "name": "options_iron_condor",
+      "regime": "range",
+      "tail_only": false,
+      "defaults": { "bb_period": 20, "bb_std": 2.0, "delta_target": 0.15 },
+      "adx_default": "range"
+    },
+    {
+      "name": "sma_rsi",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "sma_period": 50, "rsi_period": 14, "oversold": 30, "overbought": 70 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "time_breakout",
+      "regime": "trend",
+      "tail_only": false,
+      "defaults": { "period": "day", "use_volume_filter": false, "vol_lookback": 10, "vol_mult": 1.2 },
+      "adx_default": "trend"
+    },
+    {
+      "name": "vwap_bands",
+      "regime": "ranging",
+      "tail_only": false,
+      "defaults": { "mult": 2.0, "stdev_len": 50, "rsi_len": 14, "rsi_buy_max": 45.0, "rsi_sell_min": 55.0 },
+      "adx_default": "range"
+    }
+  ]
+}
