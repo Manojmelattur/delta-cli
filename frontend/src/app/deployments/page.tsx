@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import { useEffect, useState } from "react";
 import { fetchDeployments, actionDeployment, editDeployment, testTradeDeployment, fetchDeploymentLogs } from "@/lib/api";
@@ -7,22 +8,29 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-
+import { SortableTable, ColumnDef } from "@/components/ui/sortable-table";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const DEFAULT_STRATEGY_PARAMS: Record<string, string> = {
+  "ema_cross": '{\n  "fast": 9,\n  "slow": 21\n}',
+  "ema3": '{\n  "fast": 9,\n  "medium": 21,\n  "slow": 50\n}',
+  "ema_rsi": '{\n  "ema_period": 20,\n  "rsi_period": 14,\n  "rsi_overbought": 70,\n  "rsi_oversold": 30\n}',
+  "macd": '{\n  "fast": 12,\n  "slow": 26,\n  "signal": 9\n}',
+  "rsi_mr": '{\n  "rsi_period": 14,\n  "overbought": 70,\n  "oversold": 30\n}',
+  "smc_ob": '{\n  "lookback": 50,\n  "mitigation_threshold": 0.5\n}',
+  "supertrend_mom": '{\n  "period": 10,\n  "multiplier": 3.0\n}',
+  "time_breakout": '{\n  "start_time": "09:15",\n  "end_time": "15:30"\n}',
+  "vwap": '{\n  "mult": 1.0\n}',
+  "vwap_bands": '{\n  "mult1": 1.0,\n  "mult2": 2.0\n}',
+  "bollinger": '{\n  "period": 20,\n  "std_dev": 2.0\n}',
+  "turtle": '{\n  "entry_period": 20,\n  "exit_period": 10\n}'
+};
+
 export default function DeploymentsPage() {
   const [deployments, setDeployments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const [openNew, setOpenNew] = useState(false);
-  const [newDep, setNewDep] = useState({ 
-    name: "", venue: "paper", strategy: "time_breakout", symbol: "BTC-USDT", timeframe: "15m", 
-    lot: 1.0, sl_pct: 0.0, tp_pct: 0.0, trail_pct: 0.0 
-  });
-  const [newParamsStr, setNewParamsStr] = useState("{}");
-
-  const [openEdit, setOpenEdit] = useState(false);
-  const [editId, setEditId] = useState("");
-  const [editParams, setEditParams] = useState("{}");
   
   const [symbols, setSymbols] = useState<string[]>([]);
   const [strategies, setStrategies] = useState<string[]>([]);
@@ -52,34 +60,6 @@ export default function DeploymentsPage() {
     load();
   }
 
-  async function handleEdit() {
-    try {
-      await editDeployment(editId, JSON.parse(editParams));
-      setOpenEdit(false);
-      load();
-    } catch(e) {
-      alert("Invalid JSON format");
-    }
-  }
-
-  async function handleCreate() {
-    let parsedParams = {};
-    try {
-      parsedParams = JSON.parse(newParamsStr);
-    } catch (e) {
-      alert("Invalid JSON format");
-      return;
-    }
-    try {
-      const { createDeployment } = await import("@/lib/api");
-      if (!newDep.name) newDep.name = newDep.strategy + "_" + newDep.symbol + "_" + Math.floor(Math.random()*1000);
-      await createDeployment({ ...newDep, params: parsedParams });
-      setOpenNew(false);
-      load();
-    } catch(e: any) {
-      alert("Error: " + e.message);
-    }
-  }
 
   async function handleTestTrade(id: string | number) {
     if (!confirm("Are you sure you want to run a test trade on this live deployment?")) return;
@@ -108,100 +88,13 @@ export default function DeploymentsPage() {
         <h1 className="text-4xl font-bold tracking-tight">Deployments</h1>
         <div className="flex gap-4">
           <Button onClick={load} variant="outline" disabled={loading}>Refresh</Button>
-          <Button onClick={() => setOpenNew(true)}>New Deployment</Button>
+          <Link href="/deployments/create">
+            <Button>New Deployment</Button>
+          </Link>
         </div>
       </div>
 
-      <Dialog open={openNew} onOpenChange={setOpenNew}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Deploy New Live Bot</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Deployment Name</label>
-              <Input value={newDep.name} onChange={(e: any) => setNewDep({...newDep, name: e.target.value})} placeholder="Auto-generated if empty" />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Strategy</label>
-                <select className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm" value={newDep.strategy} onChange={e => setNewDep({...newDep, strategy: e.target.value})}>
-                  {strategies.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Symbol</label>
-                <select className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm" value={newDep.symbol} onChange={e => setNewDep({...newDep, symbol: e.target.value})}>
-                  {symbols.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Timeframe</label>
-                <Input value={newDep.timeframe} onChange={(e: any) => setNewDep({...newDep, timeframe: e.target.value})} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Venue</label>
-                <select className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm" value={newDep.venue} onChange={e => setNewDep({...newDep, venue: e.target.value})}>
-                  <option value="paper">Paper Trading</option>
-                  <option value="binance">Binance (Live)</option>
-                  <option value="bybit">Bybit (Live)</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Position Lot (Qty)</label>
-                <Input type="number" step="0.1" value={newDep.lot} onChange={(e: any) => setNewDep({...newDep, lot: Number(e.target.value)})} />
-              </div>
-            </div>
-            
-            <h3 className="font-semibold text-lg border-b pb-2 pt-4">Risk Management</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Stop Loss %</label>
-                <Input type="number" step="0.1" value={newDep.sl_pct} onChange={(e: any) => setNewDep({...newDep, sl_pct: Number(e.target.value)})} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Take Profit %</label>
-                <Input type="number" step="0.1" value={newDep.tp_pct} onChange={(e: any) => setNewDep({...newDep, tp_pct: Number(e.target.value)})} />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Trailing Stop %</label>
-                <Input type="number" step="0.1" value={newDep.trail_pct} onChange={(e: any) => setNewDep({...newDep, trail_pct: Number(e.target.value)})} />
-              </div>
-            </div>
-            
-            <h3 className="font-semibold text-lg border-b pb-2 pt-4">Strategy Parameters</h3>
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">JSON overrides (e.g. <code>{`{"ema_fast": 9, "ema_slow": 21}`}</code>)</p>
-              <textarea 
-                className="w-full h-24 p-3 font-mono text-sm bg-black text-green-400 rounded-md"
-                value={newParamsStr}
-                onChange={e => setNewParamsStr(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button onClick={handleCreate}>Deploy Bot</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
-      <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Strategy Params (JSON)</DialogTitle>
-          </DialogHeader>
-          <textarea 
-            className="w-full h-64 p-3 font-mono text-sm bg-black text-green-400 rounded-md mt-4"
-            value={editParams}
-            onChange={e => setEditParams(e.target.value)}
-          />
-          <DialogFooter>
-            <Button onClick={handleEdit}>Save</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       
       <Dialog open={openLogs} onOpenChange={setOpenLogs}>
         <DialogContent className="max-w-4xl">
@@ -224,7 +117,7 @@ export default function DeploymentsPage() {
                     <TableCell className="whitespace-nowrap">{l.ts}</TableCell>
                     <TableCell><Badge variant={l.kind === 'error' ? 'destructive' : 'outline'}>{l.kind}</Badge></TableCell>
                     <TableCell>{l.message}</TableCell>
-                    <TableCell className={l.pnl > 0 ? 'text-green-500' : l.pnl < 0 ? 'text-red-500' : ''}>
+                    <TableCell className={l.pnl > 0 ? 'text-green-500' : l.pnl < 0 ? 'text-purple-500' : ''}>
                       {l.pnl ? l.pnl.toFixed(4) : ''}
                     </TableCell>
                   </TableRow>
@@ -244,65 +137,76 @@ export default function DeploymentsPage() {
           <CardDescription>Manage running algorithmic trading deployments.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Strategy</TableHead>
-                <TableHead>Symbol</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {deployments.map(dep => (
-                <TableRow key={dep.id}>
-                  <TableCell className="font-medium">#{dep.id}</TableCell>
-                  <TableCell>{dep.name}</TableCell>
-                  <TableCell>{dep.strategy}</TableCell>
-                  <TableCell>{dep.symbol}</TableCell>
-                  <TableCell>
-                    <Badge variant={dep.status === 'running' ? 'default' : 'secondary'}>
-                      {dep.status}
+          <SortableTable
+            data={deployments}
+            loading={loading}
+            emptyMessage="No deployments found. Create one with 'New Deployment'."
+            searchPlaceholder="Search by name, strategy, symbol..."
+            defaultSort={{ key: "id", dir: "desc" }}
+            columns={[
+              { key: "id", header: "#", sortable: true, className: "font-medium w-12",
+                render: (v: any) => `#${v}` },
+              { key: "name", header: "Name", sortable: true },
+              { key: "strategy", header: "Strategy", sortable: true },
+              { key: "symbol", header: "Symbol", sortable: true },
+              { key: "timeframe", header: "TF", sortable: true },
+              { key: "venue", header: "Venue", sortable: true },
+              { key: "realized_pnl", header: "PnL", sortable: true,
+                render: (v: any) => (
+                  <span className={v > 0 ? "text-green-400 font-mono" : v < 0 ? "text-purple-400 font-mono" : "text-zinc-400 font-mono"}>
+                    {v != null ? `$${Math.abs(v).toFixed(2)}${v < 0 ? '-' : ''}`.replace('$-', '-$') : "$0.00"}
+                  </span>
+                ) 
+              },
+              { key: "profit_pct", header: "PnL %", sortable: false,
+                render: (_: any, dep: any) => {
+                  const pct = dep.profit_pct != null ? dep.profit_pct : (dep.size ? (dep.realized_pnl / (dep.size * (dep.contract_value || 1))) * 100 : 0);
+                  return (
+                    <Badge variant={pct >= 0 ? 'default' : 'destructive'}>
+                      {pct?.toFixed(2)}%
                     </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2 flex-wrap">
-                      <Button size="sm" variant="outline" onClick={() => handleAction(dep.id, dep.status === 'active' || dep.status === 'running' ? 'pause' : 'resume')}>
-                        {dep.status === 'active' || dep.status === 'running' ? 'Pause' : 'Resume'}
-                      </Button>
-                      <Button size="sm" variant="secondary" onClick={() => { setEditId(dep.id); setEditParams(dep.params_json); setOpenEdit(true); }}>
-                        Edit
-                      </Button>
-                      <Button size="sm" variant="secondary" onClick={() => handleTestTrade(dep.id)}>
-                        Test Trade
-                      </Button>
-                      <Button size="sm" variant="secondary" onClick={() => handleViewLogs(dep.id)}>
-                        Events
-                      </Button>
-                      {dep.status === 'stopped' ? (
-                        <Button size="sm" variant="destructive" onClick={() => handleAction(dep.id, 'delete')}>
-                          Delete
-                        </Button>
-                      ) : (
-                        <Button size="sm" variant="destructive" onClick={() => handleAction(dep.id, 'stop')}>
-                          Stop
-                        </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {deployments.length === 0 && !loading && (
-                <TableRow>
-                  <TableCell colSpan={6} className="text-center text-muted-foreground py-6">
-                    No active deployments.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                  );
+                } 
+              },
+              { key: "day_pnl", header: "Day PnL", sortable: false,
+                render: (_: any, dep: any) => {
+                  const daypnl = dep.day_pnl ?? dep.daypnl ?? 0;
+                  return (
+                    <span className={daypnl > 0 ? "text-green-400 font-mono" : daypnl < 0 ? "text-purple-400 font-mono" : "text-zinc-400 font-mono"}>
+                      {daypnl != null ? `$${Math.abs(daypnl).toFixed(2)}${daypnl < 0 ? '-' : ''}`.replace('$-', '-$') : "$0.00"}
+                    </span>
+                  );
+                } 
+              },
+              { key: "status", header: "Status", sortable: true,
+                render: (v: any) => (
+                  <Badge variant={v === 'running' ? 'default' : v === 'paused' ? 'secondary' : 'outline'}>
+                    {v}
+                  </Badge>
+                ) },
+              { key: "_actions", header: "Actions", sortable: false, searchable: false,
+                render: (_: any, dep: any) => (
+                  <div className="flex gap-1.5 flex-wrap">
+                    <Button size="sm" variant="outline" onClick={() => handleAction(dep.id, dep.status === 'active' || dep.status === 'running' ? 'pause' : 'resume')}>
+                      {dep.status === 'active' || dep.status === 'running' ? 'Pause' : 'Resume'}
+                    </Button>
+                    <Link href={`/deployments/${dep.id}/edit`}>
+                      <Button size="sm" variant="secondary">Edit</Button>
+                    </Link>
+                    <Button size="sm" variant="secondary" onClick={() => handleTestTrade(dep.id)}>Test</Button>
+                    <Link href={`/deployments/${dep.id}`}>
+                      <Button size="sm" variant="secondary">Events</Button>
+                    </Link>
+                    {dep.status === 'stopped' ? (
+                      <Button size="sm" variant="destructive" onClick={() => handleAction(dep.id, 'delete')}>Delete</Button>
+                    ) : (
+                      <Button size="sm" variant="destructive" onClick={() => handleAction(dep.id, 'stop')}>Stop</Button>
+                    )}
+                  </div>
+                )
+              },
+            ] as ColumnDef[]}
+          />
         </CardContent>
       </Card>
     </div>

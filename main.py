@@ -294,12 +294,37 @@ def menu_deployments():
             sl   = input(f" {C_CYAN}◆ Stop-Loss %{C_RESET} [1.5]: ").strip() or "1.5"
             tp   = input(f" {C_CYAN}◆ Take-Profit %{C_RESET} [3.0]: ").strip() or "3.0"
             trail= input(f" {C_CYAN}◆ Trailing Stop %{C_RESET} [0]: ").strip() or "0"
+
+            # --- Advanced Risk JSON Prompt ---
+            default_advanced_json = _dj.dumps({
+                "use_kelly_sizer": True,
+                "use_maker_limit": True,
+                "use_atr_risk": True,
+                "risk_type": "percentage",
+                "multiple_tp": [{"pct": 1.0, "qty_pct": 50}, {"pct": 2.0, "qty_pct": 50}]
+            }, indent=2)
+            params_str = ""
+            if input(f"\n {C_CYAN}◆ Configure Advanced Risk (Kelly/Maker/ATR/Multiple-TP) as JSON? (Opens editor) [y/N]:{C_RESET} ").strip().lower() in ("y", "yes"):
+                import click
+                edited = click.edit(default_advanced_json, extension=".json")
+                if edited is not None:
+                    try:
+                        _dj.loads(edited)
+                        params_str = edited
+                        print(f"   {C_GREEN}JSON updated.{C_RESET}")
+                    except Exception:
+                        print(f"   {C_YELLOW}Invalid JSON — skipping params{C_RESET}")
+                else:
+                    print(f"   {C_YELLOW}Editor aborted — skipping params{C_RESET}")
+
             args = [
                 "deployments", "add",
                 "--name", name, "--venue", venue, "--strategy", strategy,
                 "--symbol", symbol, "--resolution", tf, "--lot", size,
                 "--sl-pct", sl, "--tp-pct", tp, "--trail-pct", trail,
             ]
+            if params_str:
+                args += ["--params", params_str]
             if venue == "live": args.append("--i-understand-live")
             run_cli_command(args)
 
@@ -407,15 +432,31 @@ def menu_deployments():
                 cur_params = _dj.loads(b.get("params_json") or "{}")
             except Exception:
                 cur_params = {}
-            if input(f"\n {C_CYAN}◆ Edit extra params JSON? [y/N]:{C_RESET} ").strip().lower() in ("y","yes"):
-                cur_js = _dj.dumps(cur_params)
-                np_str = input(f"   {C_DIM}Current: {cur_js}{C_RESET}\n   New JSON [{cur_js}]: ").strip()
-                if np_str and np_str != cur_js:
+                
+            adv_template = {
+                "use_kelly_sizer": True,
+                "use_maker_limit": True,
+                "use_atr_risk": True,
+                "risk_type": "percentage",
+                "multiple_tp": [{"pct": 1.0, "qty_pct": 50}, {"pct": 2.0, "qty_pct": 50}]
+            }
+            for k, v in adv_template.items():
+                if k not in cur_params:
+                    cur_params[k] = v
+
+            if input(f"\n {C_CYAN}◆ Edit extra params JSON (Kelly/Maker/ATR/Multiple-TP)? (Opens editor) [y/N]:{C_RESET} ").strip().lower() in ("y","yes"):
+                cur_js = _dj.dumps(cur_params, indent=2)
+                import click
+                edited = click.edit(cur_js, extension=".json")
+                if edited is not None:
                     try:
-                        _dj.loads(np_str)
-                        args += ["--params", np_str]; changed = True
+                        _dj.loads(edited)
+                        args += ["--params", edited]; changed = True
+                        print(f"   {C_GREEN}JSON updated.{C_RESET}")
                     except Exception:
                         print(f"   {C_YELLOW}Invalid JSON — params unchanged{C_RESET}")
+                else:
+                    print(f"   {C_YELLOW}Editor aborted — params unchanged{C_RESET}")
 
             if changed:
                 run_cli_command(args)

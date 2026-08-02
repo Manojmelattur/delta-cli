@@ -1,8 +1,8 @@
 # ⚡ Delta Backtester — Standalone Console CLI Framework (`delta-cli`)
 
-A pure-Python, **100% Terminal-Based** algorithmic backtesting, paper-trading, live-execution, market scanner, background task manager, and PnL analytics framework for **Delta Exchange India**.
+A pure-Python algorithmic backtesting, paper-trading, live-execution, market scanner, background task manager, and PnL analytics framework for **Delta Exchange India**.
 
-> **Zero Web Dependencies Required**: `delta-cli` is completely decoupled and self-contained. It requires **no Node.js, no React, no Vite, and no Nginx**. You can safely run it on local machines or cloud servers (`/home/ubuntu/delta-cli`) as a standalone Git repository.
+> **Two Interfaces in One**: `delta-cli` ships with a full-featured **Terminal CLI** (zero web dependencies required) *and* an optional **Next.js Web UI** backed by a FastAPI server. Run whichever suits your workflow.
 
 ---
 
@@ -10,7 +10,8 @@ A pure-Python, **100% Terminal-Based** algorithmic backtesting, paper-trading, l
 1. [Prerequisites & Quick Start](#1-prerequisites--quick-start)
 2. [Environment Configuration (`.env` & `config.py`)](#2-environment-configuration-env--configpy)
 3. [Interactive Terminal Menu (`./run.sh`)](#3-interactive-terminal-menu-runsh)
-4. [Complete CLI Commands Reference](#4-complete-cli-commands-reference)
+4. [Web UI (Next.js + FastAPI)](#4-web-ui-nextjs--fastapi)
+5. [Complete CLI Commands Reference](#5-complete-cli-commands-reference)
    - [Backtesting & Parameter Sweeps](#backtesting--parameter-sweeps)
    - [Live & Paper Trading Execution](#live--paper-trading-execution)
    - [Scheduled Execution & Headless Watcher](#scheduled-execution--headless-watcher)
@@ -22,9 +23,9 @@ A pure-Python, **100% Terminal-Based** algorithmic backtesting, paper-trading, l
    - [Background Task Scheduler & Batch Commands (`tasks`)](#background-task-scheduler--batch-commands-tasks)
    - [Master Factory Reset (`factory-reset`)](#master-factory-reset-factory-reset)
    - [Database Maintenance & Utilities](#database-maintenance--utilities)
-5. [Complete Strategies Catalog (30+ Strategies)](#5-complete-strategies-catalog-30-strategies)
-6. [Complete Background Tasks Catalog (25 Active Tasks)](#6-complete-background-tasks-catalog-25-active-tasks)
-7. [24/7 Cloud Server Operations & Headless Daemons](#7-247-cloud-server-operations--headless-daemons)
+6. [Complete Strategies Catalog (30+ Strategies)](#6-complete-strategies-catalog-30-strategies)
+7. [Complete Background Tasks Catalog (25 Active Tasks)](#7-complete-background-tasks-catalog-25-active-tasks)
+8. [24/7 Cloud Server Operations & Headless Daemons](#8-247-cloud-server-operations--headless-daemons)
 
 ---
 
@@ -108,7 +109,77 @@ Features clean ANSI color-coded tables and interactive single-key navigation:
 
 ---
 
-## 4. Complete CLI Commands Reference
+## 4. Web UI (Next.js + FastAPI)
+
+An optional browser-based dashboard is available in the `frontend/` directory. It communicates with a **FastAPI** backend that exposes the SQLite database, deployments, backtest runs, PnL analytics, and scheduler controls over a REST API.
+
+### Architecture
+
+| Layer | Technology | Default URL |
+|-------|-----------|-------------|
+| **Backend API** | FastAPI (`delta_bt/server.py`) | `http://127.0.0.1:8000` |
+| **Frontend** | Next.js (`frontend/`) | `http://localhost:3000` |
+
+Next.js proxies all `/api/*` requests to the FastAPI backend, so you only need to open `localhost:3000` in your browser.
+
+### Step 1 — Start the FastAPI backend
+
+```bash
+cd delta-cli
+source .venv/bin/activate   # or: source venv/bin/activate
+python -m delta_bt serve --host 127.0.0.1 --port 8000
+```
+
+Available options:
+```
+--host TEXT    Bind address (default: 127.0.0.1)
+--port INT     Port number  (default: 8000)
+--db TEXT      Override SQLite database path
+```
+
+### Step 2 — Start the Next.js frontend
+
+```bash
+cd delta-cli/frontend
+npm install          # first time only
+npm run dev
+```
+
+Open **http://localhost:3000** in your browser.
+
+### Frontend `.env`
+
+The `frontend/.env` file points the Next.js server-side fetcher at the database:
+```env
+DATABASE_URL="file:/home/manoj/delta-cli/data/delta_bt.sqlite"
+```
+Update this path if your SQLite file lives elsewhere.
+
+### Running both in parallel (tmux example)
+
+```bash
+# Terminal 1 — backend
+source .venv/bin/activate && python -m delta_bt serve --port 8000
+
+# Terminal 2 — frontend
+cd frontend && npm run dev
+```
+
+### Available UI pages
+
+| Page | Route | Description |
+|------|-------|-------------|
+| Dashboard | `/` | Live deployments & recent backtest runs overview |
+| Backtests | `/backtests` | Run new backtests, view equity curves & heatmaps |
+| Deployments | `/deployments` | Manage live/paper/testnet bots |
+| PnL | `/pnl` | Portfolio PnL summary & analytics |
+| Scanner | `/scan` | Multi-strategy market scanner |
+| Tasks | `/tasks` | Background task scheduler |
+| Scheduler | `/scheduler` | Scheduler status, logs & settings |
+
+---
+
+## 5. Complete CLI Commands Reference
 
 All subcommands are executed using `python -m delta_bt <command> [options]`.
 
@@ -380,7 +451,7 @@ python -m delta_bt db-vacuum
 
 ---
 
-## 5. Complete Strategies Catalog (30+ Strategies)
+## 6. Complete Strategies Catalog (30+ Strategies)
 
 All 29 strategies built into `delta-cli` are modular and supported across Backtest, Paper, Testnet, Live, and Auto-Deploy modes:
 
@@ -427,7 +498,7 @@ All 29 strategies built into `delta-cli` are modular and supported across Backte
 
 ---
 
-## 6. Complete Background Tasks Catalog (25 Active Tasks)
+## 7. Complete Background Tasks Catalog (25 Active Tasks)
 
 1. **Emergency Monitor**: Position liquidation guard & margin spike monitor.
 2. **Daily Report**: End-of-day PnL report generator & Telegram dispatcher.
@@ -457,7 +528,7 @@ All 29 strategies built into `delta-cli` are modular and supported across Backte
 
 ---
 
-## 7. 24/7 Cloud Server Operations & Headless Daemons
+## 8. 24/7 Cloud Server Operations & Headless Daemons
 
 To run `delta-cli` 24/7 continuous on a cloud VPS (AWS, DigitalOcean, Hetzner) without relying on an active SSH connection:
 

@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { scanMarket, fetchSymbols, fetchStrategies } from "@/lib/api";
+import { scanMarket, fetchSymbols, fetchStrategies, createDeployment } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useRouter } from "next/navigation";
 
 export default function ScanPage() {
+  const router = useRouter();
   const [params, setParams] = useState({
     strategy: "time_breakout",
     symbol: "",
@@ -20,17 +23,24 @@ export default function ScanPage() {
     sl_pct: 1.2,
     tp_pct: 2.4,
     trail_pct: 0.8,
-    sort_by: "pnl",
+    sort_by: "return_pct",
     min_trades: 1,
     profitable_only: false,
     qty_pct: 1.0,
     leverage: 1.0,
     adx_filter: false,
+    adx_len: 14,
+    adx_trend_min: 25,
+    adx_range_max: 20,
+    adx_exit_on_flip: false,
+    adx_tighten_trail_on_flip: false,
     save: false,
-    live: false
+    live: false,
+    json_output: true
   });
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
+  const [results, setResults] = useState<any[]>([]);
+  const [errorStr, setErrorStr] = useState<string | null>(null);
   const [symbols, setSymbols] = useState<string[]>([]);
   const [strategies, setStrategies] = useState<string[]>([]);
 
@@ -41,17 +51,73 @@ export default function ScanPage() {
   
   async function runScan() {
     setLoading(true);
-    setResult(null);
+    setResults([]);
+    setErrorStr(null);
     try {
       const payload: any = { ...params };
       if (!payload.symbol || payload.symbol === "ALL") delete payload.symbol;
       if (!payload.strategy || payload.strategy === "ALL") delete payload.strategy;
       const res = await scanMarket(payload);
-      setResult(res.output || "No output returned.");
+      if (res.output) {
+        try {
+          const parsed = JSON.parse(res.output);
+          setResults(parsed);
+        } catch(e) {
+          setErrorStr(res.output);
+        }
+      }
     } catch (err: any) {
-      setResult(`Error: ${err.message}`);
+      setErrorStr(`Error: ${err.message}`);
     }
     setLoading(false);
+  }
+
+  async function handleDeploy(r: any) {
+    try {
+      const depName = `${r.strategy}_${r.symbol}_${Math.floor(Math.random() * 1000)}`;
+      await createDeployment({
+        name: depName,
+        venue: "paper",
+        strategy: r.strategy,
+        symbol: r.symbol,
+        timeframe: params.timeframe,
+        lot: 1.0,
+        sl_pct: params.sl_pct,
+        tp_pct: params.tp_pct,
+        trail_pct: params.trail_pct,
+        params: {}
+      });
+      alert(`Successfully deployed ${depName}`);
+    } catch(e: any) {
+      alert("Error deploying: " + e.message);
+    }
+  }
+
+  async function handleDeployTop3() {
+    if (results.length === 0) return;
+    const top3 = results.slice(0, 3);
+    let successCount = 0;
+    for (const r of top3) {
+      try {
+        const depName = `${r.strategy}_${r.symbol}_${Math.floor(Math.random() * 1000)}`;
+        await createDeployment({
+          name: depName,
+          venue: "paper",
+          strategy: r.strategy,
+          symbol: r.symbol,
+          timeframe: params.timeframe,
+          lot: 1.0,
+          sl_pct: params.sl_pct,
+          tp_pct: params.tp_pct,
+          trail_pct: params.trail_pct,
+          params: {}
+        });
+        successCount++;
+      } catch(e: any) {
+        console.error("Failed deploying", r.strategy, r.symbol, e);
+      }
+    }
+    alert(`Successfully auto-deployed ${successCount} strategies.`);
   }
 
   return (
@@ -161,11 +227,9 @@ export default function ScanPage() {
                   <SelectValue placeholder="Sort By" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pnl">PnL</SelectItem>
-                  <SelectItem value="sharpe">Sharpe</SelectItem>
-                  <SelectItem value="winrate">Win Rate</SelectItem>
-                  <SelectItem value="dd">Drawdown</SelectItem>
-                  <SelectItem value="return">Return</SelectItem>
+                  <SelectItem value="return_pct">Return</SelectItem>
+                  <SelectItem value="win_rate_pct">Win Rate</SelectItem>
+                  <SelectItem value="profit_factor">Profit Factor</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -186,18 +250,92 @@ export default function ScanPage() {
               <label className="text-sm font-medium">Save to DB</label>
             </div>
           </div>
+          
+          {params.adx_filter && (
+            <>
+              <h3 className="font-semibold text-sm border-b pb-1 mt-6">ADX Filter Configuration</h3>
+              <div className="grid grid-cols-5 gap-4 mt-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">ADX Length</label>
+                  <Input type="number" value={params.adx_len} onChange={(e) => setParams({...params, adx_len: Number(e.target.value)})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">ADX Trend Min</label>
+                  <Input type="number" value={params.adx_trend_min} onChange={(e) => setParams({...params, adx_trend_min: Number(e.target.value)})} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">ADX Range Max</label>
+                  <Input type="number" value={params.adx_range_max} onChange={(e) => setParams({...params, adx_range_max: Number(e.target.value)})} />
+                </div>
+                <div className="space-y-2 pt-8 flex items-center gap-2">
+                  <input type="checkbox" checked={params.adx_exit_on_flip} onChange={(e) => setParams({...params, adx_exit_on_flip: e.target.checked})} className="h-4 w-4 rounded border-gray-300" />
+                  <label className="text-sm font-medium leading-none">Exit On Flip</label>
+                </div>
+                <div className="space-y-2 pt-8 flex items-center gap-2">
+                  <input type="checkbox" checked={params.adx_tighten_trail_on_flip} onChange={(e) => setParams({...params, adx_tighten_trail_on_flip: e.target.checked})} className="h-4 w-4 rounded border-gray-300" />
+                  <label className="text-sm font-medium leading-none">Tighten Trail</label>
+                </div>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
       
-      {result && (
+      {errorStr && (
         <Card>
           <CardHeader>
-            <CardTitle>Scan Results</CardTitle>
+            <CardTitle className="text-red-500">Scan Error</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="p-4 bg-black text-green-400 rounded-md overflow-x-auto text-xs font-mono whitespace-pre-wrap">
-              {result}
+            <pre className="p-4 bg-black text-red-400 rounded-md overflow-x-auto text-xs font-mono whitespace-pre-wrap">
+              {errorStr}
             </pre>
+          </CardContent>
+        </Card>
+      )}
+
+      {results.length > 0 && (
+        <Card>
+          <CardHeader className="flex flex-row justify-between items-center">
+            <div>
+              <CardTitle>Scan Results</CardTitle>
+              <CardDescription>Found {results.length} valid combinations.</CardDescription>
+            </div>
+            <Button onClick={handleDeployTop3} variant="secondary">Deploy Top 3</Button>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Symbol</TableHead>
+                  <TableHead>Strategy</TableHead>
+                  <TableHead>Return %</TableHead>
+                  <TableHead>Trades</TableHead>
+                  <TableHead>Win Rate %</TableHead>
+                  <TableHead>Profit Factor</TableHead>
+                  <TableHead>Max DD %</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {results.map((r, i) => (
+                  <TableRow key={i}>
+                    <TableCell className="font-medium">{r.symbol}</TableCell>
+                    <TableCell>{r.strategy}</TableCell>
+                    <TableCell className={r.return_pct > 0 ? "text-green-500" : "text-red-500"}>
+                      {r.return_pct.toFixed(2)}%
+                    </TableCell>
+                    <TableCell>{r.trades}</TableCell>
+                    <TableCell>{r.win_rate_pct.toFixed(1)}%</TableCell>
+                    <TableCell>{r.profit_factor.toFixed(2)}</TableCell>
+                    <TableCell className="text-red-400">{r.max_drawdown_pct.toFixed(2)}%</TableCell>
+                    <TableCell className="text-right">
+                      <Button size="sm" onClick={() => handleDeploy(r)}>Deploy</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       )}

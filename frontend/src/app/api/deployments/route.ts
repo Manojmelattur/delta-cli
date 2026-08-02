@@ -4,12 +4,14 @@ import { prisma } from '@/lib/db';
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
     const status = searchParams.get('status');
     const venue = searchParams.get('venue');
     const strategy = searchParams.get('strategy');
     const symbol = searchParams.get('symbol');
 
     let where: any = {};
+    if (id) where.id = parseInt(id);
     if (status) where.status = status;
     if (venue) where.venue = venue;
     if (strategy) where.strategy = strategy;

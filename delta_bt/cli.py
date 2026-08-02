@@ -346,6 +346,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Persist each strategy's run to SQLite (default: off)",
     )
+    sc.add_argument(
+        "--json",
+        action="store_true",
+        help="Output JSON format",
+    )
     sc.add_argument("--reports-dir", default="./reports")
     sc.add_argument("--base-url", default=None)
     sc.add_argument("--api-key", default=None)
@@ -688,18 +693,19 @@ def build_parser() -> argparse.ArgumentParser:
     ted.add_argument("--status", choices=["running", "paused"], default=None, help="New status")
     ted.add_argument("--params", default=None, help="New params as JSON string (replaces existing)")
 
-    # PnL & Analytics
     pn = sub.add_parser("pnl", help="Show portfolio PnL summary, win rate, and ASCII equity chart")
     pn.add_argument("--days", type=int, default=None, help="Filter trades within last N days")
     pn.add_argument("--venue", default=None, help="Filter by venue")
     pn.add_argument("--strategy", default=None, help="Filter by strategy")
     pn.add_argument("--symbol", default=None, help="Filter by symbol")
+    pn.add_argument("--json", action="store_true", help="Emit raw JSON")
 
     pns = sub.add_parser("pnl-strategy", help="Show performance breakdown per strategy")
     pns.add_argument("--days", type=int, default=None, help="Filter trades within last N days")
     pns.add_argument("--venue", default=None, help="Filter by venue")
     pns.add_argument("--strategy", default=None, help="Filter by strategy")
     pns.add_argument("--symbol", default=None, help="Filter by symbol")
+    pns.add_argument("--json", action="store_true", help="Emit raw JSON")
 
     # Terminal Monitor & Emergency Kill-switch
     mn = sub.add_parser("monitor", help="Launch live terminal console PnL dashboard")
@@ -1024,10 +1030,8 @@ def cmd_plot(a) -> int:
 
 def cmd_scan(a) -> int:
     """Run every strategy against one symbol, OR run one strategy against many symbols."""
-    if not a.symbol and not a.strategy:
-        print("You must provide either --symbol (to scan all strategies on an asset) or --strategy (to scan all assets for a strategy).", file=sys.stderr)
-        return 2
-
+    # We allow running without symbol or strategy for a full market sweep
+    pass
     # --- resolve window ---
     if a.start and a.end:
         start, end = a.start, a.end
@@ -1073,90 +1077,89 @@ def cmd_scan(a) -> int:
     from .reports.report import summarize
     from .pnl_analytics import render_box_table
 
-    if a.symbol and not a.strategy:
-        # MODE 1: Scan all strategies against ONE symbol
-        print(f"[scan] {a.symbol} @ {a.resolution}  {start.date()} → {end.date()}  venue={base}")
-        bars = load_history(client, a.symbol, a.resolution, start, end)
-        if not bars:
-            print("no data returned; check symbol/timeframe/dates", file=sys.stderr)
-            return 2
-            
-        print(f"[scan] {len(bars)} bars loaded — running {len(discover_strategies())} strategies")
+
+    strategies = [a.strategy] if a.strategy else sorted(discover_strategies().keys())
+    
+    symbols = []
+    if a.symbol:
+        symbols = [a.symbol]
+    else:
+        if not getattr(a, "json", False):
+            print(f"[scan] Fetching top {a.top or 20} symbols from Delta Exchange to scan against...", file=sys.stderr)
+        from .scanner.rank_universe import rank_universe
+        top_symbols = rank_universe(
+            client, resolution=a.resolution, lookback_bars=getattr(a, "lookback_bars", 100),
+            adx_len=getattr(a, "adx_len", 14), 
+            trend_min=getattr(a, "adx_trend_min", 25.0), 
+            range_max=getattr(a, "adx_range_max", 20.0),
+            min_turnover_usd=500_000, max_funding_pct=2.0, atr_min_pct=0.0, atr_max_pct=100.0,
+            quote_symbol_suffix="USD", contract_types="perpetual_futures",
+            regime_bias="trend", top=getattr(a, "top", 20) or 20, workers=4
+        )
+        symbols = [s.symbol for s in top_symbols]
         
-        results = []
-        table_rows = []
-        for name in sorted(discover_strategies().keys()):
-            try:
-                strat = load_strategy(name, {})
-                pf = run_backtest(bars, strat, cfg)
-                s = summarize(pf)
-                results.append({"strategy": name, "summary": s, "pf": pf})
-                table_rows.append([
-                    name, f"{s['return_pct']:.2f}%", str(s['trades']),
-                    f"{s['win_rate_pct']:.1f}%", f"{s['profit_factor']:.2f}",
-                    f"{s['max_drawdown_pct']:.2f}%", "✓ OK"
-                ])
-            except Exception as e:
-                table_rows.append([name, "-", "-", "-", "-", "-", f"✗ ERROR: {e}"])
-                
-        headers = ["Strategy", "Return %", "Trades", "Win Rate %", "Profit Factor", "Max DD %", "Status"]
-        print("\n" + render_box_table(headers, table_rows, title=f"MARKET SCANNER ({a.symbol} @ {a.resolution})") + "\n")
-        
-    elif a.strategy:
-        # MODE 2: Scan ONE strategy against MANY symbols
-        symbols = []
-        if a.symbol:
-            symbols = [a.symbol]
-        else:
-            print(f"[scan] Fetching top {a.top or 20} symbols from Delta Exchange to scan against...")
-            from .scanner.rank_universe import rank_universe
-            top_symbols = rank_universe(
-                client, resolution=a.resolution, lookback_bars=getattr(a, "lookback_bars", 100),
-                adx_len=getattr(a, "adx_len", 14), 
-                trend_min=getattr(a, "adx_trend_min", 25.0), 
-                range_max=getattr(a, "adx_range_max", 20.0),
-                min_turnover_usd=500_000, max_funding_pct=2.0, atr_min_pct=0.0, atr_max_pct=100.0,
-                quote_symbol_suffix="USD", contract_types="perpetual_futures",
-                regime_bias="trend", top=getattr(a, "top", 20) or 20, workers=4
-            )
-            symbols = [s.symbol for s in top_symbols]
+    if not symbols:
+        print("No symbols found to scan.", file=sys.stderr)
+        return 2
+
+    if not getattr(a, "json", False):
+        print(f"[scan] Running {len(strategies)} strategies against {len(symbols)} symbols @ {a.resolution}", file=sys.stderr)
+
+    table_rows = []
+    json_results = []
+    
+    for sym in symbols:
+        try:
+            bars = load_history(client, sym, a.resolution, start, end)
+            if not bars:
+                continue
+            cfg.symbol = sym
             
-        if not symbols:
-            print("No symbols found to scan.", file=sys.stderr)
-            return 2
-            
-        print(f"[scan] Running '{a.strategy}' against {len(symbols)} symbols @ {a.resolution}")
-        
-        table_rows = []
-        for sym in symbols:
-            try:
-                bars = load_history(client, sym, a.resolution, start, end)
-                if not bars:
-                    table_rows.append([sym, "-", "-", "-", "-", "-", "✗ NO DATA"])
-                    continue
+            for strat_name in strategies:
+                try:
+                    strat = load_strategy(strat_name, {})
+                    pf = run_backtest(bars, strat, cfg)
+                    s = summarize(pf)
                     
-                cfg.symbol = sym
-                strat = load_strategy(a.strategy, {})
-                pf = run_backtest(bars, strat, cfg)
-                s = summarize(pf)
-                table_rows.append([
-                    sym, f"{s['return_pct']:.2f}%", str(s['trades']),
-                    f"{s['win_rate_pct']:.1f}%", f"{s['profit_factor']:.2f}",
-                    f"{s['max_drawdown_pct']:.2f}%", "✓ OK"
-                ])
-            except Exception as e:
-                table_rows.append([sym, "-", "-", "-", "-", "-", f"✗ ERROR: {e}"])
-                
-        def sort_key(row):
-            try:
-                if row[1] == "-": return -999999
-                return float(row[1].replace("%", ""))
-            except:
-                return -999999
-        table_rows.sort(key=sort_key, reverse=True)
-                
-        headers = ["Symbol", "Return %", "Trades", "Win Rate %", "Profit Factor", "Max DD %", "Status"]
-        print("\n" + render_box_table(headers, table_rows, title=f"STRATEGY SCANNER ({a.strategy} @ {a.resolution})") + "\n")
+                    if getattr(a, "profitable_only", False) and s['return_pct'] <= 0:
+                        continue
+                    if s['trades'] < getattr(a, "min_trades", 1):
+                        continue
+                        
+                    table_rows.append([
+                        sym, strat_name, f"{s['return_pct']:.2f}%", str(s['trades']),
+                        f"{s['win_rate_pct']:.1f}%", f"{s['profit_factor']:.2f}",
+                        f"{s['max_drawdown_pct']:.2f}%", "✓ OK"
+                    ])
+                    json_results.append({
+                        "symbol": sym, "strategy": strat_name, "return_pct": s['return_pct'],
+                        "trades": s['trades'], "win_rate_pct": s['win_rate_pct'],
+                        "profit_factor": s['profit_factor'], "max_drawdown_pct": s['max_drawdown_pct']
+                    })
+                except Exception as e:
+                    pass
+        except Exception as e:
+            pass
+            
+    def sort_key(row_dict):
+        v = row_dict.get('return_pct')
+        return float(v) if v is not None else -999999
+
+    json_results.sort(key=sort_key, reverse=True)
+
+    if getattr(a, "json", False):
+        import json
+        print(json.dumps(json_results, indent=2))
+    else:
+        sorted_table_rows = []
+        for r in json_results:
+            sorted_table_rows.append([
+                r['symbol'], r['strategy'], f"{r['return_pct']:.2f}%", str(r['trades']),
+                f"{r['win_rate_pct']:.1f}%", f"{r['profit_factor']:.2f}",
+                f"{r['max_drawdown_pct']:.2f}%", "✓ OK"
+            ])
+        headers = ["Symbol", "Strategy", "Return %", "Trades", "Win Rate %", "Profit Factor", "Max DD %", "Status"]
+        print("\n" + render_box_table(headers, sorted_table_rows, title=f"MARKET SCANNER RESULTS") + "\n")
         
     return 0
 
@@ -2243,12 +2246,18 @@ def cmd_tasks(a) -> int:
 
 def cmd_pnl(a) -> int:
     from .pnl_analytics import get_portfolio_pnl, get_daily_pnl, generate_ascii_chart, render_box_table, format_pnl
+    import json
     venue = getattr(a, 'venue', None)
     strategy = getattr(a, 'strategy', None)
     symbol = getattr(a, 'symbol', None)
     days = getattr(a, 'days', None)
     
     summary = get_portfolio_pnl(venue=venue, strategy=strategy, symbol=symbol, days=days)
+    daily = get_daily_pnl(limit=a.days or 30, venue=venue, strategy=strategy, symbol=symbol, days=days)
+    
+    if getattr(a, 'json', False):
+        print(json.dumps({"summary": summary, "daily": daily}, indent=2))
+        return 0
     
     print("\n\033[1;36m┌─────────────────────────────────────────────────────────────┐\033[0m")
     print("\033[1;36m│\033[0m \033[1m📊 PORTFOLIO PnL & PERFORMANCE SUMMARY\033[0m                        \033[1;36m│\033[0m")
@@ -2289,11 +2298,17 @@ def cmd_pnl(a) -> int:
 
 def cmd_pnl_strategy(a) -> int:
     from .pnl_analytics import get_strategy_pnl_breakdown, render_box_table, format_pnl
+    import json
     venue = getattr(a, 'venue', None)
     strategy = getattr(a, 'strategy', None)
     symbol = getattr(a, 'symbol', None)
     days = getattr(a, 'days', None)
     rows_data = get_strategy_pnl_breakdown(venue=venue, strategy=strategy, symbol=symbol, days=days)
+    
+    if getattr(a, 'json', False):
+        print(json.dumps(rows_data, indent=2))
+        return 0
+        
     headers = ["Strategy", "Runs", "Trades", "WinRate%", "Net PnL ($)", "Sharpe", "Max DD%"]
     rows = []
     for r in rows_data:

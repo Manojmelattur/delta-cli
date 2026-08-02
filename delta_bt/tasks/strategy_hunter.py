@@ -161,24 +161,30 @@ def run(**kwargs) -> str:
             f"Valid strategies: {', '.join(sorted(_KNOWN_STRATEGIES))}"
         )
 
-    # --- Fetch top N symbols by USD turnover ---
+    # --- Fetch symbols ---
     client = DeltaClient(base_url="https://api.india.delta.exchange")
-    try:
-        tickers = client.tickers(contract_types="perpetual_futures")
-    except Exception as e:
-        return (
-            f"### Strategy Hunter\n\n"
-            f"Date: {now_str}\n\n"
-            f"ERR | Failed to fetch tickers: {e}"
-        )
+    
+    user_symbols_raw = kwargs.get("coins", kwargs.get("symbols", []))
+    if isinstance(user_symbols_raw, str):
+        user_symbols = [s.strip() for s in user_symbols_raw.split(",") if s.strip()]
+    elif isinstance(user_symbols_raw, list):
+        user_symbols = [str(s).strip() for s in user_symbols_raw if str(s).strip()]
+    else:
+        user_symbols = []
 
-    tickers.sort(
-        key=lambda x: float(x.get("turnover_usd") or x.get("turnover") or 0),
-        reverse=True,
-    )
-    symbols: List[str] = [
-        t["symbol"] for t in tickers[:top_n] if "symbol" in t
-    ]
+    if user_symbols:
+        symbols = user_symbols
+    else:
+        try:
+            tickers = client.tickers(contract_types="perpetual_futures")
+            # Return all coins if not specified
+            symbols = [t["symbol"] for t in tickers if "symbol" in t]
+        except Exception as e:
+            return (
+                f"### Strategy Hunter\n\n"
+                f"Date: {now_str}\n\n"
+                f"ERR | Failed to fetch tickers: {e}"
+            )
 
     if not symbols:
         return (

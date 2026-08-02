@@ -8,6 +8,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model app_settings {
+  key        String? @id
+  value_json String
+  updated_at String
+
+  @@ignore
+}
+
+model background_tasks {
+  id           Int         @id @default(autoincrement())
+  name         String      @unique(map: "sqlite_autoindex_background_tasks_1")
+  description  String?
+  interval_sec Int         @default(900)
+  status       String      @default("running")
+  last_run_at  String?
+  script_name  String
+  params_json  String?
+  last_report  String?
+  task_logs    task_logs[]
+}
+
+model bookmarks {
+  entity_type String
+  entity_id   String
+  favorite    Int    @default(0)
+  labels      String @default("")
+  updated_at  String
+
+  @@id([entity_type, entity_id])
+  @@index([entity_type, favorite], map: "ix_bookmarks_fav")
+}
+
 model deployment_events {
   id            Int         @id @default(autoincrement())
   deployment_id Int
@@ -24,40 +57,68 @@ model deployment_events {
   trail         Float?
   equity_after  Float?
   upnl          Float?
+  peak          Float?
+  trough        Float?
+  profit_pct    Float?
+  sl_px         Float?
+  snapshot_json String?
+  fees          Float       @default(0)
   deployments   deployments @relation(fields: [deployment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([deployment_id, id(sort: Desc)], map: "ix_events_dep")
 }
 
 model deployments {
-  id                Int                 @id @default(autoincrement())
-  name              String
-  venue             String
-  strategy          String
-  symbol            String
-  resolution        String
-  size              Float
-  params_json       String              @default("{}")
-  sl_pct            Float               @default(0)
-  tp_pct            Float               @default(0)
-  trail_pct         Float               @default(0)
-  reduce_only       Int                 @default(0)
-  interval_sec      Int                 @default(300)
-  status            String              @default("running")
-  i_understand_live Int                 @default(0)
-  created_at        String
-  started_at        String?
-  stopped_at        String?
-  last_tick_at      String?
-  last_signal       String?
-  last_error        String?
-  realized_pnl      Float               @default(0)
-  prior_signal      String?
-  open_side         String?
-  open_qty          Float?
-  open_price        Float?
-  ticks             Int?                @default(0)
-  deployment_events deployment_events[]
+  id                  Int                 @id @default(autoincrement())
+  name                String
+  venue               String
+  strategy            String
+  symbol              String
+  resolution          String
+  size                Float
+  params_json         String              @default("{}")
+  sl_pct              Float               @default(0)
+  tp_pct              Float               @default(0)
+  trail_pct           Float               @default(0)
+  reduce_only         Int                 @default(0)
+  interval_sec        Int                 @default(300)
+  status              String              @default("running")
+  i_understand_live   Int                 @default(0)
+  created_at          String
+  started_at          String?
+  stopped_at          String?
+  last_tick_at        String?
+  last_signal         String?
+  last_error          String?
+  realized_pnl        Float               @default(0)
+  prior_signal        String?
+  open_side           String?
+  open_qty            Float?
+  open_price          Float?
+  ticks               Int?                @default(0)
+  consecutive_errors  Int?                @default(0)
+  trail_activate_pct  Float               @default(0)
+  breakeven_after_pct Float               @default(0)
+  peak_price          Float?
+  trough_price        Float?
+  trail_armed         Int                 @default(0)
+  be_armed            Int                 @default(0)
+  last_sl_px          Float?
+  contract_value      Float               @default(1)
+  leverage            Float               @default(1)
+  sl_order_id         Int?
+  tp_order_id         Int?
+  sl_stop_price       Float?
+  tp_stop_price       Float?
+  exchange_brackets   Int                 @default(1)
+  risk_semantics_v2   Int                 @default(0)
+  sync_leverage       Int                 @default(1)
+  force_entry         Int                 @default(0)
+  tag                 String?
+  total_fees          Float               @default(0)
+  reconciled_at       String?
+  signal_override     String?
+  deployment_events   deployment_events[]
 
   @@index([status], map: "ix_deployments_status")
 }
@@ -141,51 +202,82 @@ model paper_positions {
 }
 
 model runs {
-  id                Int      @id @default(autoincrement())
-  run_id            String   @unique(map: "sqlite_autoindex_runs_1")
-  mode              String
-  strategy          String
-  symbol            String
-  resolution        String
-  period_start      String?
-  period_end        String?
-  params_json       String?
-  sl_pct            Float?
-  tp_pct            Float?
-  trail_pct         Float?
-  leverage          Float?
-  starting_cap      Float?
-  ending_equity     Float?
-  net_pnl           Float?
-  return_pct        Float?
-  trades            Int?
-  win_rate_pct      Float?
-  profit_factor     Float?
-  max_dd_pct        Float?
-  sharpe            Float?
-  expectancy        Float?
-  summary_json      String?
-  created_at        String
-  exit_reasons_json String?
-  notes             String?
-  fee_bps           Float?
-  slippage_bps      Float?
-  qty_pct           Float?
-  best_trade_pnl    Float?
-  worst_trade_pnl   Float?
-  avg_hold_seconds  Float?
-  max_win_streak    Int?
-  max_loss_streak   Int?
-  total_fees        Float?
-  bars              Int?
-  diag              diag[]
-  equity            equity[]
-  fills             fills[]
-  trades_list       trades[]
+  id                  Int      @id @default(autoincrement())
+  run_id              String   @unique(map: "sqlite_autoindex_runs_1")
+  mode                String
+  strategy            String
+  symbol              String
+  resolution          String
+  period_start        String?
+  period_end          String?
+  params_json         String?
+  sl_pct              Float?
+  tp_pct              Float?
+  trail_pct           Float?
+  leverage            Float?
+  starting_cap        Float?
+  ending_equity       Float?
+  net_pnl             Float?
+  return_pct          Float?
+  trades_count        Int?     @map("trades")
+  win_rate_pct        Float?
+  profit_factor       Float?
+  max_dd_pct          Float?
+  sharpe              Float?
+  expectancy          Float?
+  summary_json        String?
+  created_at          String
+  trail_activate_pct  Float?   @default(0)
+  breakeven_after_pct Float?   @default(0)
+  exit_reasons_json   String?
+  notes               String?
+  fee_bps             Float?
+  slippage_bps        Float?
+  qty_pct             Float?
+  best_trade_pnl      Float?
+  worst_trade_pnl     Float?
+  avg_hold_seconds    Float?
+  max_win_streak      Int?
+  max_loss_streak     Int?
+  total_fees          Float?
+  bars                Int?
+  diag                diag[]
+  equity              equity[]
+  fills               fills[]
+  trades              trades[]
 
   @@index([created_at], map: "ix_runs_created")
   @@index([symbol], map: "ix_runs_symbol")
   @@index([strategy], map: "ix_runs_strategy")
+}
+
+model scheduler_control {
+  id                   Int     @id @default(autoincrement())
+  restart_requested    Int     @default(0)
+  restart_reason       String?
+  restart_requested_at String?
+  last_heartbeat_at    String?
+  last_restart_at      String?
+  pid                  Int?
+  version              String?
+}
+
+model scheduler_logs {
+  id    Int    @id @default(autoincrement())
+  ts    String
+  level String @default("INFO")
+  msg   String
+
+  @@index([id(sort: Desc)], map: "ix_scheduler_logs_id")
+}
+
+model task_logs {
+  id               Int              @id @default(autoincrement())
+  task_id          Int
+  ts               String
+  level            String           @default("INFO")
+  message          String
+  background_tasks background_tasks @relation(fields: [task_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model trades {

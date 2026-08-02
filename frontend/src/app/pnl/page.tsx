@@ -44,19 +44,19 @@ export default function PnlPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground font-medium">Total Realized PnL</p>
-                  <p className={`text-2xl font-bold ${data?.total_realized_pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-2xl font-bold ${data?.total_realized_pnl >= 0 ? 'text-green-500' : 'text-purple-500'}`}>
                     ${data?.total_realized_pnl?.toFixed(2)}
                   </p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground font-medium">Total Fees</p>
-                  <p className="text-2xl font-bold text-red-400">
+                  <p className="text-2xl font-bold text-purple-400">
                     ${data?.total_fees?.toFixed(2)}
                   </p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground font-medium">Net PnL</p>
-                  <p className={`text-2xl font-bold ${(data?.total_realized_pnl - data?.total_fees) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  <p className={`text-2xl font-bold ${(data?.total_realized_pnl - data?.total_fees) >= 0 ? 'text-green-500' : 'text-purple-500'}`}>
                     ${(data?.total_realized_pnl - data?.total_fees)?.toFixed(2)}
                   </p>
                 </div>

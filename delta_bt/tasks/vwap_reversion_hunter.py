@@ -9,13 +9,18 @@ def run(**kwargs):
     # Fix 1: correct base URL
     client = DeltaClient(base_url="https://api.india.delta.exchange")
     venue       = str(kwargs.get("venue",         "paper"))
-    # Get top 15 symbols by USD turnover
-    tickers = client.tickers(contract_types="perpetual_futures")
-    tickers.sort(
-        key=lambda x: float(x.get("turnover_usd") or x.get("turnover") or 0),
-        reverse=True,
-    )
-    symbols = [t["symbol"] for t in tickers[:15] if "symbol" in t]
+    user_symbols_raw = kwargs.get("coins", kwargs.get("symbols", kwargs.get("symbol_list", [])))
+    user_symbols = []
+    if isinstance(user_symbols_raw, str):
+        user_symbols = [s.strip() for s in user_symbols_raw.split(",") if s.strip()]
+    elif isinstance(user_symbols_raw, list):
+        user_symbols = [str(s).strip() for s in user_symbols_raw if str(s).strip()]
+
+    if user_symbols:
+        symbols = user_symbols
+    else:
+        tickers = client.tickers(contract_types="perpetual_futures")
+        symbols = [t["symbol"] for t in tickers if "symbol" in t]
 
     end_time   = datetime.now(timezone.utc)
     start_time = end_time - timedelta(days=7)

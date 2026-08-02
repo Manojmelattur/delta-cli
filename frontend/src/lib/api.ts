@@ -11,6 +11,17 @@ export async function fetchDeployments() {
   }
 }
 
+export async function fetchDeployment(id: string) {
+  try {
+    const res = await fetch(`${API_URL}/deployments?id=${id}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.rows && data.rows.length > 0 ? data.rows[0] : null;
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function fetchRuns() {
   try {
     const res = await fetch(`${API_URL}/runs`, { cache: 'no-store' });
@@ -58,6 +69,16 @@ export async function fetchPnlSummary() {
   }
 }
 
+export async function fetchPnlStrategy() {
+  try {
+    const res = await fetch(`${API_URL}/pnl/strategy`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
 export async function fetchSchedulerLogs() {
   try {
     const res = await fetch(`${API_URL}/scheduler/logs`, { cache: 'no-store' });
@@ -95,8 +116,8 @@ export async function fetchTasks() {
   }
 }
 
-export async function toggleTask(taskId: string) {
-  const res = await fetch(`${API_URL}/tasks/${taskId}/toggle`, { method: 'POST' });
+export async function toggleTask(taskId: string, status: string) {
+  const res = await fetch(`${API_URL}/tasks/${taskId}/toggle?status=${status}`, { method: 'POST' });
   return res.json();
 }
 
@@ -108,6 +129,26 @@ export async function runTask(taskId: string) {
 export async function fetchRunSummary(runId: string) {
   try {
     const res = await fetch(`${API_URL}/runs/${runId}/summary`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function fetchRunEquity(runId: string) {
+  try {
+    const res = await fetch(`${API_URL}/runs/${runId}/equity`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
+}
+
+export async function fetchRunTrades(runId: string) {
+  try {
+    const res = await fetch(`${API_URL}/runs/${runId}/trades`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch (e) {
@@ -136,7 +177,7 @@ export async function createBacktest(data: any) {
 }
 
 export async function createDeployment(data: any) {
-  const res = await fetch(`${API_URL}/deployments/create`, {
+  const res = await fetch(`${API_URL}/api/deployments/create`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -146,7 +187,7 @@ export async function createDeployment(data: any) {
 }
 
 export async function editDeployment(id: string | number, data: any) {
-  const res = await fetch(`${API_URL}/deployments/${id}/edit`, {
+  const res = await fetch(`${API_URL}/api/deployments/${id}/edit`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
@@ -155,7 +196,7 @@ export async function editDeployment(id: string | number, data: any) {
 }
 
 export async function testTradeDeployment(id: string | number) {
-  const res = await fetch(`${API_URL}/deployments/${id}/test_trade`, {
+  const res = await fetch(`${API_URL}/api/deployments/${id}/test_trade`, {
     method: 'POST'
   });
   return res.json();
@@ -177,6 +218,14 @@ export async function editTask(id: string, params: any) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(params)
   });
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    let msg = error.detail;
+    if (Array.isArray(msg)) {
+      msg = msg.map((m: any) => `${m.loc ? m.loc.join('.') + ': ' : ''}${m.msg}`).join(', ');
+    }
+    throw new Error(msg || `Server error: ${res.status}`);
+  }
   return res.json();
 }
 
@@ -184,6 +233,14 @@ export async function deleteTask(id: string) {
   const res = await fetch(`${API_URL}/tasks/${id}/delete`, {
     method: 'POST'
   });
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({}));
+    let msg = error.detail;
+    if (Array.isArray(msg)) {
+      msg = msg.map((m: any) => `${m.loc ? m.loc.join('.') + ': ' : ''}${m.msg}`).join(', ');
+    }
+    throw new Error(msg || `Server error: ${res.status}`);
+  }
   return res.json();
 }
 

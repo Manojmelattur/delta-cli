@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { fetchTasks, toggleTask, runTask, editTask, deleteTask, createTask, fetchTaskCatalog, fetchTaskLogs, actionAllTasks } from "@/lib/api";
 import { Input } from "@/components/ui/input";
+import { SortableTable, ColumnDef } from "@/components/ui/sortable-table";
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState<any[]>([]);
@@ -22,7 +24,7 @@ export default function TasksPage() {
   const [openEdit, setOpenEdit] = useState(false);
   const [editId, setEditId] = useState("");
   const [editParams, setEditParams] = useState("{}");
-  
+
   const [openLogs, setOpenLogs] = useState(false);
   const [logs, setLogs] = useState<string>("");
   const [logTaskName, setLogTaskName] = useState("");
@@ -40,8 +42,8 @@ export default function TasksPage() {
     load();
   }, []);
 
-  async function handleToggle(id: string) {
-    await toggleTask(id);
+  async function handleToggle(id: string, status: string) {
+    await toggleTask(id, status);
     await load();
   }
 
@@ -73,15 +75,19 @@ export default function TasksPage() {
       await editTask(editId, JSON.parse(editParams));
       setOpenEdit(false);
       load();
-    } catch (e) {
-      alert("Invalid JSON params");
+    } catch (e: any) {
+      alert(e.message || "Invalid JSON params");
     }
   }
 
   async function handleDelete(id: string) {
     if (confirm("Are you sure you want to delete this task?")) {
-      await deleteTask(id);
-      load();
+      try {
+        await deleteTask(id);
+        load();
+      } catch (e: any) {
+        alert(e.message || "Failed to delete task");
+      }
     }
   }
   
@@ -191,14 +197,27 @@ export default function TasksPage() {
       </Dialog>
 
       <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-        <DialogContent>
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>Edit Task Params (JSON)</DialogTitle>
           </DialogHeader>
+          <div className="text-xs text-muted-foreground mt-2 mb-2 space-y-2">
+            <p>Common JSON parameters structure:</p>
+            <pre className="bg-zinc-900 p-2 rounded text-zinc-300">
+{`{
+  "coins": ["BTCUSD", "ETHUSD"],
+   // Leave empty for all coins
+  "strategy": "ema3", 
+  "auto_deploy": true,
+  "venue": "paper"
+}`}
+            </pre>
+          </div>
           <textarea 
-            className="w-full h-64 p-3 font-mono text-sm bg-black text-green-400 rounded-md mt-4"
+            className="w-full h-48 p-3 font-mono text-sm bg-black text-green-400 rounded-md border border-zinc-800 focus:outline-none focus:border-green-500"
             value={editParams}
             onChange={e => setEditParams(e.target.value)}
+            placeholder={`{\n  "coins": ["BTCUSD", "ETHUSD"],\n  "strategy": "ema3"\n}`}
           />
           <DialogFooter>
             <Button onClick={handleEdit}>Save</Button>
@@ -219,59 +238,51 @@ export default function TasksPage() {
               <CardDescription>Manage background scheduler scripts</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>ID</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Script</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Interval</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {tasks.map(t => (
-                    <TableRow key={t.id}>
-                      <TableCell className="font-medium">#{t.id}</TableCell>
-                      <TableCell>{t.name}</TableCell>
-                      <TableCell>{t.script}</TableCell>
-                      <TableCell>
-                        <Badge variant={t.status === 'running' ? 'default' : 'secondary'}>
-                          {t.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{t.interval_sec}s</TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" onClick={() => handleToggle(t.id)}>
-                            {t.status === 'running' ? 'Pause' : 'Resume'}
-                          </Button>
-                          <Button size="sm" variant="secondary" onClick={() => handleRun(t.id)}>
-                            Run Now
-                          </Button>
-                          <Button size="sm" variant="secondary" onClick={() => handleViewLogs(t.id, t.name)}>
-                            Logs
-                          </Button>
-                          <Button size="sm" variant="secondary" onClick={() => { setEditId(t.id); setEditParams(t.params_json); setOpenEdit(true); }}>
-                            Edit Params
-                          </Button>
-                          <Button size="sm" variant="destructive" onClick={() => handleDelete(t.id)}>
-                            Delete
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {tasks.length === 0 && !loading && (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
-                        No background tasks configured.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
+              <SortableTable
+                data={tasks}
+                loading={loading}
+                emptyMessage="No background tasks configured."
+                searchPlaceholder="Search by name or script..."
+                defaultSort={{ key: "id", dir: "asc" }}
+                columns={[
+                  { key: "id", header: "#", sortable: true, className: "w-12 font-medium",
+                    render: (v: any) => `#${v}` },
+                  { key: "name", header: "Name", sortable: true, className: "font-medium" },
+                  { key: "script", header: "Script", sortable: true, className: "font-mono text-xs" },
+                  { key: "status", header: "Status", sortable: true,
+                    render: (v: any) => (
+                      <Badge variant={v === 'running' ? 'default' : 'secondary'}>{v}</Badge>
+                    ) },
+                  { key: "interval_sec", header: "Interval", sortable: true,
+                    render: (v: any) => v ? `${v}s` : "—" },
+                  { key: "last_run_at", header: "Last Run", sortable: true, className: "text-muted-foreground text-xs",
+                    render: (v: any) => v ? new Date(v).toLocaleString() : "Never" },
+                  { key: "_actions", header: "Actions", sortable: false, searchable: false,
+                    render: (_: any, t: any) => (
+                      <div className="flex gap-1.5">
+                        <Button size="sm" variant="outline" onClick={() => handleToggle(t.id, t.status === 'running' ? 'paused' : 'running')}>
+                          {t.status === 'running' ? 'Pause' : 'Resume'}
+                        </Button>
+                        <Link href={`/tasks/${t.id}`}>
+                          <Button size="sm" variant="secondary">Logs</Button>
+                        </Link>
+                        <Button size="sm" variant="secondary" onClick={() => { 
+                          setEditId(t.id); 
+                          try {
+                            const p = JSON.parse(t.params_json || '{}');
+                            if (t.interval_sec !== undefined) p.interval = t.interval_sec;
+                            setEditParams(JSON.stringify(p, null, 2));
+                          } catch(e) {
+                            setEditParams(t.params_json ?? '{}');
+                          }
+                          setOpenEdit(true); 
+                        }}>Edit</Button>
+                        <Button size="sm" variant="destructive" onClick={() => handleDelete(t.id)}>Delete</Button>
+                      </div>
+                    )
+                  },
+                ] as ColumnDef[]}
+              />
             </CardContent>
           </Card>
         </TabsContent>

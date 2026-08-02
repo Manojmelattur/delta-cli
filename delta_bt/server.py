@@ -22,6 +22,9 @@ import sys
 import tempfile
 from datetime import datetime
 from typing import List, Optional
+from pydantic import BaseModel
+from typing import List, Optional
+
 
 try:
     from fastapi import Request  # module-scope so annotations resolve under `from __future__ import annotations`
@@ -35,6 +38,71 @@ from .store.db import (
 from .deployments import scheduler_status, request_scheduler_restart, scheduler_logs_tail
 from .store.plot import plot_runs, _load_equity, _load_trades
 from .cache import get_cache
+
+
+
+class BacktestRequest(BaseModel):
+    strategy: str
+    symbol: str
+    timeframe: str = "15m"
+    days: Optional[int] = 30
+    start: Optional[str] = None
+    end: Optional[str] = None
+    capital: float = 10000.0
+    fee_bps: float = 5.0
+    slippage_bps: float = 2.0
+    qty_pct: float = 1.0
+    leverage: float = 1.0
+    sl_pct: float = 0.0
+    tp_pct: float = 0.0
+    trail_pct: float = 0.0
+    live: bool = False
+    params: dict = {}
+    
+class ScanRequest(BaseModel):
+    strategy: Optional[str] = None
+    symbol: Optional[str] = None
+    timeframe: str = "15m"
+    top: int = 10
+    days: int = 30
+    capital: float = 10000.0
+    fee_bps: float = 5.0
+    slippage_bps: float = 2.0
+    qty_pct: float = 1.0
+    leverage: float = 1.0
+    sl_pct: float = 1.2
+    tp_pct: float = 2.4
+    trail_pct: float = 0.8
+    sort_by: str = "pnl"
+    min_trades: int = 1
+    profitable_only: bool = False
+    save: bool = False
+    live: bool = False
+    json_output: bool = False
+    adx_len: int = 14
+    adx_trend_min: int = 25
+    adx_range_max: int = 20
+    adx_exit_on_flip: bool = False
+    adx_tighten_trail_on_flip: bool = False
+
+class TaskRequest(BaseModel):
+    name: str
+    script: str
+    interval: int = 900
+    desc: str = ""
+    params: dict = {}
+    
+class DeployRequest(BaseModel):
+    name: str
+    venue: str = "paper"
+    strategy: str
+    symbol: str
+    timeframe: str = "15m"
+    lot: Optional[float] = 1.0
+    sl_pct: Optional[float] = 0.0
+    tp_pct: Optional[float] = 0.0
+    trail_pct: Optional[float] = 0.0
+    params: dict = {}
 
 
 def create_app(db_path: Optional[str] = None):
@@ -74,8 +142,25 @@ def create_app(db_path: Optional[str] = None):
         from .core.registry import discover_strategies
         return list(discover_strategies().keys())
 
+    # Cache to prevent rate limiting
+    symbols_cache = []
+    
     @app.get("/api/symbols")
     def api_symbols():
+        nonlocal symbols_cache
+        if not symbols_cache:
+            try:
+                import requests
+                res = requests.get('https://api.delta.exchange/v2/products', timeout=5)
+                if res.status_code == 200:
+                    data = res.json().get('result', [])
+                    symbols_cache = [p['symbol'] for p in data if p.get('state') != 'expired']
+            except Exception as e:
+                print(f"Error fetching symbols from Delta Exchange: {e}")
+        
+        if symbols_cache:
+            return symbols_cache
+            
         return ["BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "ADAUSD", "AVAXUSD", "DOGEUSD", "DOTUSD", "LINKUSD", "MATICUSD", "BNBUSD"]
 
     @app.get("/api/runs")
@@ -227,6 +312,17 @@ def create_app(db_path: Optional[str] = None):
             cur = conn.execute(q, args)
             cols = [c[0] for c in cur.description]
             result = [dict(zip(cols, row)) for row in cur.fetchall()]
+            
+            import datetime
+            today = datetime.datetime.utcnow().strftime("%Y-%m-%d")
+            for r in result:
+                dep_id_str = f"d_{r['id']}"
+                cur_day = conn.execute("SELECT SUM(pnl) FROM trades WHERE run_id=? AND exit_ts LIKE ?", (dep_id_str, f"{today}%")).fetchone()
+                r['day_pnl'] = cur_day[0] if cur_day and cur_day[0] else 0.0
+                # Using 10000 as a proxy for capital if we only have lot size, or assuming size is capital
+                # If size is purely qty, this is a proxy percentage. We'll use lot size directly as a base.
+                r['return_pct'] = (r['realized_pnl'] / r['size']) * 100 if r.get('size') else 0.0
+                
             cache.set(cache_key, result, ttl=2)
             return result
 
@@ -468,15 +564,20 @@ def create_app(db_path: Optional[str] = None):
         
     @app.post("/api/tasks/{task_id}/toggle")
     def api_toggle_task(task_id: int, status: str = ""):
+        if not status:
+            from .store.db import connect
+            with connect(db_path=db_path) as conn:
+                row = conn.execute("SELECT status FROM background_tasks WHERE id=?", (task_id,)).fetchone()
+                if not row:
+                    from fastapi import HTTPException
+                    raise HTTPException(404, "Task not found")
+                status = "running" if row[0] in ("paused", "stopped") else "paused"
+                
         if status not in ("running", "stopped", "paused"):
             from fastapi import HTTPException
             raise HTTPException(400, "status must be running, stopped, or paused")
         ok = toggle_background_task(task_id, status, db_path=db_path)
         return {"ok": ok, "status": status}
-        
-    @app.get("/api/tasks/{task_id}/logs")
-    def api_task_logs(task_id: int, limit: int = 100):
-        return {"rows": get_task_logs(task_id, limit, db_path=db_path)}
 
     @app.post("/api/tasks/{task_id}/run")
     async def api_task_run(task_id: int, request: Request):
@@ -505,64 +606,6 @@ def create_app(db_path: Optional[str] = None):
 
     from pydantic import BaseModel
     
-    class BacktestRequest(BaseModel):
-        strategy: str
-        symbol: str
-        timeframe: str = "15m"
-        days: Optional[int] = 30
-        start: Optional[str] = None
-        end: Optional[str] = None
-        capital: float = 10000.0
-        fee_bps: float = 5.0
-        slippage_bps: float = 2.0
-        qty_pct: float = 1.0
-        leverage: float = 1.0
-        sl_pct: float = 0.0
-        tp_pct: float = 0.0
-        trail_pct: float = 0.0
-        live: bool = False
-        params: dict = {}
-        
-    class ScanRequest(BaseModel):
-        strategy: Optional[str] = None
-        symbol: Optional[str] = None
-        timeframe: str = "15m"
-        top: int = 10
-        days: int = 30
-        capital: float = 10000.0
-        fee_bps: float = 5.0
-        slippage_bps: float = 2.0
-        qty_pct: float = 1.0
-        leverage: float = 1.0
-        sl_pct: float = 1.2
-        tp_pct: float = 2.4
-        trail_pct: float = 0.8
-        sort_by: str = "pnl"
-        min_trades: int = 1
-        profitable_only: bool = False
-        adx_filter: bool = False
-        save: bool = False
-        live: bool = False
-
-    class TaskRequest(BaseModel):
-        name: str
-        script: str
-        interval: int = 900
-        desc: str = ""
-        params: dict = {}
-        
-    class DeployRequest(BaseModel):
-        name: str
-        venue: str = "paper"
-        strategy: str
-        symbol: str
-        timeframe: str = "15m"
-        lot: float = 1.0
-        sl_pct: float = 0.0
-        tp_pct: float = 0.0
-        trail_pct: float = 0.0
-        params: dict = {}
-
     @app.post("/api/backtest")
     def api_backtest(req: BacktestRequest):
         import subprocess
@@ -581,8 +624,7 @@ def create_app(db_path: Optional[str] = None):
                 "--sl-pct", str(req.sl_pct),
                 "--tp-pct", str(req.tp_pct),
                 "--trail-pct", str(req.trail_pct),
-                "--params", json.dumps(req.params),
-                "--save"
+                "--params", json.dumps(req.params)
             ]
             if req.days is not None:
                 cmd.extend(["--days", str(req.days)])
@@ -630,8 +672,17 @@ def create_app(db_path: Optional[str] = None):
                 cmd.append("--profitable-only")
             if req.adx_filter:
                 cmd.append("--adx-filter")
+                cmd.extend(["--adx-len", str(req.adx_len)])
+                cmd.extend(["--adx-trend-min", str(req.adx_trend_min)])
+                cmd.extend(["--adx-range-max", str(req.adx_range_max)])
+                if req.adx_exit_on_flip:
+                    cmd.append("--adx-exit-on-flip")
+                if req.adx_tighten_trail_on_flip:
+                    cmd.append("--adx-tighten-trail-on-flip")
             if req.save:
                 cmd.append("--save")
+            if req.json_output:
+                cmd.append("--json")
             if req.live:
                 cmd.append("--live")
             else:
@@ -683,17 +734,19 @@ def create_app(db_path: Optional[str] = None):
             return [dict(zip(cols, r)) for r in cur.fetchall()]
 
     @app.post("/api/tasks/create")
-    def api_tasks_create(req: TaskRequest):
+    async def api_tasks_create(req: Request):
         import subprocess
         import json
+        from fastapi import HTTPException
         try:
+            body = await req.json()
             cmd = [
                 sys.executable, "-m", "delta_bt", "tasks", "add",
-                "--name", req.name,
-                "--script", req.script,
-                "--interval", str(req.interval),
-                "--desc", req.desc,
-                "--params", json.dumps(req.params)
+                "--name", body.get("name", ""),
+                "--script", body.get("script", ""),
+                "--interval", str(body.get("interval", 900)),
+                "--desc", body.get("desc", ""),
+                "--params", json.dumps(body.get("params", {}))
             ]
             res = subprocess.run(cmd, capture_output=True, text=True)
             if res.returncode != 0:
@@ -701,6 +754,30 @@ def create_app(db_path: Optional[str] = None):
             return {"ok": True, "output": res.stdout}
         except Exception as e:
             raise HTTPException(500, detail=str(e))
+            
+    @app.post("/api/tasks/{task_id}/edit")
+    async def api_tasks_edit(task_id: int, request: Request):
+        import json
+        
+        body = await request.json()
+        if not isinstance(body, dict):
+            body = {"_raw": body}
+            
+        with connect(db_path=db_path) as conn:
+            interval = body.pop("interval", None)
+            if interval is not None:
+                conn.execute("UPDATE background_tasks SET params_json=?, interval_sec=? WHERE id=?", (json.dumps(body), int(interval), task_id))
+            else:
+                conn.execute("UPDATE background_tasks SET params_json=? WHERE id=?", (json.dumps(body), task_id))
+        return {"ok": True}
+            
+    @app.post("/api/tasks/{task_id}/delete")
+    def api_tasks_delete(task_id: int):
+        with connect(db_path=db_path) as conn:
+            cur = conn.execute("DELETE FROM background_tasks WHERE id=?", (task_id,))
+            if cur.rowcount == 0:
+                raise HTTPException(404, "Task not found")
+        return {"ok": True}
             
     @app.post("/api/deployments/create")
     def api_deployments_create(req: DeployRequest):
@@ -714,10 +791,10 @@ def create_app(db_path: Optional[str] = None):
                 "--strategy", req.strategy,
                 "--symbol", req.symbol,
                 "--timeframe", req.timeframe,
-                "--lot", str(req.lot),
-                "--sl-pct", str(req.sl_pct),
-                "--tp-pct", str(req.tp_pct),
-                "--trail-pct", str(req.trail_pct),
+                "--lot", str(req.lot if req.lot is not None else 1.0),
+                "--sl-pct", str(req.sl_pct if req.sl_pct is not None else 0.0),
+                "--tp-pct", str(req.tp_pct if req.tp_pct is not None else 0.0),
+                "--trail-pct", str(req.trail_pct if req.trail_pct is not None else 0.0),
                 "--params", json.dumps(req.params),
                 "--i-understand"
             ]

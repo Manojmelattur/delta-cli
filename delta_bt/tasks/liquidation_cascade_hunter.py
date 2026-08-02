@@ -33,7 +33,23 @@ def run(**kwargs):
     messages      = []
     opportunities = []
 
-    for symbol in DEFAULT_PAIRS:
+    user_symbols_raw = kwargs.get("coins", kwargs.get("symbols", kwargs.get("symbol_list", [])))
+    user_symbols = []
+    if isinstance(user_symbols_raw, str):
+        user_symbols = [s.strip() for s in user_symbols_raw.split(",") if s.strip()]
+    elif isinstance(user_symbols_raw, list):
+        user_symbols = [str(s).strip() for s in user_symbols_raw if str(s).strip()]
+
+    if user_symbols:
+        symbols = user_symbols
+    else:
+        try:
+            tickers = client.tickers(contract_types="perpetual_futures")
+            symbols = [t["symbol"] for t in tickers if "symbol" in t]
+        except Exception:
+            symbols = DEFAULT_PAIRS
+
+    for symbol in symbols:
         try:
             bars = client.candles(symbol, "5m", start_time, end_time)
             if not bars or len(bars) < 3:

@@ -48,7 +48,7 @@ def run(**kwargs) -> str:
     auto_deploy          = _to_bool(kwargs.get("auto_deploy",     False))
     dry_run              = _to_bool(kwargs.get("dry_run",         False))
 
-    user_symbols_raw     = kwargs.get("symbols") or kwargs.get("symbol_list")
+    user_symbols_raw     = kwargs.get("coins", kwargs.get("symbols", kwargs.get("symbol_list", [])))
     user_symbols: List[str] = []
     if isinstance(user_symbols_raw, str):
         user_symbols = [s.strip() for s in user_symbols_raw.split(",") if s.strip()]
@@ -63,14 +63,10 @@ def run(**kwargs) -> str:
     if user_symbols:
         symbols = user_symbols
     else:
-        # --- Fetch top N symbols by USD turnover ---
+        # --- Fetch all symbols ---
         try:
             tickers = client.tickers(contract_types="perpetual_futures")
-            tickers.sort(
-                key=lambda x: float(x.get("turnover_usd") or x.get("turnover") or 0),
-                reverse=True,
-            )
-            symbols = [t["symbol"] for t in tickers[:top_n] if "symbol" in t]
+            symbols = [t["symbol"] for t in tickers if "symbol" in t]
         except Exception as e:
             return (
                 f"### SMC Hunter\n\n"

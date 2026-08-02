@@ -10,14 +10,43 @@ def add_mutations(app: FastAPI, db_path: str):
     async def api_edit_deployment(dep_id: str, req: Request):
         try:
             data = await req.json()
-            # delta_bt deployments edit <id> --params '{"size": 2.0}'
-            cmd = ["python", "-m", "delta_bt", "deployments", "edit", str(dep_id), "--params", json.dumps(data)]
-            cwd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            res = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
-            if res.returncode != 0:
-                raise HTTPException(500, detail=res.stderr)
-            return {"ok": True, "output": res.stdout}
+            conn = sqlite3.connect(db_path)
+            
+            if "params" in data:
+                # New format with risk fields
+                params_str = json.dumps(data.get("params", {}))
+                
+                def safe_float(val, default=0.0):
+                    if val is None:
+                        return default
+                    try:
+                        return float(val)
+                    except (ValueError, TypeError):
+                        return default
+                        
+                size = safe_float(data.get("size"), 1.0)
+                sl_pct = safe_float(data.get("sl_pct"), 0.0)
+                tp_pct = safe_float(data.get("tp_pct"), 0.0)
+                trail_pct = safe_float(data.get("trail_pct"), 0.0)
+                
+                cur = conn.execute("""
+                    UPDATE deployments 
+                    SET params_json=?, size=?, sl_pct=?, tp_pct=?, trail_pct=?
+                    WHERE id=?
+                """, (params_str, size, sl_pct, tp_pct, trail_pct, dep_id))
+            else:
+                # Backward compatibility (only params dict)
+                params_str = json.dumps(data)
+                cur = conn.execute("UPDATE deployments SET params_json=? WHERE id=?", (params_str, dep_id))
+                
+            conn.commit()
+            
+            if cur.rowcount == 0:
+                raise HTTPException(404, "Deployment not found")
+            return {"ok": True}
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             raise HTTPException(500, detail=str(e))
             
     @app.post("/api/deployments/{dep_id}/test_trade")
@@ -48,30 +77,7 @@ def add_mutations(app: FastAPI, db_path: str):
         except Exception as e:
             raise HTTPException(500, detail=str(e))
             
-    @app.post("/api/tasks/{task_name}/edit")
-    async def api_edit_task(task_name: str, req: Request):
-        try:
-            data = await req.json()
-            cmd = ["python", "-m", "delta_bt", "tasks", "edit", task_name, "--params", json.dumps(data)]
-            cwd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            res = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
-            if res.returncode != 0:
-                raise HTTPException(500, detail=res.stderr)
-            return {"ok": True, "output": res.stdout}
-        except Exception as e:
-            raise HTTPException(500, detail=str(e))
-            
-    @app.post("/api/tasks/{task_name}/delete")
-    def api_delete_task(task_name: str):
-        try:
-            cmd = ["python", "-m", "delta_bt", "tasks", "rm", task_name]
-            cwd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            res = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
-            if res.returncode != 0:
-                raise HTTPException(500, detail=res.stderr)
-            return {"ok": True, "output": res.stdout}
-        except Exception as e:
-            raise HTTPException(500, detail=str(e))
+
             
     @app.get("/api/settings")
     def api_get_settings():

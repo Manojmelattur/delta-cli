@@ -18,7 +18,7 @@ def run(**kwargs):
     profit_lookback_days = int(kwargs.get("profit_lookback_days", 30))
     min_win_rate         = float(kwargs.get("min_win_rate",       0.50))
 
-    user_symbols_raw = kwargs.get("symbols") or kwargs.get("symbol_list")
+    user_symbols_raw = kwargs.get("coins", kwargs.get("symbols", kwargs.get("symbol_list", [])))
     user_symbols = []
     if isinstance(user_symbols_raw, str):
         user_symbols = [s.strip() for s in user_symbols_raw.split(",") if s.strip()]
@@ -29,11 +29,7 @@ def run(**kwargs):
         symbols = user_symbols
     else:
         tickers = client.tickers(contract_types="perpetual_futures")
-        tickers.sort(
-            key=lambda x: float(x.get("turnover_usd") or x.get("turnover") or 0),
-            reverse=True,
-        )
-        symbols = [t["symbol"] for t in tickers[:15] if "symbol" in t]
+        symbols = [t["symbol"] for t in tickers if "symbol" in t]
 
     # Fix: wrap scanner in try/except so API failures do not crash the task
     try:
