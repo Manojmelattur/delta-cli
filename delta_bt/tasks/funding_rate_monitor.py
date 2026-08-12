@@ -90,7 +90,7 @@ def run(**kwargs):
 
                 # Fix 7: flag open positions separately with a warning (cannot pause)
                 open_rows = conn.execute(
-                    "SELECT id, name, open_side FROM deployments "
+                    "SELECT id, name, strategy, open_side FROM deployments "
                     "WHERE status='running' AND symbol=? AND open_side IS NOT NULL",
                     (sym,),
                 ).fetchall()

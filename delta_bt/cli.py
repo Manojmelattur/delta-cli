@@ -5,6 +5,7 @@ Subcommands:
     paper            paper trade on live data (demo/testnet, or sim only)
     live             REAL orders on the production venue (requires --i-understand)
     list-strategies  print available strategies
+    run-task         execute a single background task by ID (for cron-based scheduling)
 """
 
 from __future__ import annotations

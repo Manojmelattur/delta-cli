@@ -47,6 +47,28 @@ def calc_rsi(closes, n=14):
 def run(**kwargs):
     client      = DeltaClient(base_url="https://api.india.delta.exchange")
     auto_deploy = kwargs.get("auto_deploy", False)
+    dry_run     = kwargs.get("dry_run", False)
+    venue       = str(kwargs.get("venue", "paper"))
+    # Fix: integer lots — Delta does not support fractional lots
+    base_size   = max(1, int(float(kwargs.get("base_lot_size", 1))))
+    # Fix: cap concurrent scalp bots so a signal burst can't drain margin
+    max_concurrent = int(kwargs.get("max_concurrent", 3))
+    # Fix: per-symbol cooldown after a scalp bot stops (minutes)
+    cooldown_min   = int(kwargs.get("cooldown_min", 30))
+    # Fix: liquid-coin whitelist — 1m RSI on illiquid pairs pins to 0/100
+    # on a single trade and generates junk signals (e.g. WIFUSD RSI=100).
+    default_whitelist = [
+        "BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "BNBUSD",
+        "DOGEUSD", "ADAUSD", "LINKUSD", "AVAXUSD", "LTCUSD",
+        "BCHUSD", "INJUSD", "SUIUSD", "NEARUSD", "TONUSD",
+    ]
+    whitelist_raw = kwargs.get("whitelist", default_whitelist)
+    if isinstance(whitelist_raw, str):
+        whitelist = [s.strip().upper() for s in whitelist_raw.split(",") if s.strip()]
+    else:
+        whitelist = [str(s).upper() for s in whitelist_raw]
+    # Fix: minimum 24h USD turnover gate (extra guard on top of whitelist)
+    min_turnover_usd = float(kwargs.get("min_turnover_usd", 1_000_000))
 
     user_symbols_raw = kwargs.get("coins", kwargs.get("symbols", kwargs.get("symbol_list", [])))
     user_symbols = []
@@ -59,7 +81,19 @@ def run(**kwargs):
         symbols = user_symbols
     else:
         tickers = client.tickers(contract_types="perpetual_futures")
-        symbols = [t["symbol"] for t in tickers if "symbol" in t]
+        # Apply whitelist + turnover gate
+        symbols = []
+        for t in tickers:
+            sym = t.get("symbol")
+            if not sym or sym.upper() not in whitelist:
+                continue
+            try:
+                turnover = float(t.get("turnover_usd") or t.get("turnover") or 0)
+            except (TypeError, ValueError):
+                turnover = 0.0
+            if turnover and turnover < min_turnover_usd:
+                continue
+            symbols.append(sym)
 
     end   = datetime.now(timezone.utc)
     # Fix 2: fetch 200 bars for reliable RSI-14 Wilder smoothing
@@ -101,7 +135,25 @@ def run(**kwargs):
                 )
 
                 if auto_deploy:
+                    # Exposure gate: block new entries while gross exposure >= limit
+                    from delta_bt.tasks.exposure_gate import exposure_blocked
+                    _blocked, _reason = exposure_blocked()
+                    if _blocked:
+                        messages.append(f"> Entry blocked ({sym}): {_reason}")
+                        continue
                     with connect() as conn:
+                        # Fix: global concurrency cap across all scalp bots
+                        running_count = conn.execute(
+                            "SELECT COUNT(*) FROM deployments "
+                            "WHERE tag='scalp_hunter' AND status='running'"
+                        ).fetchone()[0]
+                        if running_count >= max_concurrent:
+                            messages.append(
+                                f"> Skipped {sym}: max concurrent scalp bots "
+                                f"reached ({running_count}/{max_concurrent})."
+                            )
+                            continue
+
                         existing = conn.execute(
                             "SELECT id FROM deployments "
                             "WHERE symbol=? AND tag='scalp_hunter' AND status='running'",
@@ -114,10 +166,37 @@ def run(**kwargs):
                             )
                             continue
 
+                        # Fix: per-symbol cooldown — don't re-enter a symbol
+                        # right after a scalp bot on it stopped
+                        recent = conn.execute(
+                            "SELECT id FROM deployments "
+                            "WHERE symbol=? AND tag='scalp_hunter' "
+                            "AND status!='running' "
+                            "AND COALESCE(stopped_at, created_at) >= ?",
+                            (
+                                sym,
+                                (datetime.now(timezone.utc)
+                                 - timedelta(minutes=cooldown_min)).isoformat(),
+                            ),
+                        ).fetchone()
+                        if recent:
+                            messages.append(
+                                f"> Skipped {sym}: cooldown active "
+                                f"({cooldown_min}m after last scalp stop)."
+                            )
+                            continue
+
+                        if dry_run:
+                            messages.append(
+                                f"> DRY | Would deploy scalp bot on {sym} "
+                                f"(venue={venue} size={base_size})."
+                            )
+                            continue
+
                         now  = datetime.now(timezone.utc).isoformat()
                         # Fix 4: removed redundant "scalp_hunter_" prefix
                         name = f"1m Scalp {sym}"
-                        size = float(kwargs.get("base_lot_size", 1.0))
+                        size = base_size
 
                         params_str = json.dumps({
                             "force_entry_side": "buy" if signal == "LONG" else "sell"
@@ -131,7 +210,9 @@ def run(**kwargs):
                                 sync_leverage, force_entry, created_at, started_at, tag
                             ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'running',?,?,?,?,?,?,?)""",
                             (
-                                name, "paper",
+                                name,
+                                # Fix: respect configured venue (was hardcoded "paper")
+                                venue,
                                 # Fix 5: use rsi_mr strategy not vwap_reversion
                                 "rsi_mr",
                                 sym, "1m", size, params_str,
@@ -139,7 +220,9 @@ def run(**kwargs):
                                 # Fix 6: correct column order
                                 # reduce_only, interval_sec, i_understand_live,
                                 # leverage, sync_leverage, force_entry
-                                0, 60, 1, 1, 1, 1,
+                                0, 60,
+                                1 if venue == "live" else 0,
+                                1, 1, 1,
                                 now, now, "scalp_hunter",
                             ),
                         )

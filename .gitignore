@@ -1,0 +1,62 @@
+# Environment variables
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Hermes configuration (if we don't want to push)
+.hermes/
+
+# Reports (can be large, regenerate)
+reports/
+!reports/.gitkeep
+
+# Delta CLI database (state file, not to push)
+data/delta_bt.sqlite
+data/delta_bt.sqlite-shm
+data/delta_bt.sqlite-wal
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Vendor or third-party code (if any)
+vendor/
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Compiled extensions
+*.so
+
+# Packages
+*.egg-info/
+.dist/
+eggs/
+pip-wheel-metadata/
+build/
+dist/
+
+# SQLite studio
+*.sqlite3
+
+# Misc
+*.swp
+*~
+_inspect_*.py

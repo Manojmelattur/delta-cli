@@ -62,20 +62,20 @@ def get_cache(key: str) -> Optional[Any]:
             pass
     
     if key in _local_cache:
-        val, ts = _local_cache[key]
-        if time.time() - ts < 5:  # 5 second TTL
+        val, ts, ttl = _local_cache[key]
+        if time.time() - ts < ttl:
             return val
     return None
 
-def set_cache(key: str, val: Any) -> None:
+def set_cache(key: str, val: Any, ttl: int = 5) -> None:
     if redis_client:
         try:
-            redis_client.setex(key, 5, json.dumps(val))
+            redis_client.setex(key, ttl, json.dumps(val))
             return
         except Exception:
             pass
             
-    _local_cache[key] = (val, time.time())
+    _local_cache[key] = (val, time.time(), ttl)
 
 
 
@@ -153,13 +153,45 @@ class DeltaClient:
                 raise RuntimeError("API key/secret required for this endpoint")
             headers = self._sign(method, path, query, body_str)
 
-        r = self.s.request(
-            method,
-            url + (query if params else ""),
-            data=body_str if body_str else None,
-            headers=headers,
-            timeout=self.timeout,
-        )
+        # Retry with exponential backoff on 429 (rate limit) and 5xx errors.
+        # Delta India quota: 10,000 weight / 5-min window. On 429 the
+        # X-RATE-LIMIT-RESET header (microseconds) says when the window resets.
+        last_err: Optional[Exception] = None
+        r: Optional[requests.Response] = None
+        for attempt in range(4):  # 1 try + 3 retries
+            r = self.s.request(
+                method,
+                url + (query if params else ""),
+                data=body_str if body_str else None,
+                headers=headers,
+                timeout=self.timeout,
+            )
+            if r.status_code == 429:
+                # rate limited — wait for reset (capped) then retry
+                reset_us = r.headers.get("X-RATE-LIMIT-RESET")
+                try:
+                    wait_s = min(float(reset_us) / 1_000_000.0, 30.0) if reset_us else 5.0 * (attempt + 1)
+                except (TypeError, ValueError):
+                    wait_s = 5.0 * (attempt + 1)
+                last_err = RuntimeError(f"Delta API 429 rate limited (attempt {attempt + 1})")
+                if attempt < 3:
+                    time.sleep(max(wait_s, 1.0))
+                    if auth:  # timestamp must be fresh after sleeping
+                        headers = self._sign(method, path, query, body_str)
+                    continue
+                raise last_err
+            if r.status_code >= 500:
+                last_err = RuntimeError(f"Delta API {r.status_code} server error (attempt {attempt + 1})")
+                if attempt < 3:
+                    time.sleep(2.0 * (attempt + 1))
+                    if auth:
+                        headers = self._sign(method, path, query, body_str)
+                    continue
+                raise last_err
+            break
+
+        assert r is not None  # loop always executes at least once
+
         try:
             data = r.json()
         except Exception:
@@ -179,7 +211,7 @@ class DeltaClient:
             return cached
             
         data = self._request("GET", "/v2/products")
-        set_cache(cache_key, data)
+        set_cache(cache_key, data, ttl=600)  # products list rarely changes — 10 min
         return data
 
     def get_product(self, symbol: str) -> Dict[str, Any]:
@@ -201,7 +233,7 @@ class DeltaClient:
 
         params = {"contract_types": contract_types} if contract_types else None
         data = self._request("GET", "/v2/tickers", params=params)
-        set_cache(cache_key, data)
+        set_cache(cache_key, data, ttl=30)  # tickers: 30s is fresh enough for scanners
         return data
 
     def ticker(self, symbol: str) -> Dict[str, Any]:
@@ -214,6 +246,11 @@ class DeltaClient:
         data = self._request("GET", f"/v2/tickers/{symbol}")
         set_cache(cache_key, data)
         return data
+
+    def rate_limit_quota(self) -> Dict[str, Any]:
+        """Remaining API quota: {'current_quota': N, 'remaining_time_in_milliseconds': M}.
+        Delta India allows 10,000 weight units per 5-minute window."""
+        return self._request("GET", "/v2/rate_limits/quota", auth=True)
 
 
     def candles(

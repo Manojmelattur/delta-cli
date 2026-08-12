@@ -21,6 +21,10 @@ def run(**kwargs):
     # Fix 2: fetch 60 bars so klines[-20:-1] always has enough data
     start_time = end_time - timedelta(minutes=60)
     venue       = str(kwargs.get("venue",         "paper"))
+    # Hunter / dry-run contract (see task_blacklist.py & README):
+    # scanners must be alert-only — never auto-deploy unless explicitly enabled.
+    auto_deploy = bool(kwargs.get("auto_deploy", False))
+    dry_run     = bool(kwargs.get("dry_run", False))
     messages = []
 
     for sym in symbols:
@@ -47,6 +51,12 @@ def run(**kwargs):
                     f"VOLUME ANOMALY on {sym}: "
                     f"1m volume spiked to {vol_multiple:.1f}x average."
                 )
+
+                # Alert-only / dry-run guard: hunter tasks must never auto-deploy
+                # unless explicitly enabled (see task_blacklist.py & README).
+                if not auto_deploy or dry_run:
+                    messages.append("> Auto-deploy is OFF (alert-only mode).")
+                    continue
 
                 with connect() as conn:
                     existing = conn.execute(

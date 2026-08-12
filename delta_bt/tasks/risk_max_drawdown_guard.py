@@ -75,24 +75,46 @@ def _calc_drawdown(equity_points: list) -> tuple[float, float, float]:
 def _fetch_equity_history(
     dep_id: int,
     lookback_days: int,
+    capital_base: float = 0.0,
 ) -> list:
-    """Fetch equity snapshots from deployment_events for a deployment."""
+    """Reconstruct the per-deployment equity curve from deployment_events.
+
+    There is no dedicated deployment_equity table in this DB; instead the
+    scheduler logs realized `pnl` on exit/flip events and unrealized `upnl`
+    on tick events.  Equity at each point is:
+
+        capital_base + cumulative_realized_pnl + upnl_at_tick
+
+    capital_base > 0 makes drawdown percentages meaningful (relative to
+    account capital) instead of dividing by a near-zero pnl peak.
+    """
     since = (
         datetime.now(timezone.utc) - timedelta(days=lookback_days)
-    ).isoformat() + "Z"
+    ).isoformat()
     with connect() as conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
             """
-            SELECT ts, equity
-            FROM deployment_equity
+            SELECT ts, pnl, upnl
+            FROM deployment_events
             WHERE deployment_id = ?
               AND ts > ?
+              AND (pnl IS NOT NULL OR upnl IS NOT NULL)
             ORDER BY ts ASC
             """,
             (dep_id, since),
         ).fetchall()
-    return [{"ts": r["ts"], "equity": r["equity"]} for r in rows]
+
+    points = []
+    cum_realized = 0.0
+    for r in rows:
+        if r["pnl"] is not None:
+            cum_realized += float(r["pnl"])
+        upnl = float(r["upnl"]) if r["upnl"] is not None else 0.0
+        points.append(
+            {"ts": r["ts"], "equity": capital_base + cum_realized + upnl}
+        )
+    return points
 
 
 def _pause_deployment(dep_id: int, reason: str) -> None:
@@ -159,6 +181,7 @@ def run(**kwargs) -> str:
     global_action     = str(kwargs.get("dd_action",          DEFAULT_DD_ACTION))
     global_lookback   = int(kwargs.get("dd_lookback_days",   DEFAULT_DD_LOOKBACK_DAYS))
     dry_run           = bool(kwargs.get("dry_run",           False))
+    capital_base      = float(kwargs.get("dd_capital_base_usd", 0.0))
 
     now_str   = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     messages  = []
@@ -207,7 +230,7 @@ def run(**kwargs) -> str:
             action = "pause"
 
         # --- Fetch equity history ---
-        equity_history = _fetch_equity_history(dep_id, lookback)
+        equity_history = _fetch_equity_history(dep_id, lookback, capital_base)
         if len(equity_history) < 2:
             messages.append(
                 f"WARN | {name} ({symbol}): insufficient equity history "

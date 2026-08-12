@@ -131,6 +131,13 @@ def run(**kwargs) -> str:
         if not auto_deploy:
             continue
 
+        # Exposure gate: block new entries while gross exposure >= limit
+        from delta_bt.tasks.exposure_gate import exposure_blocked
+        _blocked, _reason = exposure_blocked()
+        if _blocked:
+            messages.append(f"> Entry blocked ({s.symbol}): {_reason}")
+            continue
+
         # --- Auto-deploy ---
         try:
             with connect() as conn:

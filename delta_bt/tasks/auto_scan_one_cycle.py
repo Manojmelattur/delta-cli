@@ -224,6 +224,13 @@ def run(**kwargs) -> str:
 
     lines.append("\n#### Deployment Results\n")
 
+    # Exposure gate: block new entries while gross exposure >= limit
+    from delta_bt.tasks.exposure_gate import exposure_blocked
+    _blocked, _reason = exposure_blocked()
+    if _blocked and not dry_run:
+        lines.append(f"  ⛔ BLOCKED | {_reason}")
+        setups = []
+
     with connect() as conn:
         for s in setups:
             if deployed >= max_trades:
