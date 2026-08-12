@@ -126,6 +126,7 @@ _KNOWN_STRATEGIES = {
     "three_bar_reversal", "price_action_engulfing",
     "price_action_pinbar", "ichimoku_cloud",
     "options_iron_condor", "move_volatility_straddle",
+    "bollinger", "turtle", "ema_cross", "ema_rsi", "sma_rsi", "time_breakout",
 }
 
 

@@ -48,11 +48,16 @@ from delta_bt.store.db import connect
 
 # ── Strategy universe scanned when strategy="auto" ────────────────────────────
 _AUTO_STRATEGIES = [
-    "ema3", "macd", "rsi_mr", "rsi_divergence",
-    "momentum_breakout", "donchian_breakout", "atr_channel_breakout",
-    "stochastic_rsi", "keltner_squeeze",
+    "ema3", "macd", "macd_divergence", "rsi_mr", "rsi_divergence",
+    "fvg", "grid", "momentum_breakout", "donchian_breakout",
+    "atr_channel_breakout", "obv_trend", "stochastic_rsi",
+    "cci_reversion", "bb_ha_supertrend", "supertrend_mom",
+    "supertrend_mom_v2", "keltner_squeeze", "vwap", "vwap_bands",
     "smc_ob", "smc_ob_fvg", "smc_liquidity_sweep", "smc_bos_retest",
-    "supertrend_mom", "vwap", "obv_trend",
+    "smc_choch_bos", "inside_bar_breakout", "three_bar_reversal",
+    "price_action_engulfing", "price_action_pinbar", "ichimoku_cloud",
+    "options_iron_condor", "move_volatility_straddle",
+    "bollinger", "turtle", "ema_cross", "ema_rsi", "sma_rsi", "time_breakout",
 ]
 
 _VALID_VENUES = {"live", "testnet", "paper", "paper_live"}
