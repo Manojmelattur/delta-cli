@@ -468,6 +468,41 @@ def create_app(db_path: Optional[str] = None):
             conn.commit()
             return {"ok": True, "deleted": cur.rowcount > 0}
 
+    @app.post("/api/deployments/pause-all")
+    def api_deployment_pause_all():
+        now = datetime.utcnow().isoformat() + "Z"
+        with connect(db_path) as conn:
+            ids = [r[0] for r in conn.execute("SELECT id FROM deployments WHERE status='running'").fetchall()]
+            for dep_id in ids:
+                conn.execute("UPDATE deployments SET status='paused' WHERE id=?", (dep_id,))
+                conn.execute("INSERT INTO deployment_events(deployment_id,ts,kind,message) VALUES (?,?, 'stop', 'paused from web UI bulk')", (dep_id, now))
+            conn.commit()
+            return {"ok": True, "paused": len(ids)}
+
+    @app.post("/api/deployments/stop-all")
+    def api_deployment_stop_all():
+        now = datetime.utcnow().isoformat() + "Z"
+        with connect(db_path) as conn:
+            ids = [r[0] for r in conn.execute("SELECT id FROM deployments WHERE status IN ('running','paused')").fetchall()]
+            for dep_id in ids:
+                conn.execute("UPDATE deployments SET status='stopped', stopped_at=? WHERE id=?", (now, dep_id))
+                conn.execute("INSERT INTO deployment_events(deployment_id,ts,kind,message) VALUES (?,?, 'stop', 'stopped from web UI bulk')", (dep_id, now))
+            conn.commit()
+            return {"ok": True, "stopped": len(ids)}
+
+    @app.post("/api/deployments/delete-all-paused")
+    def api_deployment_delete_all_paused(venue: str = Query("", description="Optional venue filter, e.g. 'paper' or 'live'")):
+        with connect(db_path) as conn:
+            if venue:
+                ids = [r[0] for r in conn.execute("SELECT id FROM deployments WHERE status='paused' AND venue=?", (venue,)).fetchall()]
+            else:
+                ids = [r[0] for r in conn.execute("SELECT id FROM deployments WHERE status='paused'").fetchall()]
+            for dep_id in ids:
+                conn.execute("DELETE FROM deployment_events WHERE deployment_id=?", (dep_id,))
+                conn.execute("DELETE FROM deployments WHERE id=?", (dep_id,))
+            conn.commit()
+            return {"ok": True, "deleted": len(ids)}
+
     # --------- db admin / introspection ---------
     @app.get("/api/db/info")
     def api_db_info():

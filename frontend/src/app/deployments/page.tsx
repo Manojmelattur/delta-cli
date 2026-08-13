@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
-import { fetchDeployments, actionDeployment, editDeployment, testTradeDeployment, fetchDeploymentLogs } from "@/lib/api";
+import { fetchDeployments, actionDeployment, editDeployment, testTradeDeployment, fetchDeploymentLogs, pauseAllDeployments, stopAllDeployments, deleteAllPausedDeployments } from "@/lib/api";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -60,6 +60,25 @@ export default function DeploymentsPage() {
     load();
   }
 
+  async function handlePauseAll() {
+    if (!confirm("Pause ALL running bots?")) return;
+    await pauseAllDeployments();
+    load();
+  }
+
+  async function handleStopAll() {
+    if (!confirm("Stop ALL bots (running + paused)?")) return;
+    await stopAllDeployments();
+    load();
+  }
+
+  async function handleDeleteAllPaused() {
+    const venue = prompt("Delete ALL paused bots by venue? Leave empty for all venues.\nEnter venue (paper/live) or leave blank:", "") || "";
+    if (!confirm(`Delete ALL paused bots${venue ? ` with venue="${venue}"` : ""}?`)) return;
+    await deleteAllPausedDeployments(venue);
+    load();
+  }
+
 
   async function handleTestTrade(id: string | number) {
     if (!confirm("Are you sure you want to run a test trade on this live deployment?")) return;
@@ -88,6 +107,9 @@ export default function DeploymentsPage() {
         <h1 className="text-4xl font-bold tracking-tight">Deployments</h1>
         <div className="flex gap-4">
           <Button onClick={load} variant="outline" disabled={loading}>Refresh</Button>
+          <Button onClick={handlePauseAll} variant="outline">Pause ALL</Button>
+          <Button onClick={handleStopAll} variant="destructive">Stop ALL</Button>
+          <Button onClick={handleDeleteAllPaused} variant="destructive">Delete ALL Paused</Button>
           <Link href="/deployments/create">
             <Button>New Deployment</Button>
           </Link>

@@ -358,6 +358,22 @@ export async function clearDeployments() {
   return res.json();
 }
 
+export async function pauseAllDeployments() {
+  const res = await fetch(`${API_URL}/deployments/pause-all`, { method: 'POST' });
+  return res.json();
+}
+
+export async function stopAllDeployments() {
+  const res = await fetch(`${API_URL}/deployments/stop-all`, { method: 'POST' });
+  return res.json();
+}
+
+export async function deleteAllPausedDeployments(venue: string = "") {
+  const url = venue ? `${API_URL}/deployments/delete-all-paused?venue=${encodeURIComponent(venue)}` : `${API_URL}/deployments/delete-all-paused`;
+  const res = await fetch(url, { method: 'POST' });
+  return res.json();
+}
+
 export async function seedDefaultTasks() {
   const res = await fetch(`${API_URL}/system/seed-default-tasks`, { method: 'POST' });
   return res.json();
