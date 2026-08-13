@@ -258,18 +258,20 @@ def menu_deployments():
             print(f"  {C_DIM}(no bots deployed){C_RESET}")
 
         print(f"""
-  {C_CYAN}1.{C_RESET} \xf0\x9f\x94\x8d View Bot Detail
-  {C_CYAN}2.{C_RESET} \xe2\x9e\x95 Deploy New Bot
-  {C_CYAN}3.{C_RESET} \xe2\x8f\xb8  Pause Bot
-  {C_CYAN}4.{C_RESET} \xe2\x96\xb6  Resume Bot
-  {C_CYAN}5.{C_RESET} \xf0\x9f\x9b\x91 Stop Bot
-  {C_CYAN}6.{C_RESET} \xf0\x9f\x93\x9c View Bot Events
-  {C_CYAN}7.{C_RESET} \xe2\x8f\xb8\xef\xb8\x8f  Pause ALL Bots
-  {C_CYAN}8.{C_RESET} \xe2\x96\xb6\xef\xb8\x8f  Resume ALL Bots
-  {C_CYAN}9.{C_RESET} \xf0\x9f\x9b\x91 Stop ALL Bots
-  {C_CYAN}10.{C_RESET} \xe2\x86\xac Back\n""")
+  {C_CYAN}1.{C_RESET} 🔍 View Bot Detail
+  {C_CYAN}2.{C_RESET} ➕ Deploy New Bot
+  {C_CYAN}3.{C_RESET} ⏸  Pause Bot
+  {C_CYAN}4.{C_RESET} ▶  Resume Bot
+  {C_CYAN}5.{C_RESET} 🛑 Stop Bot
+  {C_CYAN}6.{C_RESET} 🗑 Delete Bot
+  {C_CYAN}7.{C_RESET} 📜 View Bot Events
+  {C_CYAN}8.{C_RESET} ⏸️  Pause ALL Bots
+  {C_CYAN}9.{C_RESET} ▶️  Resume ALL Bots
+  {C_CYAN}10.{C_RESET} 🛑 Stop ALL Bots
+  {C_CYAN}11.{C_RESET} ↩ Back
+""")
 
-        c = input(f" {C_BOLD}Select [1-10]:{C_RESET} ").strip()
+        c = input(f" {C_BOLD}Select [1-11]:{C_RESET} ").strip()
 
         if c == "1":
             b = _pick_bot(bots)
@@ -334,20 +336,30 @@ def menu_deployments():
                 run_cli_command(["deployments", action, "--id", str(b["id"])])
 
         elif c == "6":
+            b = _pick_bot(bots, "Bot # or ID to delete")
+            if b:
+                if b.get("status", "").lower() != "paused":
+                    print(f" {C_RED}Only paused bots can be deleted.{C_RESET}")
+                    input(f"{C_DIM}Press Enter...{C_RESET}")
+                else:
+                    if input(f" {C_RED}DELETE bot '{b['name']}'? [y/N]:{C_RESET} ").strip().lower() == "y":
+                        run_cli_command(["deployments", "delete", "--id", str(b["id"])])
+
+        elif c == "7":
             b = _pick_bot(bots, "Bot # or ID for events")
             if b:
                 run_cli_command(["bot-show", "--id", str(b["id"])])
 
-        elif c == "7":
+        elif c == "8":
             if input(f" {C_YELLOW}Pause ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "pause-all"])
-        elif c == "8":
+        elif c == "9":
             if input(f" {C_GREEN}Resume ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "resume-all"])
-        elif c == "9":
+        elif c == "10":
             if input(f" {C_RED}STOP ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "stop-all"])
-        elif c == "10":
+        elif c == "11":
             break
 
 
