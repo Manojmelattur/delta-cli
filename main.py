@@ -258,19 +258,18 @@ def menu_deployments():
             print(f"  {C_DIM}(no bots deployed){C_RESET}")
 
         print(f"""
-  {C_CYAN}1.{C_RESET} 🔍 View Bot Detail
-  {C_CYAN}2.{C_RESET} ➕ Deploy New Bot
-  {C_CYAN}3.{C_RESET} ✏️  Edit Bot Parameters  (venue / lot / SL / TP / trail / strategy / …)
-  {C_CYAN}4.{C_RESET} ⏸  Pause Bot
-  {C_CYAN}5.{C_RESET} ▶  Resume Bot
-  {C_CYAN}6.{C_RESET} 🛑 Stop Bot
-  {C_CYAN}7.{C_RESET} 📜 View Bot Events
-  {C_CYAN}8.{C_RESET} ⏸️  Pause ALL Bots
-  {C_CYAN}9.{C_RESET} ▶️  Resume ALL Bots
-  {C_CYAN}10.{C_RESET} 🛑 Stop ALL Bots
-  {C_CYAN}11.{C_RESET} ← Back\n""")
+  {C_CYAN}1.{C_RESET} \xf0\x9f\x94\x8d View Bot Detail
+  {C_CYAN}2.{C_RESET} \xe2\x9e\x95 Deploy New Bot
+  {C_CYAN}3.{C_RESET} \xe2\x8f\xb8  Pause Bot
+  {C_CYAN}4.{C_RESET} \xe2\x96\xb6  Resume Bot
+  {C_CYAN}5.{C_RESET} \xf0\x9f\x9b\x91 Stop Bot
+  {C_CYAN}6.{C_RESET} \xf0\x9f\x93\x9c View Bot Events
+  {C_CYAN}7.{C_RESET} \xe2\x8f\xb8\xef\xb8\x8f  Pause ALL Bots
+  {C_CYAN}8.{C_RESET} \xe2\x96\xb6\xef\xb8\x8f  Resume ALL Bots
+  {C_CYAN}9.{C_RESET} \xf0\x9f\x9b\x91 Stop ALL Bots
+  {C_CYAN}10.{C_RESET} \xe2\x86\xac Back\n""")
 
-        c = input(f" {C_BOLD}Select [1-11]:{C_RESET} ").strip()
+        c = input(f" {C_BOLD}Select [1-10]:{C_RESET} ").strip()
 
         if c == "1":
             b = _pick_bot(bots)
@@ -328,163 +327,27 @@ def menu_deployments():
             if venue == "live": args.append("--i-understand-live")
             run_cli_command(args)
 
-        elif c == "3":
-            # ─── EDIT BOT PARAMETERS ───────────────────────────────────────
-            b = _pick_bot(bots, "Bot # or ID to edit")
-            if not b:
-                continue
-            clear_screen(); print_banner()
-            _show_bot_detail(b)
-            print(f"{C_BOLD}✏️  EDITING BOT #{b['id']} — {b['name']}{C_RESET}\n")
-            print(f" {C_DIM}Press Enter to keep the current value shown in [ ].{C_RESET}\n")
-
-            args    = ["deployments", "edit", "--id", str(b["id"])]
-            changed = False
-
-            # Name
-            nv = input(f" {C_CYAN}◆ Name{C_RESET} [{b['name']}]: ").strip()
-            if nv and nv != b["name"]:
-                args += ["--name", nv]; changed = True
-
-            # Venue
-            print(f"\n {C_CYAN}◆ Venue{C_RESET}")
-            for i, v in enumerate(_VENUES, 1):
-                tag = f" {C_GREEN}← current{C_RESET}" if v == b["venue"] else ""
-                print(f"     {C_DIM}{i}.{C_RESET} {v}{tag}")
-            vr = input(f"   Select [1-4, Enter = keep]: ").strip()
-            if vr.isdigit() and 1 <= int(vr) <= 4:
-                nv2 = _VENUES[int(vr)-1]
-                if nv2 != b["venue"]:
-                    args += ["--venue", nv2]; changed = True
-
-            # Strategy
-            print(f"\n {C_CYAN}◆ Strategy{C_RESET} [current: {b['strategy']}]")
-            if input(f"   Change strategy? [y/N]: ").strip().lower() in ("y", "yes"):
-                ns = select_strategy_interactive(default=b["strategy"])
-                if ns != b["strategy"]:
-                    args += ["--strategy", ns]; changed = True
-
-            # Symbol
-            ns2 = input(f"\n {C_CYAN}◆ Symbol{C_RESET} [{b['symbol']}]: ").strip()
-            if ns2 and ns2 != b["symbol"]:
-                args += ["--symbol", ns2]; changed = True
-
-            # Timeframe
-            print(f"\n {C_CYAN}◆ Timeframe{C_RESET}")
-            for i, t in enumerate(_TFS, 1):
-                tag = f" {C_GREEN}← current{C_RESET}" if t == b["resolution"] else ""
-                print(f"     {C_DIM}{i}.{C_RESET} {t}{tag}")
-            tr = input(f"   Select [1-{len(_TFS)}, Enter = keep]: ").strip()
-            if tr.isdigit() and 1 <= int(tr) <= len(_TFS):
-                ntf = _TFS[int(tr)-1]
-                if ntf != b["resolution"]:
-                    args += ["--resolution", ntf]; changed = True
-
-            # Lot Size
-            cur_size = b.get("size", 1)
-            sr = input(f"\n {C_CYAN}◆ Lot Size (contracts){C_RESET} [{cur_size}]: ").strip()
-            if sr:
-                try:
-                    if float(sr) != float(cur_size):
-                        args += ["--lot", sr]; changed = True
-                except ValueError:
-                    print(f"   {C_YELLOW}Invalid — keeping {cur_size}{C_RESET}")
-
-            # Risk params
-            _RISK = [
-                ("sl_pct",             "--sl-pct",             "Stop-Loss %"),
-                ("tp_pct",             "--tp-pct",             "Take-Profit %"),
-                ("trail_pct",          "--trail-pct",          "Trailing Stop %"),
-                ("trail_activate_pct", "--trail-activate-pct", "Trail Activates After %"),
-                ("breakeven_after_pct","--breakeven-pct",      "Breakeven After % profit"),
-                ("leverage",           "--leverage",           "Leverage"),
-            ]
-            for col, flag, label in _RISK:
-                cur = b.get(col, 0)
-                raw = input(f" {C_CYAN}◆ {label}{C_RESET} [{cur}]: ").strip()
-                if raw:
-                    try:
-                        if float(raw) != float(cur):
-                            args += [flag, raw]; changed = True
-                    except ValueError:
-                        print(f"   {C_YELLOW}Invalid — keeping {cur}{C_RESET}")
-
-            # Tick interval
-            cur_int = b.get("interval_sec", 300)
-            ir = input(f"\n {C_CYAN}◆ Tick Interval (sec){C_RESET} [{cur_int}]: ").strip()
-            if ir.isdigit() and int(ir) != cur_int:
-                args += ["--interval", ir]; changed = True
-
-            # Status
-            cur_st = b.get("status", "running")
-            print(f"\n {C_CYAN}◆ Status{C_RESET}")
-            for i, s in enumerate(_STATUS, 1):
-                tag = f" {C_GREEN}← current{C_RESET}" if s == cur_st else ""
-                print(f"     {C_DIM}{i}.{C_RESET} {s}{tag}")
-            str_r = input(f"   Select [1-3, Enter = keep]: ").strip()
-            if str_r.isdigit() and 1 <= int(str_r) <= 3:
-                nst = _STATUS[int(str_r)-1]
-                if nst != cur_st:
-                    args += ["--status", nst]; changed = True
-
-            # Extra params JSON
-            try:
-                cur_params = _dj.loads(b.get("params_json") or "{}")
-            except Exception:
-                cur_params = {}
-                
-            adv_template = {
-                "use_kelly_sizer": True,
-                "use_maker_limit": True,
-                "use_atr_risk": True,
-                "risk_type": "percentage",
-                "multiple_tp": [{"pct": 1.0, "qty_pct": 50}, {"pct": 2.0, "qty_pct": 50}]
-            }
-            for k, v in adv_template.items():
-                if k not in cur_params:
-                    cur_params[k] = v
-
-            if input(f"\n {C_CYAN}◆ Edit extra params JSON (Kelly/Maker/ATR/Multiple-TP)? (Opens editor) [y/N]:{C_RESET} ").strip().lower() in ("y","yes"):
-                cur_js = _dj.dumps(cur_params, indent=2)
-                import click
-                edited = click.edit(cur_js, extension=".json")
-                if edited is not None:
-                    try:
-                        _dj.loads(edited)
-                        args += ["--params", edited]; changed = True
-                        print(f"   {C_GREEN}JSON updated.{C_RESET}")
-                    except Exception:
-                        print(f"   {C_YELLOW}Invalid JSON — params unchanged{C_RESET}")
-                else:
-                    print(f"   {C_YELLOW}Editor aborted — params unchanged{C_RESET}")
-
-            if changed:
-                run_cli_command(args)
-            else:
-                print(f"\n {C_DIM}No changes made.{C_RESET}")
-                input(f"{C_DIM}Press Enter to return…{C_RESET}")
-
-        elif c in ("4", "5", "6"):
-            action = {"4": "pause", "5": "resume", "6": "stop"}[c]
+        elif c in ("3", "4", "5"):
+            action = {"3": "pause", "4": "resume", "5": "stop"}[c]
             b = _pick_bot(bots, f"Bot # or ID to {action}")
             if b:
                 run_cli_command(["deployments", action, "--id", str(b["id"])])
 
-        elif c == "7":
+        elif c == "6":
             b = _pick_bot(bots, "Bot # or ID for events")
             if b:
                 run_cli_command(["bot-show", "--id", str(b["id"])])
 
-        elif c == "8":
+        elif c == "7":
             if input(f" {C_YELLOW}Pause ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "pause-all"])
-        elif c == "9":
+        elif c == "8":
             if input(f" {C_GREEN}Resume ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "resume-all"])
-        elif c == "10":
+        elif c == "9":
             if input(f" {C_RED}STOP ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "stop-all"])
-        elif c == "11":
+        elif c == "10":
             break
 
 
