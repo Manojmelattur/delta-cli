@@ -338,8 +338,8 @@ def menu_deployments():
         elif c == "6":
             b = _pick_bot(bots, "Bot # or ID to delete")
             if b:
-                if b.get("status", "").lower() != "paused":
-                    print(f" {C_RED}Only paused bots can be deleted.{C_RESET}")
+                if b.get("status", "").lower() not in ("paused", "stopped"):
+                    print(f" {C_RED}Only paused or stopped bots can be deleted.{C_RESET}")
                     input(f"{C_DIM}Press Enter...{C_RESET}")
                 else:
                     if input(f" {C_RED}DELETE bot '{b['name']}'? [y/N]:{C_RESET} ").strip().lower() == "y":
