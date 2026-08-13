@@ -343,7 +343,7 @@ def menu_deployments():
                     input(f"{C_DIM}Press Enter...{C_RESET}")
                 else:
                     if input(f" {C_RED}DELETE bot '{b['name']}'? [y/N]:{C_RESET} ").strip().lower() == "y":
-                        run_cli_command(["deployments", "delete", "--id", str(b["id"])])
+                        run_cli_command(["deployments", "rm", "--id", str(b["id"])])
 
         elif c == "7":
             b = _pick_bot(bots, "Bot # or ID for events")
