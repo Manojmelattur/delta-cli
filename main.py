@@ -267,11 +267,12 @@ def menu_deployments():
   {C_CYAN}7.{C_RESET} 📜 View Bot Events
   {C_CYAN}8.{C_RESET} ⏸️  Pause ALL Bots
   {C_CYAN}9.{C_RESET} ▶️  Resume ALL Bots
-  {C_CYAN}10.{C_RESET} 🛑 Stop ALL Bots
-  {C_CYAN}11.{C_RESET} ↩ Back
+  {C_CYAN}10.{C_RESET} 🛑 Stop ALL Paused
+  {C_CYAN}11.{C_RESET} 🗑 Delete ALL Stopped
+  {C_CYAN}12.{C_RESET} ↩ Back
 """)
 
-        c = input(f" {C_BOLD}Select [1-11]:{C_RESET} ").strip()
+        c = input(f" {C_BOLD}Select [1-12]:{C_RESET} ").strip()
 
         if c == "1":
             b = _pick_bot(bots)
@@ -357,9 +358,22 @@ def menu_deployments():
             if input(f" {C_GREEN}Resume ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
                 run_cli_command(["deployments", "resume-all"])
         elif c == "10":
-            if input(f" {C_RED}STOP ALL bots? [y/N]:{C_RESET} ").strip().lower() == "y":
-                run_cli_command(["deployments", "stop-all"])
+            paused_bots = [b for b in bots if b.get("status", "").lower() == "paused"]
+            if not paused_bots:
+                print(f" {C_YELLOW}No paused bots.{C_RESET}")
+                input(f"{C_DIM}Press Enter...{C_RESET}")
+            elif input(f" {C_RED}STOP ALL {len(paused_bots)} paused bots? [y/N]:{C_RESET} ").strip().lower() == "y":
+                for b in paused_bots:
+                    run_cli_command(["deployments", "stop", "--id", str(b["id"])])
         elif c == "11":
+            stopped_bots = [b for b in bots if b.get("status", "").lower() == "stopped"]
+            if not stopped_bots:
+                print(f" {C_YELLOW}No stopped bots.{C_RESET}")
+                input(f"{C_DIM}Press Enter...{C_RESET}")
+            elif input(f" {C_RED}DELETE ALL {len(stopped_bots)} stopped bots? [y/N]:{C_RESET} ").strip().lower() == "y":
+                for b in stopped_bots:
+                    run_cli_command(["deployments", "rm", "--id", str(b["id"])])
+        elif c == "12":
             break
 
 
